@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "ms-azuretools.vscode-docker",
+        "davidanson.vscode-markdownlint",
+        "shardulm94.trailing-spaces",
+        "IBM.output-colorizer"
+    ]
+}
