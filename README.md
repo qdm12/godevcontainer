@@ -1,6 +1,6 @@
-# godevcontainer
+# Go Dev Container
 
-*SHORT_DESCRIPTION*
+*Golang development container for Visual Studio Code Remote Containers Development*
 
 [![godevcontainer](https://github.com/qdm12/godevcontainer/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/godevcontainer)
 
