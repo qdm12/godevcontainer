@@ -50,7 +50,6 @@ In a new project:
         // "appPort": 8000,
         "extensions": [
             "ms-vscode.go",
-            // "softwaredotcom.swdc-vscode",
             "davidanson.vscode-markdownlint",
             "shardulm94.trailing-spaces",
             "IBM.output-colorizer"
@@ -65,10 +64,8 @@ In a new project:
             "--cap-add=SYS_PTRACE",
             "--security-opt",
             "seccomp=unconfined",
-            // Linux
-            "-v", "$HOME/.ssh:/home/vscode/.ssh:ro",
-            // Windows
-            // "v", "${env:HOME}/.ssh:/home/vscode/.ssh:ro"
+            // Map your SSH keys for Git
+            "-v", "${env:HOME}/.ssh:/home/vscode/.ssh:ro",
         ]
     }
     ```
