@@ -17,7 +17,7 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.title="Go Dev container" \
     org.opencontainers.image.description="Go development container for Visual Studio Code Remote Containers development" \
-    image-size="445MB"
+    image-size="613MB"
 
 # Setup user
 RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
@@ -26,8 +26,9 @@ RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
     chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Install packages and Go language server
-RUN apk add -q --update --progress --no-cache git sudo openssh-client zsh
-RUN go get -u -v golang.org/x/tools/cmd/gopls 2>&1
+RUN apk add -q --update --progress --no-cache git sudo openssh-client zsh build-base
+RUN go get -u -v golang.org/x/tools/cmd/gopls 2>&1 && \
+    go get -u -v github.com/ramya-rao-a/go-outline 2>&1
 
 # Setup shell
 USER $USERNAME
