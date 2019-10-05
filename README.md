@@ -17,8 +17,6 @@
 [![Image size](https://images.microbadger.com/badges/image/qmcgaw/godevcontainer.svg)](https://microbadger.com/images/qmcgaw/godevcontainer)
 [![Image version](https://images.microbadger.com/badges/version/qmcgaw/godevcontainer.svg)](https://microbadger.com/images/qmcgaw/godevcontainer)
 
-[![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/qdm12)
-
 | Image size |
 | --- |
 | 613MB |
@@ -55,7 +53,22 @@ In a new project:
             "IBM.output-colorizer"
         ],
         "settings": {
-            "go.useLanguageServer": true
+            "go.useLanguageServer": true,
+            "go.autocompleteUnimportedPackages": true,
+            "[go]": {
+                "editor.snippetSuggestions": "none",
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": true,
+                }
+            },
+            "gopls": {
+                "usePlaceholders": true,
+                "completeUnimported": true,
+                "watchChangedFiles": true,
+                "deepCompletion": true,
+            },
+            "files.eol": "\n"
         },
         "postCreateCommand": "go mod download",
         "runArgs": [
