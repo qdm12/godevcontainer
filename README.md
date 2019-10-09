@@ -59,16 +59,17 @@ In a new project:
                 "editor.snippetSuggestions": "none",
                 "editor.formatOnSave": true,
                 "editor.codeActionsOnSave": {
-                    "source.organizeImports": true,
+                    "source.organizeImports": true
                 }
             },
             "gopls": {
-                "usePlaceholders": true,
                 "completeUnimported": true,
                 "watchChangedFiles": true,
                 "deepCompletion": true,
+                "usePlaceholders": false
             },
-            "files.eol": "\n"
+            "files.eol": "\n",
+            "go.inferGopath": false
         },
         "postCreateCommand": "go mod download",
         "runArgs": [
