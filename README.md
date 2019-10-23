@@ -50,7 +50,17 @@ In a new project:
             "ms-vscode.go",
             "davidanson.vscode-markdownlint",
             "shardulm94.trailing-spaces",
-            "IBM.output-colorizer"
+            "IBM.output-colorizer",
+            "alefragnani.Bookmarks",
+            "CoenraadS.bracket-pair-colorizer-2",
+            "eamodio.gitlens",
+            "Gruntfuggly.todo-tree",
+            "mhutchie.git-graph",
+            "mohsen1.prettify-json",
+            "quicktype.quicktype",
+            "spikespaz.vscode-smoothtype",
+            "stkb.rewrap",
+            "vscode-icons-team.vscode-icons",
         ],
         "settings": {
             "go.useLanguageServer": true,
