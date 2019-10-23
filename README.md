@@ -99,6 +99,9 @@ choose your project directory
 
 ## TODOs
 
+- [ ] Install VS code in Docker image
+- [ ] Install VS code extensions in Docker image
+
 ## License
 
 This repository is under an [MIT license](https://github.com/qdm12/godevcontainer/master/LICENSE)
