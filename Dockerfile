@@ -25,11 +25,14 @@ RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
     echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
     chmod 0440 /etc/sudoers.d/$USERNAME
 
-# Install packages and Go language server
-RUN apk add -q --update --progress --no-cache git sudo openssh-client zsh build-base
-RUN go get -u -v golang.org/x/tools/cmd/gopls 2>&1 && \
-    go get -u -v github.com/ramya-rao-a/go-outline 2>&1
-
+# Install Alpine packages
+RUN apk add -q --update --progress --no-cache git sudo openssh-client zsh build-base nano
+# Install development packages
+RUN GO111MODULE=on go get -v \
+    golang.org/x/tools/gopls@latest \
+    github.com/ramya-rao-a/go-outline \
+    github.com/go-delve/delve/cmd/dlv \
+    2>&1
 # Setup shell
 USER $USERNAME
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended &> /dev/null
