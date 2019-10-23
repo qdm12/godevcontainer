@@ -17,7 +17,7 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.title="Go Dev container" \
     org.opencontainers.image.description="Go development container for Visual Studio Code Remote Containers development" \
-    image-size="613MB"
+    image-size="705MB"
 
 # Setup user
 RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \

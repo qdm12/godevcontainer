@@ -19,7 +19,7 @@
 
 | Image size |
 | --- |
-| 613MB |
+| 705MB |
 
 This is to be used with Visual Studio Code Remote Containers development.
 
