@@ -26,7 +26,7 @@ RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
     chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Install Alpine packages
-RUN apk add -q --update --progress --no-cache git sudo openssh-client zsh build-base nano
+RUN apk add -q --update --progress --no-cache git sudo openssh-client zsh build-base nano libstdc++
 # Install development packages
 RUN GO111MODULE=on go get -v \
     golang.org/x/tools/gopls@latest \
