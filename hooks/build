@@ -2,6 +2,4 @@
 
 docker build --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
              --build-arg VCS_REF=`git rev-parse --short HEAD` \
-             --build-arg GO_VERSION=1.13 \
-             --build-arg ALPINE_VERSION=3.10 \
              -t $IMAGE_NAME .
