@@ -1,6 +1,6 @@
 # Go Dev Container
 
-*Golang development container for Visual Studio Code Remote Containers Development*
+**This is the ultimate Go development container for Visual Studio Code**
 
 [![godevcontainer](https://github.com/qdm12/godevcontainer/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/godevcontainer)
 
@@ -17,90 +17,118 @@
 [![Image size](https://images.microbadger.com/badges/image/qmcgaw/godevcontainer.svg)](https://microbadger.com/images/qmcgaw/godevcontainer)
 [![Image version](https://images.microbadger.com/badges/version/qmcgaw/godevcontainer.svg)](https://microbadger.com/images/qmcgaw/godevcontainer)
 
-| Image size |
-| --- |
-| 705MB |
+## Features
 
-This is to be used with Visual Studio Code Remote Containers development.
+What's bundled in this image?
 
-In a new project:
+- Go, Google's language server and development tools
+- Manage your host Docker from within VS code in this container
+- Bind mount your SSH keys to use ssh in VS code
+- Use Git using VS code interface or terminal
+- Custom terminal for user `vscode` and `root`
+    - Zsh with [oh-my-zsh](https://ohmyz.sh/)
+    - [Powerlevel10k theme](https://github.com/romkatv/powerlevel10k)
+    - Oh-My-Zsh plugins: git, extract, colorize, encode64, golang
 
-1. Create a directory `.devcontainer`
-1. Create a Dockerfile `.devcontainer/Dockerfile` with:
+Extra goodies...
 
-    ```Dockerfile
-    FROM qmcgaw/godevcontainer
+- Runs without root
+- Minimal size of **811MB**
+- Extensible with docker-compose.yml
+- Compatible with ARM and other architectures
+- Docker CLI and Docker-compose are statically built from source
+
+## Requirements
+
+- [Docker](https://www.docker.com/products/docker-desktop) installed and running with the following directories shared (if you don't use Linux):
+    - `~/.ssh`
+    - the directory of your project
+- [Docker Compose](https://docs.docker.com/compose/install/) installed
+- [VS code](https://code.visualstudio.com/download) installed
+- [VS code remote containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
+
+## Setup for a project
+
+1. Download this repository and put the `.devcontainer` directory in your project.
+   Alternatively, use this shell script from your project path
+
+    ```sh
+    # we assume you are in myproject
+    mkdir .devcontainer
+    wget -q https://github.com/qdm12/godevcontainer/blob/master/.devcontainer/devcontainer.json
     ```
 
-    This will automatically download the image from Docker Hub.
-    You can also build it yourself with
+1. If you have a *.vscode/settings.json*, eventually move the settings to *.devcontainer/devcontainer.json* in the `"settings"` section and remove *.vscode/settings.json*, as these won't be overwritten by the settings defined in *.devcontainer/devcontainer.json*.
+1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P) and select `Remote-Containers: Open Folder in Container...` and choose your project directory
+
+## More
+
+### devcontainer.json
+
+- You can change the `"postCreateCommand"` to be relevant to your situation. In example it could be `go mod download && gofmt ./...` to combine two commands
+- You can change the extensions installed in the Docker image within the `"extensions"` array
+- Other Go settings can be changed or added in the `"settings"` object.
+- You can publish a port to your localhost by uncommenting `// "appPort": 8000,` to access your app from a browser on your desktop for example.
+
+### docker-compose.yml
+
+- Add containers to be launched with your development container. In example, let's add a postgres database.
+    1. Add this block to `.devcontainer/docker-compose.yml`
+
+        ```yml
+          database:
+            image: postgres
+            restart: always
+            environment:
+              POSTGRES_PASSWORD: password
+        ```
+
+    1. In `.devcontainer/devcontainer.json` change the line `"runServices": ["vscode"],` to `"runServices": ["vscode", "database"],`
+    1. In the VS code command palette, rebuild the container
+
+### Development image
+
+- Build the development container yourself using
 
     ```sh
     docker build -t qmcgaw/godevcontainer https://github.com/qdm12/godevcontainer.git
     ```
 
-1. Create `.devcontainer/devcontainer.json` with:
+    You can also pass the following `--build-arg` to the build command: `ALPINE_VERSION`, `GO_VERSION`, `DOCKER_VERSION`, `DOCKER_COMPOSE_VERSION`. You can see defaults from the [Dockerfile](https://github.com/qdm12/godevcontainer/blob/master/Dockerfile)
 
-    ```json
-    {
-        "name": "Your project Dev",
-        "dockerFile": "Dockerfile",
-        // "appPort": 8000,
-        "extensions": [
-            "ms-vscode.go",
-            "davidanson.vscode-markdownlint",
-            "shardulm94.trailing-spaces",
-            "IBM.output-colorizer",
-            "alefragnani.Bookmarks",
-            "CoenraadS.bracket-pair-colorizer-2",
-            "eamodio.gitlens",
-            "Gruntfuggly.todo-tree",
-            "mhutchie.git-graph",
-            "mohsen1.prettify-json",
-            "quicktype.quicktype",
-            "spikespaz.vscode-smoothtype",
-            "stkb.rewrap",
-            "vscode-icons-team.vscode-icons",
-        ],
-        "settings": {
-            "go.useLanguageServer": true,
-            "go.autocompleteUnimportedPackages": true,
-            "[go]": {
-                "editor.snippetSuggestions": "none",
-                "editor.formatOnSave": true,
-                "editor.codeActionsOnSave": {
-                    "source.organizeImports": true
-                }
-            },
-            "gopls": {
-                "completeUnimported": true,
-                "watchChangedFiles": true,
-                "deepCompletion": true,
-                "usePlaceholders": false
-            },
-            "files.eol": "\n",
-            "go.inferGopath": false
-        },
-        "postCreateCommand": "go mod download",
-        "runArgs": [
-            "-u",
-            "vscode",
-            "--cap-add=SYS_PTRACE",
-            "--security-opt",
-            "seccomp=unconfined",
-            // Map your SSH keys for Git
-            "-v", "${env:HOME}/.ssh:/home/vscode/.ssh:ro",
-        ]
-    }
-    ```
+- Extend the current Docker image
+    1. Create a file `.devcontainer/Dockerfile` with `FROM qmcgaw/godevcontainer`
+    1. Append instructions to the Dockerfile created. You might want to use `USER root` to install packages and then switch back to `USER vscode` at the end. For example:
 
-1. Open the command palette in Visual Studio Code and select `Remote-Containers: Open Folder in Container...` and
-choose your project directory
+        ```Dockerfile
+        FROM qmcgaw/godevcontainer
+        # Running as vscode by default
+        go get github.com/julienschmidt/httprouter
+        USER root
+        apk add curl
+        USER vscode
+        ```
+
+    1. Modify `.devcontainer/docker-compose.yml` and add `build: .` in the vscode service.
+    1. Open the VS code command palette and choose `Remote-Containers: Rebuilt container`
 
 ## TODOs
 
-- [ ] Install VS code in Docker image
-- [ ] Install VS code extensions in Docker image
+- [ ] Use less packages than `build-base`
+- [ ] Install VS code extensions
+    - [ ] In Docker image
+    - [ ] In a named volume
+- [ ] Readme
+    - [ ] Extend another docker-compose.yml
+- [ ] Automatically write Github RSA host key to known_hosts for root and vscode
+- [ ] Install VS code server in Docker image
+- [ ] Figure out Docker group IDs to be crossplatform
+    - [x] OSX does not have `docker` group and needs `sudo docker` to run
+        - Run docker with `sudo docker`
+        - Alias `alias docker='sudo docker'`
+        - Login as root with `sudo -E su`
+    - [ ] Linux has Docker group, find which ID
+    - [ ] Windows?
 
 ## License
 
