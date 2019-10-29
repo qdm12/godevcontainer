@@ -35,10 +35,13 @@ RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
 
 # Install Alpine packages
 RUN apk add -q --update --progress ca-certificates sudo zsh bash nano git openssh-client libstdc++
+
+# Setup Docker
 COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/docker
 COPY --from=docker-compose /usr/local/bin/docker-compose /usr/local/bin/docker-compose
 RUN chown ${USERNAME}:${USER_GID} /usr/local/bin/docker /usr/local/bin/docker-compose && \
     chmod 500 /usr/local/bin/docker /usr/local/bin/docker-compose
+ENV DOCKER_BUILDKIT=1
 
 # Setup shells
 ENV EDITOR=nano \
