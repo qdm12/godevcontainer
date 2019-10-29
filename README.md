@@ -56,6 +56,7 @@ Extra goodies...
     # we assume you are in myproject
     mkdir .devcontainer
     wget -q https://github.com/qdm12/godevcontainer/blob/master/.devcontainer/devcontainer.json
+    wget -q https://github.com/qdm12/godevcontainer/blob/master/.devcontainer/docker-compose.yml
     ```
 
 1. If you have a *.vscode/settings.json*, eventually move the settings to *.devcontainer/devcontainer.json* in the `"settings"` section and remove *.vscode/settings.json*, as these won't be overwritten by the settings defined in *.devcontainer/devcontainer.json*.
