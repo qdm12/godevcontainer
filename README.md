@@ -115,7 +115,9 @@ Extra goodies...
 
 ## TODOs
 
-- [ ] Use less packages than `build-base`
+- [ ] Go test race detector on Alpine, see [this](https://github.com/golang/go/issues/14481)
+- [ ] Firewall, see [this](https://code.visualstudio.com/docs/remote/containers#_what-are-the-connectivity-requirements-for-the-vs-code-server-when-it-is-running-in-a-container)
+- [x] Use less packages than `build-base`
 - [ ] Install VS code extensions
     - [ ] In Docker image
     - [ ] In a named volume
