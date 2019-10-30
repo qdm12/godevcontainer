@@ -1,5 +1,7 @@
+.devcontainer
+.vscode
 .gitignore
 .git
+LICENSE
 *.md
 title.png
-.vscode
