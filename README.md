@@ -115,22 +115,19 @@ Extra goodies...
 
 ## TODOs
 
+- [ ] Write Github RSA host key to known_hosts for root and vscode in Docker image
 - [ ] Go test race detector on Alpine, see [this](https://github.com/golang/go/issues/14481)
+- [ ] Replace oh-my-zsh+Powerlevel10k with [https://github.com/justjanne/powerline-go](https://github.com/justjanne/powerline-go)
+- [ ] Replace .zshrc welcome with a Go binary
 - [ ] Firewall, see [this](https://code.visualstudio.com/docs/remote/containers#_what-are-the-connectivity-requirements-for-the-vs-code-server-when-it-is-running-in-a-container)
 - [x] Use less packages than `build-base`
-- [ ] Install VS code extensions
-    - [ ] In Docker image
-    - [ ] In a named volume
+- [ ] Install VS code server and extensions, waiting for [this issue](https://github.com/microsoft/vscode-remote-release/issues/1718)
 - [ ] Readme
     - [ ] Extend another docker-compose.yml
-- [ ] Automatically write Github RSA host key to known_hosts for root and vscode
-- [ ] Install VS code server in Docker image
-- [ ] Figure out Docker group IDs to be crossplatform
-    - [x] OSX does not have `docker` group and needs `sudo docker` to run
-        - Run docker with `sudo docker`
-        - Alias `alias docker='sudo docker'`
-        - Login as root with `sudo -E su`
-    - [ ] Linux has Docker group, find which ID
+- [ ] Run Docker without `sudo` or without loggin as `root`
+    - [ ] Linux has Docker group, find which ID by default and do not chown docker.sock as for OSX
+    - [x] OSX does not a have `docker` group so .zshrc chowns the docker.sock to vscode at login
+        - [ ] Maybe `chown` at entrypoint in case the user does not open a terminal
     - [ ] Windows?
 
 ## License
