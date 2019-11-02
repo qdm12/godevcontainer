@@ -39,6 +39,9 @@ WORKDIR /home/${USERNAME}
 ENTRYPOINT [ "/bin/zsh" ]
 CMD [ "" ]
 
+# Disable CGO by default
+ENV CGO_ENABLED=0
+
 # Patch for go test -race on Alpine
 COPY --from=race /tmp/race/lib/tsan/go/race_linux_amd64.syso /usr/local/go/src/runtime/race/race_linux_amd64.syso
 
