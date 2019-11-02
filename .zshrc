@@ -28,13 +28,10 @@ echo "Running as `id`"
 echo "Alpine version `cat /etc/alpine-release`"
 echo "Go version `go version | cut -d' ' -f3`"
 echo "Git version `git version | cut -d' ' -f3`"
-echo
-[ ! -z $DOCKERSOCK_OK ] && echo "Docker server `docker version --format {{.Server.Version}}`"
-[ ! -z $DOCKERSOCK_OK ] && echo "Docker client `docker version --format {{.Client.Version}}`"
+[ ! -z $DOCKERSOCK_OK ] && echo "Docker server `docker version --format {{.Server.Version}}` | client `docker version --format {{.Client.Version}}`"
 [ ! -z $DOCKERSOCK_OK ] && echo "Docker-Compose `docker-compose version --short`"
 [ ! -z $DOCKERSOCK_OK ] && alias alpine='docker run -it --rm alpine:3.10'
 [ ! -z $DOCKERSOCK_OK ] && alias dive='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive'
-[ ! -z $DOCKERSOCK_OK ] && alias citest='/workspace/ci/test setup all; /workspace/ci/test teardown'
 if [ "$CGO_ENABLED" != 0 ]; then
   echo "CGO is enabled, installing C/C++ Alpine packages..."
   sudo apk --update add gcc g++
