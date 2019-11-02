@@ -83,16 +83,33 @@ RUN chown -R ${USERNAME}:${USER_GID} /home/${USERNAME}/.oh-my-zsh && \
     cp -r /home/${USERNAME}/.oh-my-zsh /root/.oh-my-zsh && \
     chown -R root:root /root/.oh-my-zsh
 
-# Install development packages
-RUN GO111MODULE=on go get -v \
-    golang.org/x/tools/gopls@latest \
+# Install Go packages
+ENV GO111MODULE=on
+# See https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on
+RUN go get -v golang.org/x/tools/gopls@latest 2>&1
+RUN go get -v \
+    # Base Go tools needed for VS code Go extension
     github.com/ramya-rao-a/go-outline \
+    github.com/acroca/go-symbols \
+    github.com/uudashr/gopkgs/cmd/gopkgs@latest \
+    golang.org/x/tools/cmd/guru \
+    golang.org/x/tools/cmd/gorename \
+    golang.org/x/lint/golint \
     github.com/go-delve/delve/cmd/dlv \
-    github.com/mdempsky/gocode \
-    github.com/uudashr/gopkgs/cmd/gopkgs \
-    github.com/stamblerre/gocode \
-    github.com/rogpeppe/godef \
-    2>&1 && \
-    chown -R ${USERNAME}:${USER_GID} /go
+    # Extra tools integrating with VS code
+    github.com/fatih/gomodifytags \
+    github.com/haya14busa/goplay \
+    github.com/josharian/impl \
+    github.com/tylerb/gotype-live \
+    github.com/cweill/gotests \
+    github.com/davidrjenni/reftools/cmd/fillstruct \
+    # Terminal tools
+    github.com/vektra/mockery/... \
+    github.com/kyoh86/scopelint \
+    github.com/gojp/goreportcard/cmd/goreportcard-cli \
+    2>&1
+
+RUN chown -R ${USERNAME}:${USER_GID} /go /usr/local/go && \
+    chmod -R 700 /go /usr/local/go
 
 USER ${USERNAME}
