@@ -7,7 +7,7 @@ FROM docker:${DOCKER_VERSION} AS docker-cli
 FROM docker/compose:${DOCKER_COMPOSE_VERSION} AS docker-compose
 
 # See https://github.com/golang/go/issues/14481
-FROM ${BASE_IMAGE}:${GO_VERSION}-alpine${ALPINE_VERSION} AS race
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS race
 WORKDIR /tmp/race
 RUN apk --update -q --progress --no-cache add git g++
 RUN git clone --single-branch https://llvm.org/git/compiler-rt.git . &> /dev/null
@@ -37,7 +37,6 @@ LABEL \
     image-size="811MB"
 WORKDIR /home/${USERNAME}
 ENTRYPOINT [ "/bin/zsh" ]
-CMD [ "" ]
 
 # Disable CGO by default
 ENV CGO_ENABLED=0
