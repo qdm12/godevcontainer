@@ -115,6 +115,7 @@ Extra goodies...
 
 ## TODOs
 
+- [ ] Use `go clean -r -cache -testcache -modcache /...`
 - [ ] Write Github RSA host key to known_hosts for root and vscode in Docker image
 - [ ] Go test race detector on Alpine, see [this](https://github.com/golang/go/issues/14481)
 - [ ] Replace oh-my-zsh+Powerlevel10k with [https://github.com/justjanne/powerline-go](https://github.com/justjanne/powerline-go)
@@ -124,6 +125,7 @@ Extra goodies...
 - [ ] Install VS code server and extensions, waiting for [this issue](https://github.com/microsoft/vscode-remote-release/issues/1718)
 - [ ] Readme
     - [ ] Extend another docker-compose.yml
+    - [ ] Fonts for host OS for the VS code shell
 - [x] Run Docker without `sudo` or without loggin as `root`
     - [x] Linux has Docker group, usually `102`, `1000` or `987`
     - [x] OSX and Windows don't have a `docker` group so .zshrc chowns the docker.sock to user's GID at login
