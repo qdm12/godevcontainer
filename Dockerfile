@@ -6,6 +6,18 @@ ARG DOCKER_COMPOSE_VERSION=1.25.0-rc2-alpine
 FROM docker:${DOCKER_VERSION} AS docker-cli
 FROM docker/compose:${DOCKER_COMPOSE_VERSION} AS docker-compose
 
+# See https://github.com/golang/go/issues/14481
+FROM ${BASE_IMAGE}:${GO_VERSION}-alpine${ALPINE_VERSION} AS race
+WORKDIR /tmp/race
+RUN apk --update -q --progress --no-cache add git g++
+RUN git clone --single-branch https://llvm.org/git/compiler-rt.git . &> /dev/null
+RUN git reset --hard fe2c72c59aa7f4afa45e3f65a5d16a374b6cce26 && \
+    wget -q https://github.com/golang/go/files/3615484/0001-hack-to-make-Go-s-race-flag-work-on-Alpine.patch.gz -O patch.gz && \
+    gunzip patch.gz && \
+    patch -p1 -i patch
+RUN cd lib/tsan/go && \
+    ./buildgo.sh &> /dev/null
+
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION}
 ARG BUILD_DATE
 ARG VCS_REF
@@ -26,6 +38,9 @@ LABEL \
 WORKDIR /home/${USERNAME}
 ENTRYPOINT [ "/bin/zsh" ]
 CMD [ "" ]
+
+# Patch for go test -race on Alpine
+COPY --from=race /tmp/race/lib/tsan/go/race_linux_amd64.syso /usr/local/go/src/runtime/race/race_linux_amd64.syso
 
 # Setup user
 RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
