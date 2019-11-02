@@ -33,7 +33,7 @@ What's bundled in this image?
 Extra goodies...
 
 - Runs without root
-- Minimal size of **811MB**
+- Minimal size of **742MB**
 - Extensible with docker-compose.yml
 - Compatible with ARM and other architectures
 - Docker CLI and Docker-compose are statically built from source
@@ -115,9 +115,7 @@ Extra goodies...
 
 ## TODOs
 
-- [ ] Use `go clean -r -cache -testcache -modcache /...`
-- [ ] Write Github RSA host key to known_hosts for root and vscode in Docker image
-- [ ] Go test race detector on Alpine, see [this](https://github.com/golang/go/issues/14481)
+- [x] Go test race detector on Alpine, see [this](https://github.com/golang/go/issues/14481)
 - [ ] Replace oh-my-zsh+Powerlevel10k with [https://github.com/justjanne/powerline-go](https://github.com/justjanne/powerline-go)
 - [ ] Replace .zshrc welcome with a Go binary
 - [ ] Firewall, see [this](https://code.visualstudio.com/docs/remote/containers#_what-are-the-connectivity-requirements-for-the-vs-code-server-when-it-is-running-in-a-container)

@@ -34,7 +34,7 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.title="Go Dev container" \
     org.opencontainers.image.description="Go development container for Visual Studio Code Remote Containers development" \
-    image-size="811MB"
+    image-size="742MB"
 WORKDIR /home/${USERNAME}
 ENTRYPOINT [ "/bin/zsh" ]
 
@@ -49,6 +49,9 @@ RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
     mkdir -p /etc/sudoers.d && \
     echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME && \
     chmod 0440 /etc/sudoers.d/$USERNAME
+
+# Ownership of Go empty directories
+RUN chown ${USERNAME}:${USER_GID} /go/bin /go/src
 
 # Install Alpine packages
 RUN apk add -q --update --progress ca-certificates sudo zsh bash nano git openssh-client libstdc++
@@ -80,10 +83,10 @@ RUN chown ${USERNAME}:${USER_GID} /home/${USERNAME}/.p10k.zsh /home/${USERNAME}/
     sed -i "s/HOMEPATH/home\/${USERNAME}/" /home/${USERNAME}/.zshrc && \
     sed -i "s/HOMEPATH/root/" /root/.zshrc
 RUN git clone --single-branch --depth 1 https://github.com/robbyrussell/oh-my-zsh.git /home/${USERNAME}/.oh-my-zsh &> /dev/null && \
-    rm -rf /home/${USERNAME}/.oh-my-zsh/.git
-RUN git clone --single-branch --depth 1 https://github.com/romkatv/powerlevel10k.git /home/${USERNAME}/.oh-my-zsh/custom/themes/powerlevel10k &> /dev/null && \
-    rm -rf /home/${USERNAME}/.oh-my-zsh/custom/themes/powerlevel10k/.git
-RUN chown -R ${USERNAME}:${USER_GID} /home/${USERNAME}/.oh-my-zsh && \
+    rm -rf /home/${USERNAME}/.oh-my-zsh/.git && \
+    git clone --single-branch --depth 1 https://github.com/romkatv/powerlevel10k.git /home/${USERNAME}/.oh-my-zsh/custom/themes/powerlevel10k &> /dev/null && \
+    rm -rf /home/${USERNAME}/.oh-my-zsh/custom/themes/powerlevel10k/.git && \
+    chown -R ${USERNAME}:${USER_GID} /home/${USERNAME}/.oh-my-zsh && \
     chmod -R 700 /home/${USERNAME}/.oh-my-zsh && \
     cp -r /home/${USERNAME}/.oh-my-zsh /root/.oh-my-zsh && \
     chown -R root:root /root/.oh-my-zsh
@@ -91,8 +94,8 @@ RUN chown -R ${USERNAME}:${USER_GID} /home/${USERNAME}/.oh-my-zsh && \
 # Install Go packages
 ENV GO111MODULE=on
 # See https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on
-RUN go get -v golang.org/x/tools/gopls@latest 2>&1
-RUN go get -v \
+RUN go get -v golang.org/x/tools/gopls@latest 2>&1 && \
+    go get -v \
     # Base Go tools needed for VS code Go extension
     github.com/ramya-rao-a/go-outline \
     github.com/acroca/go-symbols \
@@ -103,18 +106,18 @@ RUN go get -v \
     github.com/go-delve/delve/cmd/dlv \
     # Extra tools integrating with VS code
     github.com/fatih/gomodifytags \
-    github.com/haya14busa/goplay \
+    github.com/haya14busa/goplay/cmd/goplay \
     github.com/josharian/impl \
     github.com/tylerb/gotype-live \
-    github.com/cweill/gotests \
+    github.com/cweill/gotests/... \
     github.com/davidrjenni/reftools/cmd/fillstruct \
     # Terminal tools
     github.com/vektra/mockery/... \
     github.com/kyoh86/scopelint \
     github.com/gojp/goreportcard/cmd/goreportcard-cli \
-    2>&1
-
-RUN chown -R ${USERNAME}:${USER_GID} /go /usr/local/go && \
-    chmod -R 700 /go /usr/local/go
+    2>&1 && \
+    chown ${USERNAME}:${USER_GID} /go/bin/* && \
+    chmod 500 /go/bin/* && \
+    rm -rf /go/pkg /go/src/* /root/.cache/go-build
 
 USER ${USERNAME}
