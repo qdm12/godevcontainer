@@ -20,8 +20,14 @@ test -S /var/run/docker.sock
 [ -z $DOCKERSOCK_OK ] && >&2 echo "[WARNING] Docker socket not found, docker will not be available"
 
 # Fixing permission on Docker socket
-DOCKERSOCK_USER=`stat -c "%u" /var/run/docker.sock`
-[ ! -z $DOCKERSOCK_OK ] && [ `stat -c "%g" /var/run/docker.sock` != `id -g` ] && sudo chown $DOCKERSOCK_USER:`id -g` /var/run/docker.sock
+if [ ! -z $DOCKERSOCK_OK ]; then
+  DOCKERSOCK_USER=`stat -c "%u" /var/run/docker.sock`
+  DOCKERSOCK_GROUP=`stat -c "%g" /var/run/docker.sock`
+  if [ "$DOCKERSOCK_GROUP" != "1000" ] && [ "$DOCKERSOCK_GROUP" != "102" ] && [ "$DOCKERSOCK_GROUP" != "976" ]; then
+    echo "Docker socket not owned by group IDs 1000, 102 or 976, changing its group to `id -g`"
+    sudo chown $DOCKERSOCK_USER:`id -g` /var/run/docker.sock
+  fi
+fi
 
 echo
 echo "Running as `id`"

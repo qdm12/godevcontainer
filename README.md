@@ -124,11 +124,10 @@ Extra goodies...
 - [ ] Install VS code server and extensions, waiting for [this issue](https://github.com/microsoft/vscode-remote-release/issues/1718)
 - [ ] Readme
     - [ ] Extend another docker-compose.yml
-- [ ] Run Docker without `sudo` or without loggin as `root`
-    - [ ] Linux has Docker group, find which ID by default and do not chown docker.sock as for OSX
-    - [x] OSX does not a have `docker` group so .zshrc chowns the docker.sock to vscode at login
+- [x] Run Docker without `sudo` or without loggin as `root`
+    - [x] Linux has Docker group, usually `102`, `1000` or `987`
+    - [x] OSX and Windows don't have a `docker` group so .zshrc chowns the docker.sock to user's GID at login
         - [ ] Maybe `chown` at entrypoint in case the user does not open a terminal
-    - [ ] Windows?
 
 ## License
 

@@ -59,6 +59,12 @@ COPY --from=docker-compose /usr/local/bin/docker-compose /usr/local/bin/docker-c
 RUN chown ${USERNAME}:${USER_GID} /usr/local/bin/docker /usr/local/bin/docker-compose && \
     chmod 500 /usr/local/bin/docker /usr/local/bin/docker-compose
 ENV DOCKER_BUILDKIT=1
+# All possible docker host groups
+RUN ([ ${USER_GID} = 1000 ] || (addgroup -g 1000 docker1000 && addgroup ${USERNAME} docker1000)) && \
+    addgroup -g 976 docker976 && \
+    addgroup -g 102 docker102 && \
+    addgroup ${USERNAME} docker976 && \
+    addgroup ${USERNAME} docker102
 
 # Setup shells
 ENV EDITOR=nano \
