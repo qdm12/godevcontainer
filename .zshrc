@@ -38,10 +38,6 @@ echo "Git version `git version | cut -d' ' -f3`"
 [ ! -z $DOCKERSOCK_OK ] && echo "Docker-Compose `docker-compose version --short`"
 [ ! -z $DOCKERSOCK_OK ] && alias alpine='docker run -it --rm alpine:3.10'
 [ ! -z $DOCKERSOCK_OK ] && alias dive='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive'
-if [ "$CGO_ENABLED" != 0 ]; then
-  echo "CGO is enabled, installing C/C++ Alpine packages..."
-  sudo apk --update add gcc g++
-fi
 echo "You have several Go tools:"
 echo " * Generate testify/mock mocks from interfaces recursively: mockery -all"
 echo " * Highlight unpinned variables: scopelint ./..."
