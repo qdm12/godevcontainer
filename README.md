@@ -19,30 +19,20 @@
 
 ## Features
 
-What's bundled in this image?
-
-- Go, Google's language server and development tools
-- Manage your host Docker from within VS code in this container
-- Bind mount your SSH keys to use ssh in VS code
-- Use Git using VS code interface or terminal
-- Custom terminal for user `vscode` and `root`
-    - Zsh with [oh-my-zsh](https://ohmyz.sh/)
-    - [Powerlevel10k theme](https://github.com/romkatv/powerlevel10k)
-    - Oh-My-Zsh plugins: git, extract, colorize, encode64, golang
-
-Extra goodies...
-
-- Runs without root
-- Minimal size of **742MB**
+- Based on [Alpine 3.10 with the minimal packages](https://github.com/qdm12/godevcontainer/blob/master/doc/alpine.md) and a custom terminal
+- Go 1.13 with [Go binary tools](https://github.com/qdm12/godevcontainer/blob/master/doc/go.md)
+- Using a [fix for go test -race](https://github.com/qdm12/godevcontainer/blob/master/doc/race.md)
+- Cross platform
+    - Easily bind mount your SSH keys to use with **git**
+    - Manage your host Docker from within the dev container, more details at [doc/docker.md](https://github.com/qdm12/godevcontainer/blob/master/doc/docker.md)
+- Runs without root by default but you can `sudo`
+- 'Minimal' size of **813MB**
 - Extensible with docker-compose.yml
-- Compatible with ARM and other architectures
-- Docker CLI and Docker-compose are statically built from source
 
 ## Requirements
 
-- [Docker](https://www.docker.com/products/docker-desktop) installed and running with the following directories shared (if you don't use Linux):
-    - `~/.ssh`
-    - the directory of your project
+- [Docker](https://www.docker.com/products/docker-desktop) installed and running
+    - If you don't use Linux, share the directories `~/.ssh` and the directory of your project with Docker Desktop
 - [Docker Compose](https://docs.docker.com/compose/install/) installed
 - [VS code](https://code.visualstudio.com/download) installed
 - [VS code remote containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
@@ -53,13 +43,13 @@ Extra goodies...
    Alternatively, use this shell script from your project path
 
     ```sh
-    # we assume you are in myproject
+    # we assume you are in /yourpath/myproject
     mkdir .devcontainer
     wget -q https://github.com/qdm12/godevcontainer/blob/master/.devcontainer/devcontainer.json
     wget -q https://github.com/qdm12/godevcontainer/blob/master/.devcontainer/docker-compose.yml
     ```
 
-1. If you have a *.vscode/settings.json*, eventually move the settings to *.devcontainer/devcontainer.json* in the `"settings"` section and remove *.vscode/settings.json*, as these won't be overwritten by the settings defined in *.devcontainer/devcontainer.json*.
+1. If you have a *.vscode/settings.json*, eventually move the settings to *.devcontainer/devcontainer.json* in the `"settings"` section as *.vscode/settings.json* take precedence over the settings defined in *.devcontainer/devcontainer.json*.
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P) and select `Remote-Containers: Open Folder in Container...` and choose your project directory
 
 ## More
@@ -113,22 +103,6 @@ Extra goodies...
     1. Modify `.devcontainer/docker-compose.yml` and add `build: .` in the vscode service.
     1. Open the VS code command palette and choose `Remote-Containers: Rebuilt container`
 
-## TODOs
-
-- [x] Go test race detector on Alpine, see [this](https://github.com/golang/go/issues/14481)
-- [ ] Replace oh-my-zsh+Powerlevel10k with [https://github.com/justjanne/powerline-go](https://github.com/justjanne/powerline-go)
-- [ ] Replace .zshrc welcome with a Go binary
-- [ ] Firewall, see [this](https://code.visualstudio.com/docs/remote/containers#_what-are-the-connectivity-requirements-for-the-vs-code-server-when-it-is-running-in-a-container)
-- [x] Use less packages than `build-base`
-- [ ] Install VS code server and extensions, waiting for [this issue](https://github.com/microsoft/vscode-remote-release/issues/1718)
-- [ ] Readme
-    - [ ] Extend another docker-compose.yml
-    - [ ] Fonts for host OS for the VS code shell
-- [x] Run Docker without `sudo` or without loggin as `root`
-    - [x] Linux has Docker group, usually `102`, `1000` or `987`
-    - [x] OSX and Windows don't have a `docker` group so .zshrc chowns the docker.sock to user's GID at login
-        - [ ] Maybe `chown` at entrypoint in case the user does not open a terminal
-
 ## License
 
-This repository is under an [MIT license](https://github.com/qdm12/godevcontainer/master/LICENSE)
+This repository is under an [MIT license](https://github.com/qdm12/godevcontainer/master/LICENSE) unless indicated otherwise.

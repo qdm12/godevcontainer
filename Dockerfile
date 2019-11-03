@@ -34,7 +34,7 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.title="Go Dev container" \
     org.opencontainers.image.description="Go development container for Visual Studio Code Remote Containers development" \
-    image-size="742MB"
+    image-size="813MB"
 WORKDIR /home/${USERNAME}
 ENTRYPOINT [ "/bin/zsh" ]
 
@@ -88,7 +88,6 @@ RUN git clone --single-branch --depth 1 https://github.com/robbyrussell/oh-my-zs
 
 # Install Go packages
 ENV GO111MODULE=on
-# See https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on
 RUN go get -v golang.org/x/tools/gopls@latest 2>&1 && \
     go get -v \
     # Base Go tools needed for VS code Go extension

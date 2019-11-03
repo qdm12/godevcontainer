@@ -1,7 +1,9 @@
 .devcontainer
-.vscode
-.gitignore
 .git
+.vscode
+doc
+.dockerignore
+.gitignore
 LICENSE
-*.md
+README.md
 title.png
