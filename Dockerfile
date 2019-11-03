@@ -57,10 +57,8 @@ RUN chown ${USERNAME}:${USER_GID} /go/bin /go/src
 RUN apk add -q --update --progress ca-certificates sudo zsh bash nano git openssh-client libstdc++
 
 # Setup Docker
-COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/docker
-COPY --from=docker-compose /usr/local/bin/docker-compose /usr/local/bin/docker-compose
-RUN chown ${USERNAME}:${USER_GID} /usr/local/bin/docker /usr/local/bin/docker-compose && \
-    chmod 500 /usr/local/bin/docker /usr/local/bin/docker-compose
+COPY --from=docker-cli --chown=${USER_UID}:${USER_GID} /usr/local/bin/docker /usr/local/bin/docker
+COPY --from=docker-compose --chown=${USER_UID}:${USER_GID} /usr/local/bin/docker-compose /usr/local/bin/docker-compose
 ENV DOCKER_BUILDKIT=1
 # All possible docker host groups
 RUN ([ ${USER_GID} = 1000 ] || (addgroup -g 1000 docker1000 && addgroup ${USERNAME} docker1000)) && \
