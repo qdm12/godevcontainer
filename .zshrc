@@ -44,3 +44,4 @@ echo " * Highlight unpinned variables: scopelint ./..."
 echo "You have several Docker tools alias you can use:"
 echo " * Inspect a Docker image layers: dive alpine"
 echo " * Run lazydocker in a container: ld"
+[ -f extend.zshrc ] && source extend.zshrc

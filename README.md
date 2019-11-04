@@ -79,29 +79,7 @@
 
 ### Development image
 
-- Build the development container yourself using
-
-    ```sh
-    docker build -t qmcgaw/godevcontainer https://github.com/qdm12/godevcontainer.git
-    ```
-
-    You can also pass the following `--build-arg` to the build command: `ALPINE_VERSION`, `GO_VERSION`, `DOCKER_VERSION`, `DOCKER_COMPOSE_VERSION`. You can see defaults from the [Dockerfile](https://github.com/qdm12/godevcontainer/blob/master/Dockerfile)
-
-- Extend the current Docker image
-    1. Create a file `.devcontainer/Dockerfile` with `FROM qmcgaw/godevcontainer`
-    1. Append instructions to the Dockerfile created. You might want to use `USER root` to install packages and then switch back to `USER vscode` at the end. For example:
-
-        ```Dockerfile
-        FROM qmcgaw/godevcontainer
-        # Running as vscode by default
-        go get github.com/julienschmidt/httprouter
-        USER root
-        apk add curl
-        USER vscode
-        ```
-
-    1. Modify `.devcontainer/docker-compose.yml` and add `build: .` in the vscode service.
-    1. Open the VS code command palette and choose `Remote-Containers: Rebuilt container`
+You can build and extend the Docker development image to suit your needs, more information is available at [doc/image.md](https://github.com/qdm12/godevcontainer/blob/master/doc/image.md)
 
 ## License
 
