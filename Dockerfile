@@ -34,7 +34,7 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.title="Go Dev container" \
     org.opencontainers.image.description="Go development container for Visual Studio Code Remote Containers development" \
-    image-size="813MB"
+    image-size="820MB"
 WORKDIR /home/${USERNAME}
 ENTRYPOINT [ "/bin/zsh" ]
 
@@ -71,9 +71,8 @@ RUN apk add shadow && \
     usermod --shell /bin/zsh root && \
     usermod --shell /bin/zsh ${USERNAME} && \
     apk del shadow
-COPY .p10k.zsh .zshrc /home/${USERNAME}/
-RUN chown ${USERNAME}:${USER_GID} /home/${USERNAME}/.p10k.zsh /home/${USERNAME}/.zshrc && \
-    ln -s /home/${USERNAME}/.p10k.zsh /root/.p10k.zsh && \
+COPY --chown=${USER_UID}:${USER_GID} .p10k.zsh .zshrc /home/${USERNAME}/
+RUN ln -s /home/${USERNAME}/.p10k.zsh /root/.p10k.zsh && \
     cp /home/${USERNAME}/.zshrc /root/.zshrc && \
     sed -i "s/HOMEPATH/home\/${USERNAME}/" /home/${USERNAME}/.zshrc && \
     sed -i "s/HOMEPATH/root/" /root/.zshrc
@@ -88,9 +87,9 @@ RUN git clone --single-branch --depth 1 https://github.com/robbyrussell/oh-my-zs
 
 # Install Go packages
 ENV GO111MODULE=on
-RUN go get -v golang.org/x/tools/gopls@latest 2>&1 && \
-    go get -v \
+RUN go get -v \
     # Base Go tools needed for VS code Go extension
+    golang.org/x/tools/gopls@v0.2.0 \
     github.com/ramya-rao-a/go-outline \
     github.com/acroca/go-symbols \
     github.com/uudashr/gopkgs/cmd/gopkgs@latest \
