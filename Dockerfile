@@ -53,9 +53,9 @@ RUN chown ${USERNAME}:${USER_GID} /go/bin /go/src
 # Install Alpine packages
 RUN apk add -q --update --progress libstdc++ g++ zsh sudo ca-certificates git openssh-client bash nano
 
-# Setup Docker
-COPY --from=docker-cli --chown=${USER_UID}:${USER_GID} /usr/local/bin/docker /usr/local/bin/docker
-COPY --from=docker-compose --chown=${USER_UID}:${USER_GID} /usr/local/bin/docker-compose /usr/local/bin/docker-compose
+# Setup Docker TODO: replace `COPY --chown=vscode` with `COPY --chown=${USER_UID}:${USER_GID}`
+COPY --from=docker-cli --chown=vscode /usr/local/bin/docker /usr/local/bin/docker
+COPY --from=docker-compose --chown=vscode /usr/local/bin/docker-compose /usr/local/bin/docker-compose
 ENV DOCKER_BUILDKIT=1
 # All possible docker host groups
 RUN ([ ${USER_GID} = 1000 ] || (addgroup -g 1000 docker1000 && addgroup ${USERNAME} docker1000)) && \
@@ -71,7 +71,7 @@ RUN apk add shadow && \
     usermod --shell /bin/zsh root && \
     usermod --shell /bin/zsh ${USERNAME} && \
     apk del shadow
-COPY --chown=${USER_UID}:${USER_GID} .p10k.zsh .zshrc /home/${USERNAME}/
+COPY --chown=vscode .p10k.zsh .zshrc /home/${USERNAME}/
 RUN ln -s /home/${USERNAME}/.p10k.zsh /root/.p10k.zsh && \
     cp /home/${USERNAME}/.zshrc /root/.zshrc && \
     sed -i "s/HOMEPATH/home\/${USERNAME}/" /home/${USERNAME}/.zshrc && \
