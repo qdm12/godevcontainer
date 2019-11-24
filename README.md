@@ -81,6 +81,10 @@
 
 You can build and extend the Docker development image to suit your needs, more information is available at [doc/image.md](https://github.com/qdm12/godevcontainer/blob/master/doc/image.md)
 
+### welcome.sh
+
+You can bind mount a shell script to `/home/vscode/.welcome.sh` to replace the [current welcome script](shell/welcome.sh) to suit your needs.
+
 ## License
 
 This repository is under an [MIT license](https://github.com/qdm12/godevcontainer/master/LICENSE) unless indicated otherwise.

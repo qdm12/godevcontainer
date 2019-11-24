@@ -1,0 +1,6 @@
+echo "You have several Go tools:"
+echo " * Generate testify/mock mocks from interfaces recursively: mockery -all"
+echo " * Highlight unpinned variables: scopelint ./..."
+echo "You have several Docker tools alias you can use:"
+echo " * Inspect the layers of a Docker image: dive <image-name>"
+echo " * Run lazydocker in a container: ld"

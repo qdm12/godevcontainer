@@ -71,9 +71,10 @@ RUN apk add shadow && \
     usermod --shell /bin/zsh root && \
     usermod --shell /bin/zsh ${USERNAME} && \
     apk del shadow
-COPY --chown=vscode .p10k.zsh .zshrc /home/${USERNAME}/
+COPY --chown=vscode shell/.p10k.zsh shell/.zshrc shell/.welcome.sh /home/${USERNAME}/
 RUN ln -s /home/${USERNAME}/.p10k.zsh /root/.p10k.zsh && \
     cp /home/${USERNAME}/.zshrc /root/.zshrc && \
+    cp /home/${USERNAME}/.welcome.sh /root/.welcome.sh && \
     sed -i "s/HOMEPATH/home\/${USERNAME}/" /home/${USERNAME}/.zshrc && \
     sed -i "s/HOMEPATH/root/" /root/.zshrc
 RUN git clone --single-branch --depth 1 https://github.com/robbyrussell/oh-my-zsh.git /home/${USERNAME}/.oh-my-zsh &> /dev/null && \

@@ -30,18 +30,13 @@ if [ ! -z $DOCKERSOCK_OK ]; then
 fi
 
 echo
-echo "Running as `id`"
-echo "Alpine version `cat /etc/alpine-release`"
+echo "Running as user `whoami`"
 echo "Go version `go version | cut -d' ' -f3`"
-echo "Git version `git version | cut -d' ' -f3`"
-[ ! -z $DOCKERSOCK_OK ] && echo "Docker server `docker version --format {{.Server.Version}}` | client `docker version --format {{.Client.Version}}`"
-[ ! -z $DOCKERSOCK_OK ] && echo "Docker-Compose `docker-compose version --short`"
-[ ! -z $DOCKERSOCK_OK ] && alias alpine='docker run -it --rm alpine:3.10'
-[ ! -z $DOCKERSOCK_OK ] && alias dive='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive'
-echo "You have several Go tools:"
-echo " * Generate testify/mock mocks from interfaces recursively: mockery -all"
-echo " * Highlight unpinned variables: scopelint ./..."
-echo "You have several Docker tools alias you can use:"
-echo " * Inspect a Docker image layers: dive alpine"
-echo " * Run lazydocker in a container: ld"
-[ -f extend.zshrc ] && source extend.zshrc
+if [ ! -z $DOCKERSOCK_OK ]; then
+  echo "Docker server `docker version --format {{.Server.Version}}` | client `docker version --format {{.Client.Version}}`"
+  echo "Docker-Compose `docker-compose version --short`"
+  alias alpine='docker run -it --rm alpine:3.10'
+  alias dive='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive'
+fi
+echo
+[ -f ~/.welcome.sh ] && source ~/.welcome.sh
