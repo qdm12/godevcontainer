@@ -44,8 +44,9 @@
     ```sh
     # we assume you are in /yourpath/myproject
     mkdir .devcontainer
-    wget -q https://github.com/qdm12/godevcontainer/blob/master/.devcontainer/devcontainer.json
-    wget -q https://github.com/qdm12/godevcontainer/blob/master/.devcontainer/docker-compose.yml
+    cd .devcontainer
+    wget -q https://raw.githubusercontent.com/qdm12/godevcontainer/master/.devcontainer/devcontainer.json
+    wget -q https://raw.githubusercontent.com/qdm12/godevcontainer/master/.devcontainer/docker-compose.yml
     ```
 
 1. If you have a *.vscode/settings.json*, eventually move the settings to *.devcontainer/devcontainer.json* in the `"settings"` section as *.vscode/settings.json* take precedence over the settings defined in *.devcontainer/devcontainer.json*.
