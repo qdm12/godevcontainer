@@ -1,16 +1,17 @@
 #!/bin/bash
 
 if [ "$TRAVIS_PULL_REQUEST" = "true" ]; then
-  docker buildx build --platform=linux/amd64,linux/arm64,linux/arm/v7  .
-  return $?
+  docker buildx build  \
+    --progress plain \
+    --platform=linux/amd64 \
+    .
+  exit $?
 fi
 echo $DOCKER_PASSWORD | docker login -u qmcgaw --password-stdin &> /dev/null
-TAG="$TRAVIS_BRANCH"
-if [ "$TAG" = "master" ]; then
-  TAG="${TRAVIS_TAG:-latest}"
-fi
+TAG="${TRAVIS_TAG:-latest}"
 echo "Building Docker images for \"$DOCKER_REPO:$TAG\""
 docker buildx build \
+    --progress plain \
     --platform=linux/amd64 \
     --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
     --build-arg VCS_REF=`git rev-parse --short HEAD` \
