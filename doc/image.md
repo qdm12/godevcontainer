@@ -37,8 +37,8 @@ You can extend the Docker image `qmcgaw/godevcontainer` with your own instructio
         ```
 
 1. Modify `.devcontainer/docker-compose.yml` and add `build: .` in the vscode service.
-1. Open the VS code command palette and choose `Remote-Containers: Rebuilt container`
+1. Open the VS code command palette and choose `Remote-Containers: Rebuild container`
 
 ## Special files
 
-You can bind mount a file at `/home/vscode/extend.zshrc` to extend the `~/.zshrc` profile file (`root/extend.zshrc` for `root`).
+You can bind mount a file at `/home/vscode/.welcome.sh` to modify the welcome message (use `/root/.welcome.sh` for `root`).

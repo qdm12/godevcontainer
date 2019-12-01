@@ -31,6 +31,6 @@ The other tools integrating with VS code Go extension are:
 ## Terminal tools
 
 Extra Go binaries tools are installed:
+
 - [github.com/vektra/mockery](https://github.com/vektra/mockery) to generate mocks for testify/mock
 - [github.com/kyoh86/scopelint](https://github.com/kyoh86/scopelint) to detect unpinned variables
-- [github.com/gojp/goreportcard/cmd/goreportcard-cl](https://github.com/gojp/goreportcard/cmd/goreportcard-cl) to generate go report card reports

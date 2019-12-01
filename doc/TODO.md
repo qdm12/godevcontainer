@@ -1,7 +1,5 @@
 # TODO
 
-- [ ] Replace oh-my-zsh+Powerlevel10k with [https://github.com/justjanne/powerline-go](https://github.com/justjanne/powerline-go)
-- [ ] Replace .zshrc welcome with a Go binary
 - [ ] Firewall, see [this](https://code.visualstudio.com/docs/remote/containers#_what-are-the-connectivity-requirements-for-the-vs-code-server-when-it-is-running-in-a-container)
 
 ## Readme

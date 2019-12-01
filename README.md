@@ -1,6 +1,6 @@
 # Go Dev Container
 
-**This is the ultimate Go development container for Visual Studio Code**
+**Ultimate Go development container for Visual Studio Code**
 
 [![godevcontainer](https://github.com/qdm12/godevcontainer/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/godevcontainer)
 
