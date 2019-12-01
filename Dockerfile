@@ -88,9 +88,12 @@ RUN git clone --single-branch --depth 1 https://github.com/robbyrussell/oh-my-zs
 
 # Install Go packages
 ENV GO111MODULE=on
+RUN go get -v golang.org/x/tools/gopls@v0.2.1 && \
+    chown ${USERNAME}:${USER_GID} /go/bin/* && \
+    chmod 500 /go/bin/* && \
+    rm -rf /go/pkg /go/src/* /root/.cache/go-build
 RUN go get -v \
     # Base Go tools needed for VS code Go extension
-    golang.org/x/tools/gopls@v0.2.0 \
     github.com/ramya-rao-a/go-outline \
     github.com/acroca/go-symbols \
     github.com/uudashr/gopkgs/cmd/gopkgs@latest \
