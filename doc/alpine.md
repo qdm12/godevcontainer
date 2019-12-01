@@ -30,7 +30,7 @@ Both `vscode` and `root` users have their default shell set as the terminal desc
 The terminal is quite customized, it is based on:
 
 - `zsh`
-- The [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) framework with the plugins `git`, `extract`, `colorize`, `encode64`, `golang`, `docker` and `docker-compose`.
+- The [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) framework with the plugins `vscode`, `git`, `colorize`, `golang`, `docker` and `docker-compose`.
 - The theme [Powerlevel10k](https://github.com/romkatv/powerlevel10k) with some [default settings](../.p10k.zsh).
 
 It also shows some information on login, such as the Go version or if the docker socket is accessible for example.
