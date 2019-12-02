@@ -4,6 +4,8 @@
 doc
 .dockerignore
 .gitignore
+.travis.yml
+ci.sh
 LICENSE
 README.md
 title.png
