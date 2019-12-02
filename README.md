@@ -59,10 +59,10 @@
 - You can change the `"postCreateCommand"` to be relevant to your situation. In example it could be `go mod download && gofmt ./...` to combine two commands
 - You can change the extensions installed in the Docker image within the `"extensions"` array
 - Other Go settings can be changed or added in the `"settings"` object.
-- You can publish a port to your localhost by uncommenting `// "appPort": 8000,` to access your app from a browser on your desktop for example.
 
 ### docker-compose.yml
 
+- You can publish a port to access it from your host
 - Add containers to be launched with your development container. In example, let's add a postgres database.
     1. Add this block to `.devcontainer/docker-compose.yml`
 

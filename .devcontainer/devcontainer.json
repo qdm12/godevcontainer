@@ -7,7 +7,6 @@
     "postCreateCommand": "go mod download",
     "workspaceFolder": "/workspace",
     // "overrideCommand": "",
-    // "appPort": 8000,
     "extensions": [
         "ms-vscode.go",
         "IBM.output-colorizer",
