@@ -87,7 +87,7 @@ RUN git clone --single-branch --depth 1 https://github.com/robbyrussell/oh-my-zs
 
 # Install Go packages
 ENV GO111MODULE=on
-RUN go get -v golang.org/x/tools/gopls@v0.2.1 && \
+RUN go get -v golang.org/x/tools/gopls@v0.2.2 && \
     chown ${USERNAME}:${USER_GID} /go/bin/* && \
     chmod 500 /go/bin/* && \
     rm -rf /go/pkg /go/src/* /root/.cache/go-build
