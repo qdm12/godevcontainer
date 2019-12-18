@@ -109,7 +109,6 @@ RUN go get -v \
     github.com/davidrjenni/reftools/cmd/fillstruct \
     # Terminal tools
     github.com/vektra/mockery/... \
-    github.com/kyoh86/scopelint \
     2>&1 && \
     chown ${USERNAME}:${USER_GID} /go/bin/* && \
     chmod 500 /go/bin/* && \
