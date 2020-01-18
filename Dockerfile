@@ -51,7 +51,7 @@ RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
 RUN chown ${USERNAME}:${USER_GID} /go/bin /go/src
 
 # Install Alpine packages
-RUN apk add -q --update --progress libstdc++ g++ zsh sudo ca-certificates git openssh-client bash nano
+RUN apk add -q --update --progress libstdc++ g++ zsh sudo ca-certificates git openssh-client bash nano curl
 
 COPY --from=docker-cli --chown=${USER_UID}:${USER_GID} /usr/local/bin/docker /usr/local/bin/docker
 COPY --from=docker-compose --chown=${USER_UID}:${USER_GID} /usr/local/bin/docker-compose /usr/local/bin/docker-compose
