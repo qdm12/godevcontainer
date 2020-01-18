@@ -85,6 +85,7 @@ RUN git clone --single-branch --depth 1 https://github.com/robbyrussell/oh-my-zs
     chown -R root:root /root/.oh-my-zsh
 
 # Install Go packages
+RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d v1.22.2
 ENV GO111MODULE=on
 RUN go get -v golang.org/x/tools/gopls@v0.2.2 && \
     chown ${USERNAME}:${USER_GID} /go/bin/* && \
