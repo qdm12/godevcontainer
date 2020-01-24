@@ -56,7 +56,6 @@
             "--enable", "golint",
             "--enable", "gosec",
             "--enable", "interfacer",
-            "--enable", "lll",
             "--enable", "maligned",
             "--enable", "misspell",
             "--enable", "nakedret",
