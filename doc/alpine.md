@@ -1,6 +1,6 @@
 # Alpine
 
-Alpine 3.10 was the chosen base OS as it is very lightweight and easy to use.
+Alpine 3.11 was the chosen base OS as it is very lightweight and easy to use.
 
 ## Packages
 

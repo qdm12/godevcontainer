@@ -35,7 +35,7 @@ echo "Go version `go version | cut -d' ' -f3`"
 if [ ! -z $DOCKERSOCK_OK ]; then
   echo "Docker server `docker version --format {{.Server.Version}}` | client `docker version --format {{.Client.Version}}`"
   echo "Docker-Compose `docker-compose version --short`"
-  alias alpine='docker run -it --rm alpine:3.10'
+  alias alpine='docker run -it --rm alpine:3.11'
   alias dive='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive'
 fi
 echo

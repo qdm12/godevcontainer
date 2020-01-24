@@ -1,6 +1,6 @@
 # Go
 
-This docker image is based on `golang:1.13-alpine3.10`.
+This docker image is based on `golang:1.13-alpine3.11`.
 
 It also contains a custom [race linux module](race.md) to allow running `go test -race` on Alpine.
 
