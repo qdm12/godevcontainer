@@ -38,6 +38,8 @@ LABEL \
 WORKDIR /home/${USERNAME}
 ENTRYPOINT [ "/bin/zsh" ]
 
+ENV TZ=
+
 # Patch for go test -race on Alpine
 COPY --from=race /tmp/race/lib/tsan/go/race_linux_amd64.syso /usr/local/go/src/runtime/race/race_linux_amd64.syso
 
@@ -51,7 +53,7 @@ RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
 RUN chown ${USERNAME}:${USER_GID} /go/bin /go/src
 
 # Install Alpine packages
-RUN apk add -q --update --progress libstdc++ g++ zsh sudo ca-certificates git openssh-client nano curl
+RUN apk add -q --update --progress libstdc++ g++ zsh sudo ca-certificates git openssh-client nano curl tzdata
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     apk add -q --update --progress hub && \
     sed -i '$ d' /etc/apk/repositories && \

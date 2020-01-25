@@ -39,4 +39,5 @@ if [ ! -z $DOCKERSOCK_OK ]; then
   alias dive='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive'
 fi
 echo
+[ -z $TZ ] && echo "TZ environment variable not set, time might be wrong!"
 [ -f ~/.welcome.sh ] && source ~/.welcome.sh
