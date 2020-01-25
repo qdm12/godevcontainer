@@ -51,7 +51,11 @@ RUN adduser $USERNAME -s /bin/sh -D -u $USER_UID $USER_GID && \
 RUN chown ${USERNAME}:${USER_GID} /go/bin /go/src
 
 # Install Alpine packages
-RUN apk add -q --update --progress libstdc++ g++ zsh sudo ca-certificates git openssh-client bash nano curl
+RUN apk add -q --update --progress libstdc++ g++ zsh sudo ca-certificates git openssh-client nano curl
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+    apk add -q --update --progress hub && \
+    sed -i '$ d' /etc/apk/repositories && \
+    apk update
 
 COPY --from=docker-cli --chown=${USER_UID}:${USER_GID} /usr/local/bin/docker /usr/local/bin/docker
 COPY --from=docker-compose --chown=${USER_UID}:${USER_GID} /usr/local/bin/docker-compose /usr/local/bin/docker-compose

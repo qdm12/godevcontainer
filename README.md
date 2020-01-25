@@ -27,6 +27,7 @@
 - 'Minimal' size of **866MB**
 - Extensible with docker-compose.yml
 - Not compatible with `arm/v8` and `arm/v7` for now because of the Alpine bug to run `go test -race`
+- Some useful tiny packages installed: `hub`, `curl`, `nano`, `git`, `ssh`
 
 ## Requirements
 

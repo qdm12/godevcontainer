@@ -13,8 +13,9 @@ The image comes with several Alpine packages installed.
 - `ca-certificates` to get the lastest certificates for HTTPs
 - `git` to interact with Git repositories
 - `openssh-client` to use SSH keys with Git
-- `bash` for shell scripts written for bash
 - `nano` to edit files simply
+- `curl` to do HTTP requests essentially like POST
+- `hub` interact with Github like a god
 
 ## User
 
