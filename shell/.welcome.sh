@@ -1,5 +1,6 @@
 echo "Terminal Go tools:"
 echo " * mockery: generate testify/mock mocks from interfaces"
 echo "Terminal Docker tools aliases:"
+echo " * alpine: launch an interactive alpine 3.11 container"
 echo " * dive: inspect the layers of a Docker image"
 echo " * ld: run lazydocker in a container"
