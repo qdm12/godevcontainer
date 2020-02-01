@@ -40,12 +40,9 @@ RUN CPUARCH="$(dpkg --print-architecture)" && \
     chown ${USERNAME}:${USER_GID} /go/bin/* && \
     chmod 500 /go/bin/* && \
     rm -rf /go/pkg /go/src/* /root/.cache/go-build; fi
-RUN go get -v golang.org/x/tools/gopls@v0.3.0 && \
-    chown ${USERNAME}:${USER_GID} /go/bin/* && \
-    chmod 500 /go/bin/* && \
-    rm -rf /go/pkg /go/src/* /root/.cache/go-build
 RUN go get -v \
     # Base Go tools needed for VS code Go extension
+    golang.org/x/tools/gopls \
     github.com/ramya-rao-a/go-outline \
     github.com/acroca/go-symbols \
     github.com/uudashr/gopkgs/cmd/gopkgs@latest \
