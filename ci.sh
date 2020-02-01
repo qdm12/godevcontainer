@@ -13,7 +13,6 @@ if [ "$TRAVIS_PULL_REQUEST" = "true" ]; then
     --platform=linux/amd64 \
     --platform=linux/arm64 \
     --platform=linux/arm/v7 \
-    --platform=linux/arm/v6 \
     .
   exit $?
 fi
@@ -46,7 +45,6 @@ docker buildx build \
     --platform=linux/amd64 \
     --platform=linux/arm64 \
     --platform=linux/arm/v7 \
-    --platform=linux/arm/v6 \
     --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
     --build-arg VCS_REF=`git rev-parse --short HEAD` \
     --build-arg VERSION=$DEBIAN_TAG \
