@@ -34,7 +34,7 @@ COPY shell/.zshrc-specific shell/.welcome.sh /root/
 # Install Go packages
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d v1.22.2
 ENV GO111MODULE=on
-RUN go get -v golang.org/x/tools/gopls@v0.2.2 && \
+RUN go get -v golang.org/x/tools/gopls@v0.3.0 && \
     chown ${USERNAME}:${USER_GID} /go/bin/* && \
     chmod 500 /go/bin/* && \
     rm -rf /go/pkg /go/src/* /root/.cache/go-build
