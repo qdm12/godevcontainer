@@ -17,11 +17,18 @@
 
 ## Features
 
-- Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer):
-    - Alpine 3.11 with minimal custom terminal and packages
-    - Go 1.13.7 code obtained from the latest Golang Alpine Docker image
+- `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer` specifics
+    - Based on Alpine 3.11 (size of 874MB)
+    - Using a patch to run `go test -race` on Alpine
+    - Only compatible with `amd64` because of the Alpine patch to run `go test -race`
+- `qmcgaw/godevcontainer:debian`
+    - Based on Debian Buster Slim (size of 962MB)
+    - Compatible with `amd64`, `armv6`, `armv7` and `arm64`
+- Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
+    - Based on either Alpine 3.11 or Debian buster slim
+    - Minimal custom terminal and packages
+    - Go 1.13.7 code obtained from the latest Golang Docker image
     - See more [features](https://github.com/qdm12/basedevcontainer#features)
-- Using a patch to run `go test -race` on Alpine
 - Go tooling [integrating with VS code](https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on):
     - [Google's Go language server gopls](https://github.com/golang/tools/tree/master/gopls)
     - [golangci-lint](https://github.com/golangci/golangci-lint)
@@ -44,7 +51,6 @@
     - Easily bind mount your SSH keys to use with **git**
     - Manage your host Docker from within the dev container, more details at [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer#features)
 - Extensible with docker-compose.yml
-- ~Compatible with `arm/v8` and `arm/v7`~ because of the Alpine bug to run `go test -race`
 
 ## Requirements
 
@@ -100,7 +106,7 @@
 - You can build the development image yourself:
 
     ```sh
-    docker build -t qmcgaw/godevcontainer https://github.com/qdm12/godevcontainer.git
+    docker build -t qmcgaw/godevcontainer -f alpine.Dockerfile https://github.com/qdm12/godevcontainer.git
     ```
 
 - You can extend the Docker image `qmcgaw/godevcontainer` with your own instructions.
@@ -132,6 +138,7 @@
 ## TODOs
 
 - [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer) todos
+- Use build args to copy Go source code and binaries
 - Remove custom race fix, waiting for [this issue to be resolved](https://github.com/golang/go/issues/14481) and add ARM compatibility
 
 ## License
