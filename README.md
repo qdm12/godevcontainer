@@ -23,7 +23,7 @@
     - Only compatible with `amd64` because of the Alpine patch to run `go test -race`
 - `qmcgaw/godevcontainer:debian`
     - Based on Debian Buster Slim (size of 962MB)
-    - Compatible with `amd64`, `armv7` and `arm64`
+    - Compatible with `amd64` and `arm64` (ARM version misses [dlv](https://github.com/go-delve/delve/cmd/dlv))
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
     - Based on either Alpine 3.11 or Debian buster slim
     - Minimal custom terminal and packages

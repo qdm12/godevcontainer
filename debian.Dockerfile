@@ -34,6 +34,12 @@ COPY shell/.zshrc-specific shell/.welcome.sh /root/
 # Install Go packages
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d v1.22.2
 ENV GO111MODULE=on
+RUN CPUARCH="$(dpkg --print-architecture)" && \
+    if [ "$CPUARCH" = "amd64" ]; then \
+    go get -v github.com/go-delve/delve/cmd/dlv && \
+    chown ${USERNAME}:${USER_GID} /go/bin/* && \
+    chmod 500 /go/bin/* && \
+    rm -rf /go/pkg /go/src/* /root/.cache/go-build; fi
 RUN go get -v golang.org/x/tools/gopls@v0.3.0 && \
     chown ${USERNAME}:${USER_GID} /go/bin/* && \
     chmod 500 /go/bin/* && \
@@ -46,7 +52,6 @@ RUN go get -v \
     golang.org/x/tools/cmd/guru \
     golang.org/x/tools/cmd/gorename \
     golang.org/x/lint/golint \
-    github.com/go-delve/delve/cmd/dlv \
     # Extra tools integrating with VS code
     github.com/fatih/gomodifytags \
     github.com/haya14busa/goplay/cmd/goplay \
