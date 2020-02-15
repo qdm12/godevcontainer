@@ -47,7 +47,8 @@ RUN apk add -q --update --progress --no-cache g++ && \
 COPY --chown=${USER_UID}:${USER_GID} shell/.zshrc-specific shell/.welcome.sh /home/${USERNAME}/
 COPY shell/.zshrc-specific shell/.welcome.sh /root/
 # Install Go packages
-RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d v1.22.2
+ARG GOLANGCI_LINT_VERSION=v1.23.6
+RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d ${GOLANGCI_LINT_VERSION}
 ENV GO111MODULE=on
 RUN go get -v \
     # Base Go tools needed for VS code Go extension
