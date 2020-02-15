@@ -20,8 +20,6 @@ COPY --from=golang:1.13.7-buster /usr/local/go /usr/local/go
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
 WORKDIR $GOPATH
-RUN chown ${USERNAME}:${USER_GID} $GOPATH && \
-    chmod 777 $GOPATH
 # Install Alpine packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends g++ && \
@@ -60,7 +58,7 @@ RUN go get -v \
     # Terminal tools
     github.com/vektra/mockery/... \
     2>&1 && \
-    chown ${USERNAME}:${USER_GID} /go/bin/* && \
-    chmod 500 /go/bin/* && \
-    rm -rf /go/pkg /go/src/* /root/.cache/go-build
+    rm -rf /go/pkg/* /go/src/* /root/.cache/go-build && \
+    chown ${USERNAME}:${USER_GID} /go && \
+    chmod 777 /go
 USER ${USERNAME}

@@ -38,8 +38,6 @@ COPY --from=race /tmp/race/lib/tsan/go/race_linux_amd64.syso /usr/local/go/src/r
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
 WORKDIR $GOPATH
-RUN chown ${USERNAME}:${USER_GID} $GOPATH && \
-    chmod 777 $GOPATH
 # Install Alpine packages
 RUN apk add -q --update --progress --no-cache g++ && \
     rm -rf /var/cache/apk/*
@@ -70,7 +68,7 @@ RUN go get -v \
     # Terminal tools
     github.com/vektra/mockery/... \
     2>&1 && \
-    chown ${USERNAME}:${USER_GID} /go/bin/* && \
-    chmod 500 /go/bin/* && \
-    rm -rf /go/pkg /go/src/* /root/.cache/go-build
+    rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
+    chown -R ${USER_UID}:${USER_GID} $GOPATH && \
+    chmod -R 777 $GOPATH
 USER ${USERNAME}
