@@ -18,11 +18,11 @@
 ## Features
 
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer` specifics
-    - Based on Alpine 3.11 (size of 874MB)
+    - Based on Alpine 3.11 (size of 815MB)
     - Using a patch to run `go test -race` on Alpine
     - Only compatible with `amd64` because of the Alpine patch to run `go test -race`
 - `qmcgaw/godevcontainer:debian`
-    - Based on Debian Buster Slim (size of 962MB)
+    - Based on Debian Buster Slim (size of 881MB)
     - Compatible with `amd64` and `arm64` (ARM version misses [dlv](https://github.com/go-delve/delve/cmd/dlv))
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
     - Based on either Alpine 3.11 or Debian buster slim
@@ -31,13 +31,9 @@
     - See more [features](https://github.com/qdm12/basedevcontainer#features)
 - Go tooling [integrating with VS code](https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on):
     - [Google's Go language server gopls](https://github.com/golang/tools/tree/master/gopls)
-    - [golangci-lint](https://github.com/golangci/golangci-lint)
-    - [go-outline](https://github.com/ramya-rao-a/go-outline)
-    - [go-symbols](https://github.com/acroca/go-symbols)
-    - [gopkgs](https://github.com/uudashr/gopkgs)
+    - [golangci-lint](https://github.com/golangci/golangci-lint), includes golint and other linters
     - [guru](https://golang.org/x/tools/cmd/guru)
     - [gorename](https://golang.org/x/tools/cmd/gorename)
-    - [golint](https://golang.org/x/lint/golint)
     - [dlv](https://github.com/go-delve/delve/cmd/dlv)
     - [gomodifytags](https://github.com/fatih/gomodifytags)
     - [goplay](https://github.com/haya14busa/goplay)

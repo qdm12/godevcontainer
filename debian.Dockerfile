@@ -34,26 +34,14 @@ COPY shell/.zshrc-specific shell/.welcome.sh /root/
 # Install Go packages
 ARG GOLANGCI_LINT_VERSION=v1.23.6
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d ${GOLANGCI_LINT_VERSION}
-RUN CPUARCH="$(dpkg --print-architecture)" && \
-    if [ "$CPUARCH" = "amd64" ]; then \
-    go get -v github.com/go-delve/delve/cmd/dlv && \
-    chown ${USERNAME}:${USER_GID} /go/bin/* && \
-    chmod 500 /go/bin/* && \
-    rm -rf /go/pkg /go/src/* /root/.cache/go-build; fi
 RUN go get -v \
     # Base Go tools needed for VS code Go extension
     golang.org/x/tools/gopls \
-    github.com/ramya-rao-a/go-outline \
-    github.com/acroca/go-symbols \
-    github.com/uudashr/gopkgs/cmd/gopkgs@latest \
     golang.org/x/tools/cmd/guru \
     golang.org/x/tools/cmd/gorename \
-    golang.org/x/lint/golint \
     # Extra tools integrating with VS code
     github.com/fatih/gomodifytags \
     github.com/haya14busa/goplay/cmd/goplay \
-    github.com/josharian/impl \
-    github.com/tylerb/gotype-live \
     github.com/cweill/gotests/... \
     github.com/davidrjenni/reftools/cmd/fillstruct \
     # Terminal tools
