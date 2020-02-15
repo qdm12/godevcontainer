@@ -66,6 +66,7 @@ RUN go get -v \
     github.com/cweill/gotests/... \
     github.com/davidrjenni/reftools/cmd/fillstruct \
     # Terminal tools
+    github.com/golang/mock/mockgen \
     github.com/vektra/mockery/... \
     2>&1 && \
     rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \

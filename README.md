@@ -46,6 +46,7 @@
     - [gotests](https://github.com/cweill/gotests)
     - [fillstruct](https://github.com/davidrjenni/reftools/cmd/fillstruct)
 - Terminal Go tools
+    - [mockgen](https://github.com/golang/mock/mockgen) to generate mocks
     - [mockery](https://github.com/vektra/mockery) to generate mocks for testify/mock
 - Cross platform
     - Easily bind mount your SSH keys to use with **git**
