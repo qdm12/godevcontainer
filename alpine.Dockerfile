@@ -36,7 +36,9 @@ USER root
 COPY --from=golang:1.13.7-alpine3.11 /usr/local/go /usr/local/go
 COPY --from=race /tmp/race/lib/tsan/go/race_linux_amd64.syso /usr/local/go/src/runtime/race/race_linux_amd64.syso
 ENV GOPATH=/go
-ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
+ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH \
+    CGO_ENABLED=0 \
+    GO111MODULE=on
 WORKDIR $GOPATH
 # Install Alpine packages (g++ for race testing)
 RUN apk add -q --update --progress --no-cache g++
@@ -46,7 +48,6 @@ COPY shell/.zshrc-specific shell/.welcome.sh /root/
 # Install Go packages
 ARG GOLANGCI_LINT_VERSION=v1.23.6
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d ${GOLANGCI_LINT_VERSION}
-ENV GO111MODULE=on
 RUN go get -v \
     # Base Go tools needed for VS code Go extension
     golang.org/x/tools/gopls \
