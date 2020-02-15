@@ -38,9 +38,8 @@ COPY --from=race /tmp/race/lib/tsan/go/race_linux_amd64.syso /usr/local/go/src/r
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
 WORKDIR $GOPATH
-# Install Alpine packages
-RUN apk add -q --update --progress --no-cache g++ && \
-    rm -rf /var/cache/apk/*
+# Install Alpine packages (g++ for race testing)
+RUN apk add -q --update --progress --no-cache g++
 # Shell setup
 COPY --chown=${USER_UID}:${USER_GID} shell/.zshrc-specific shell/.welcome.sh /home/${USERNAME}/
 COPY shell/.zshrc-specific shell/.welcome.sh /root/
