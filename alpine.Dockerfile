@@ -1,5 +1,5 @@
 ARG ALPINE_VERSION=3.11
-ARG GO_VERSION=1.13.7
+ARG GO_VERSION=1.13.8
 
 # See https://github.com/golang/go/issues/14481
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS race
@@ -33,7 +33,7 @@ LABEL \
     org.opencontainers.image.description="Go development container for Visual Studio Code Remote Containers development"
 USER root
 # TODO use build args
-COPY --from=golang:1.13.7-alpine3.11 /usr/local/go /usr/local/go
+COPY --from=golang:1.13.8-alpine3.11 /usr/local/go /usr/local/go
 COPY --from=race /tmp/race/lib/tsan/go/race_linux_amd64.syso /usr/local/go/src/runtime/race/race_linux_amd64.syso
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH \
