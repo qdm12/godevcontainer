@@ -36,15 +36,6 @@ if [ ! -z "$TAG" ]; then
   DEBIAN_TAG="$DEBIAN_TAG-$TAG"
 fi
 
-LATEST_TAG=latest
-ALPINE_TAG=alpine
-DEBIAN_TAG=debian
-if [ ! -z "$TAG" ]; then
-  LATEST_TAG="$LATEST_TAG-$TAG"
-  ALPINE_TAG="$ALPINE_TAG-$TAG"
-  DEBIAN_TAG="$DEBIAN_TAG-$TAG"
-fi
-
 echo "\n\nBuilding Docker images for \"$DOCKER_REPO:$ALPINE_TAG\" and \"$DOCKER_REPO:$LATEST_TAG\"\n\n"
 docker buildx build \
     -f alpine.Dockerfile \
