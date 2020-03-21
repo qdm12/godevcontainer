@@ -8,20 +8,31 @@
     "workspaceFolder": "/workspace",
     // "overrideCommand": "",
     "extensions": [
+        // General backend
+        "mohsen1.prettify-json",
+        "bajdzis.vscode-database", // Supports connections to mysql or postgres, over SSL, socked
+        "redhat.vscode-yaml", // Kubernetes and Kedge syntax support
+        // Go
         "ms-vscode.go",
+        // Console
         "IBM.output-colorizer",
+        // Git
         "eamodio.gitlens",
         "mhutchie.git-graph",
+        // Other linters
         "davidanson.vscode-markdownlint",
+        "ms-azuretools.vscode-docker",
+        // Other helpers
         "shardulm94.trailing-spaces",
-        "alefragnani.Bookmarks",
         "Gruntfuggly.todo-tree",
-        "mohsen1.prettify-json",
-        "quicktype.quicktype",
-        "spikespaz.vscode-smoothtype",
-        "stkb.rewrap",
+        "bierner.emojisense",
+        "stkb.rewrap", // rewrap comments after n characters on one line
+        // Other
+        "jrebocho.vscode-random", // generate random values
+        "alefragnani.Bookmarks",
+        "quicktype.quicktype", // Paste JSON as code
+        "spikespaz.vscode-smoothtype", // smooth cursor animation
         "vscode-icons-team.vscode-icons",
-        "ms-azuretools.vscode-docker"
     ],
     "settings": {
         // General settings
@@ -83,7 +94,7 @@
             "GOFLAGS": "-tags=integration"
         },
         "go.testEnvVars": {},
-        "go.testFlags": ["-v"],
+        "go.testFlags": ["-v", "-race"],
         "go.testTimeout": "600s"
     }
 }
