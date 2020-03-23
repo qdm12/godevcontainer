@@ -66,5 +66,5 @@ RUN go get -v \
     2>&1 && \
     rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
     chown -R ${USER_UID}:${USER_GID} $GOPATH && \
-    chmod -R 777 $GOPATH
+    chmod -R 700 $GOPATH
 USER ${USERNAME}
