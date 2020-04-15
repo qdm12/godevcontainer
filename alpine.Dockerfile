@@ -41,8 +41,8 @@ ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH \
     GO111MODULE=on
 WORKDIR $GOPATH
 # Install Alpine packages (g++ for race testing)
+RUN mkdir -p /var/cache/apk
 RUN apk add -q --update --progress --no-cache g++
-RUN mkdir /var/cache/apk
 # Shell setup
 COPY --chown=${USER_UID}:${USER_GID} shell/.zshrc-specific shell/.welcome.sh /home/${USERNAME}/
 COPY shell/.zshrc-specific shell/.welcome.sh /root/
