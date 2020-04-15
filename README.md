@@ -4,7 +4,7 @@
 
 [![godevcontainer](https://github.com/qdm12/godevcontainer/raw/master/title.png)](https://hub.docker.com/r/qmcgaw/godevcontainer)
 
-[![Build Status](https://travis-ci.org/qdm12/godevcontainer.svg?branch=master)](https://travis-ci.org/qdm12/godevcontainer)
+[![Build status](https://github.com/qdm12/godevcontainer/workflows/Buildx%20latest/badge.svg)](https://github.com/qdm12/godevcontainer/actions?query=workflow%3A%22Buildx+latest%22)
 [![Docker Pulls](https://img.shields.io/docker/pulls/qmcgaw/godevcontainer.svg)](https://hub.docker.com/r/qmcgaw/godevcontainer)
 [![Docker Stars](https://img.shields.io/docker/stars/qmcgaw/godevcontainer.svg)](https://hub.docker.com/r/qmcgaw/godevcontainer)
 [![Image size](https://images.microbadger.com/badges/image/qmcgaw/godevcontainer.svg)](https://microbadger.com/images/qmcgaw/godevcontainer)

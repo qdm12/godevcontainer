@@ -1,0 +1,39 @@
+name: Docker build
+on:
+  pull_request:
+    branches: [master]
+    paths-ignore:
+      - .devcontainer
+      - .github/workflows/buildx-latest.yml
+      - .github/workflows/buildx-release.yml
+      - .github/workflows/dockerhub-description.yml
+      - .github/workflows/labels.yml
+      - .github/workflows/misspell.yml
+      - .github/workflows/security.yml
+      - .vscode
+      - .gitignore
+      - docker-compose.yml
+      - LICENSE
+      - README.md
+      - title.png
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Buildx Alpine image
+        run: |
+          docker buildx build  \
+            -f alpine.Dockerfile \
+            --progress plain \
+            --platform=linux/amd64 \
+            .
+      - name: Buildx Debian image
+        run: |
+          docker buildx build  \
+            -f debian.Dockerfile \
+            --progress plain \
+            --platform=linux/amd64 \
+            --platform=linux/arm64 \
+            .

@@ -1,11 +1,11 @@
 .devcontainer
 .git
+.github
 .vscode
-doc
 .dockerignore
 .gitignore
-.travis.yml
-ci.sh
+docker-compose.yml
+Dockerfile
 LICENSE
 README.md
 title.png
