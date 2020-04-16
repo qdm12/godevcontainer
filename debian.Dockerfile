@@ -54,7 +54,7 @@ RUN go get -v \
     github.com/golang/mock/mockgen \
     github.com/vektra/mockery/... \
     2>&1 && \
-    rm -rf /go/pkg/* /go/src/* /root/.cache/go-build && \
-    chown -R ${USER_UID}:${USER_GID} /go && \
-    chmod -R 700 /go
+    rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
+    chown -R ${USER_UID}:${USER_GID} $GOPATH && \
+    chmod -R 700 $GOPATH
 USER ${USERNAME}
