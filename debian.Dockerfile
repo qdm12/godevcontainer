@@ -1,3 +1,8 @@
+ARG DEBIAN_VERSION=stretch
+ARG GO_VERSION=1.14
+
+FROM golang:${GO_VERSION}-${DEBIAN_VERSION} AS go
+
 FROM qmcgaw/basedevcontainer:debian
 ARG BUILD_DATE
 ARG VCS_REF
@@ -16,7 +21,7 @@ LABEL \
     org.opencontainers.image.title="Go Dev container Debian" \
     org.opencontainers.image.description="Go development container for Visual Studio Code Remote Containers development"
 USER root
-COPY --from=golang:1.14-stretch /usr/local/go /usr/local/go
+COPY --from=go /usr/local/go /usr/local/go
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH \
     CGO_ENABLED=0 \

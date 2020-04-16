@@ -135,7 +135,6 @@
 ## TODOs
 
 - [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer) todos
-- Use build args to copy Go source code and binaries
 - Remove custom race fix, waiting for [this issue to be resolved](https://github.com/golang/go/issues/14481) and add ARM compatibility
 
 ## License
