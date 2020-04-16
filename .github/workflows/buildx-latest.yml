@@ -16,6 +16,8 @@ on:
       - LICENSE
       - README.md
       - title.png
+  schedule:
+    - cron: '0 9 * * 0'
 jobs:
   buildx:
     runs-on: ubuntu-latest
@@ -48,7 +50,7 @@ jobs:
             --platform=linux/amd64,linux/arm64 \
             --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
             --build-arg VCS_REF=`git rev-parse --short HEAD` \
-            --build-arg VERSION=alpine \
+            --build-arg VERSION=debian \
             -t qmcgaw/godevcontainer:debian \
             --push \
             .
