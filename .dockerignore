@@ -4,8 +4,8 @@
 .vscode
 .dockerignore
 .gitignore
-docker-compose.yml
-Dockerfile
+alpine.Dockerfile
+debian.Dockerfile
 LICENSE
 README.md
 title.png
