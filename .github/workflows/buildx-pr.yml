@@ -34,6 +34,5 @@ jobs:
           docker buildx build  \
             -f debian.Dockerfile \
             --progress plain \
-            --platform=linux/amd64 \
-            --platform=linux/arm64 \
+            --platform=linux/amd64,linux/arm64 \
             .
