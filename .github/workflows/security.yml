@@ -70,13 +70,13 @@ jobs:
       - name: Build image
         if: steps.scratchCheck.outputs.scratch == ''
         run: docker build -f debian.Dockerfile -t image .
-      - name: Phonito
-        if: steps.scratchCheck.outputs.scratch == ''
-        uses: phonito/phonito-scanner-action@master
-        with:
-          image: image
-          fail-level: LOW
-          phonito-token: ${{ secrets.PHONITO_TOKEN }}
+      #- name: Phonito
+      #  if: steps.scratchCheck.outputs.scratch == ''
+      #  uses: phonito/phonito-scanner-action@master
+      #  with:
+      #    image: image
+      #    fail-level: LOW
+      #    phonito-token: ${{ secrets.PHONITO_TOKEN }}
       - name: Trivy
         if: steps.scratchCheck.outputs.scratch == ''
         uses: homoluctus/gitrivy@v1.0.0
