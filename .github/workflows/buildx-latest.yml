@@ -9,7 +9,6 @@ on:
       - .github/workflows/dockerhub-description.yml
       - .github/workflows/labels.yml
       - .github/workflows/misspell.yml
-      - .github/workflows/security.yml
       - .vscode
       - .gitignore
       - docker-compose.yml
