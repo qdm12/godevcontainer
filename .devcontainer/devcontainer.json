@@ -73,6 +73,7 @@
             "--enable", "nakedret",
             "--enable", "prealloc",
             "--enable", "scopelint",
+            "--enable", "staticcheck",
             "--enable", "unconvert",
             "--enable", "unparam",
             "--enable", "whitespace"
