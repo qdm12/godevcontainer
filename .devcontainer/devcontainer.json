@@ -33,6 +33,7 @@
         "quicktype.quicktype", // Paste JSON as code
         "spikespaz.vscode-smoothtype", // smooth cursor animation
         "vscode-icons-team.vscode-icons",
+        "github.vscode-pull-request-github"
     ],
     "settings": {
         // General settings
