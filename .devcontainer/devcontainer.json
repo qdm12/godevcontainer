@@ -4,7 +4,7 @@
     "service": "vscode",
     "runServices": ["vscode"],
     "shutdownAction": "stopCompose",
-    "postCreateCommand": "chmod -R 700 .git && go mod download",
+    "postCreateCommand": "go mod download",
     "workspaceFolder": "/workspace",
     // "overrideCommand": "",
     "extensions": [
