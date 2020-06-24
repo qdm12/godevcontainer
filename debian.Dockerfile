@@ -27,7 +27,7 @@ ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH \
     CGO_ENABLED=0 \
     GO111MODULE=on
 WORKDIR $GOPATH
-# Install Alpine packages
+# Install Debian packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends g++ && \
     apt-get autoremove -y && \
