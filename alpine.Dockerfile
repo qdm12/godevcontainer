@@ -6,7 +6,7 @@ FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS go
 # See https://github.com/golang/go/issues/14481
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS race
 WORKDIR /tmp/race
-RUN apk --update -q --progress --no-cache add git g++
+RUN apk --update -q --progress --no-cache add git g++ patch
 RUN git clone --single-branch https://github.com/llvm-mirror/compiler-rt . && \
     git reset --hard 69445f095c22aac2388f939bedebf224a6efcdaf
 RUN wget -q https://github.com/golang/go/files/4114545/0001-upstream-master-69445f095-hack-to-make-Go-s-race-flag-work-on-Alpine.patch.gz -O patch.gz && \
