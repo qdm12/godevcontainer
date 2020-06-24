@@ -18,14 +18,14 @@
 ## Features
 
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
-    - Based on Alpine 3.11 (size of 827MB)
+    - Based on Alpine 3.12 (size of 827MB)
     - Using a patch to run `go test -race` on Alpine
     - Only compatible with `amd64` because of the Alpine patch to run `go test -race`
 - `qmcgaw/godevcontainer:debian` - **beware [it has CVE](https://github.com/qdm12/godevcontainer/runs/596825646?check_suite_focus=true) because of outdated packages**
     - Based on Debian Bullseye Slim (size of 891MB)
     - Compatible with `amd64` and `arm64` (ARM version misses [dlv](https://github.com/go-delve/delve/cmd/dlv))
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
-    - Based on either Alpine 3.11 or Debian buster slim
+    - Based on either Alpine 3.12 or Debian buster slim
     - Minimal custom terminal and packages
     - Go 1.14 code obtained from the latest Golang Docker image
     - See more [features](https://github.com/qdm12/basedevcontainer#features)
