@@ -13,7 +13,7 @@
         "bajdzis.vscode-database", // Supports connections to mysql or postgres, over SSL, socked
         "redhat.vscode-yaml", // Kubernetes and Kedge syntax support
         // Go
-        "ms-vscode.go",
+        "golang.go",
         // Console
         "IBM.output-colorizer",
         // Git
