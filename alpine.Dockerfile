@@ -55,6 +55,7 @@ RUN go get -v \
     github.com/ramya-rao-a/go-outline \
     golang.org/x/tools/cmd/guru \
     golang.org/x/tools/cmd/gorename \
+    github.com/go-delve/delve/cmd/dlv \
     # Extra tools integrating with VS code
     github.com/fatih/gomodifytags \
     github.com/haya14busa/goplay/cmd/goplay \
