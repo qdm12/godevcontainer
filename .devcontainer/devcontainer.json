@@ -96,7 +96,7 @@
             "GOFLAGS": "-tags=integration"
         },
         "go.testEnvVars": {},
-        "go.testFlags": ["-v", "-race"],
+        "go.testFlags": ["-v"],
         "go.testTimeout": "600s"
     }
 }
