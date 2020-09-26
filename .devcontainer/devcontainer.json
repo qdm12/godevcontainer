@@ -101,7 +101,6 @@
             "--enable", "unused",
             "--enable", "varcheck",
             "--enable", "whitespace",
-            "--enable", "whitespace",
         ],
         // Golang on save
         "go.buildOnSave": "workspace",
