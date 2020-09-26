@@ -16,6 +16,10 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/qdm12/godevcontainer.svg)](https://github.com/qdm12/godevcontainer/issues)
 [![GitHub issues](https://img.shields.io/github/issues/qdm12/godevcontainer.svg)](https://github.com/qdm12/godevcontainer/issues)
 
+## Video
+
+[Video: what is it, how to set it up and how to customize it](https://youtu.be/t8KMhp4U40g)
+
 ## Features
 
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
