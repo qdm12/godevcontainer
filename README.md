@@ -126,7 +126,7 @@
             ```Dockerfile
             FROM qmcgaw/godevcontainer
             USER root
-            apk add curl
+            RUN apk add curl
             USER vscode
             ```
 
