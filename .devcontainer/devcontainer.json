@@ -52,7 +52,7 @@
             "deepCompletion": true,
             "usePlaceholders": false
         },
-        "go.lintTool":"golangci-lint",
+        "go.lintTool": "golangci-lint",
         "go.lintFlags": [
             "--fast",
             "--enable", "asciicheck",
@@ -121,6 +121,9 @@
         },
         "go.testEnvVars": {},
         "go.testFlags": ["-v"],
-        "go.testTimeout": "600s"
+        "go.testTimeout": "600s",
+        "go.coverOnSingleTest": true,
+        "go.coverOnSingleTestFile": true,
+        "go.coverShowCounts": true,
     }
 }
