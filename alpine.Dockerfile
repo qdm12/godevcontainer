@@ -1,20 +1,7 @@
 ARG ALPINE_VERSION=3.12
 ARG GO_VERSION=1.15
 
-FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS go
-
-# See https://github.com/golang/go/issues/14481
-FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS race
-WORKDIR /tmp/race
-RUN apk --update -q --progress --no-cache add git g++ patch
-RUN git clone --single-branch https://github.com/llvm-mirror/compiler-rt . && \
-    git reset --hard 69445f095c22aac2388f939bedebf224a6efcdaf
-RUN wget -q https://github.com/golang/go/files/4114545/0001-upstream-master-69445f095-hack-to-make-Go-s-race-flag-work-on-Alpine.patch.gz -O patch.gz && \
-   gunzip patch.gz && \
-   patch -p1 -i patch
-WORKDIR /tmp/race/lib/tsan/go
-RUN sed -e 's,-Wno-unknown-warning-option,-Wno-error=deprecated,' -i buildgo.sh
-RUN ./buildgo.sh
+FROM golang:${GO_VERSION}-alpine AS go
 
 FROM qmcgaw/basedevcontainer:alpine
 ARG BUILD_DATE
@@ -35,7 +22,6 @@ LABEL \
     org.opencontainers.image.description="Go development container for Visual Studio Code Remote Containers development"
 USER root
 COPY --from=go /usr/local/go /usr/local/go
-COPY --from=race /tmp/race/lib/tsan/go/race_linux_amd64.syso /usr/local/go/src/runtime/race/race_linux_amd64.syso
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH \
     CGO_ENABLED=0 \

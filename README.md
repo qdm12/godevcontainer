@@ -24,7 +24,6 @@
 
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
     - Based on Alpine 3.12 (size of 827MB)
-    - Using a patch to run `go test -race` on Alpine
 - `qmcgaw/godevcontainer:debian` - **beware [it has CVE](https://github.com/qdm12/godevcontainer/runs/596825646?check_suite_focus=true) because of outdated packages**
     - Based on Debian Bullseye Slim (size of 891MB)
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
@@ -138,7 +137,6 @@
 ## TODOs
 
 - [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer) todos
-- Remove custom race fix, waiting for [this issue to be resolved](https://github.com/golang/go/issues/14481) and add ARM compatibility
 
 ## License
 
