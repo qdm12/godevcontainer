@@ -29,7 +29,7 @@ ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH \
 WORKDIR $GOPATH
 # Install Debian packages
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends g++ && \
+    apt-get install -y --no-install-recommends g++ wget && \
     apt-get autoremove -y && \
     apt-get clean -y && \
     rm -r /var/cache/* /var/lib/apt/lists/*
