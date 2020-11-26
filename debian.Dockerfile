@@ -58,4 +58,31 @@ RUN go get -v \
     rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
     chown -R ${USER_UID}:${USER_GID} $GOPATH && \
     chmod -R 777 $GOPATH
+
+# EXTRA TOOLS
+# Kubectl
+ARG KUBECTL_VERSION=v1.19.4
+RUN wget -qO /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
+    chmod 500 /usr/local/bin/kubectl && \
+    chown ${USERNAME} /usr/local/bin/kubectl
+# Stern
+ARG STERN_VERSION=1.11.0
+RUN wget -qO /usr/local/bin/stern https://github.com/wercker/stern/releases/download/${STERN_VERSION}/stern_$(uname -s)_amd64 && \
+    chown ${USER_UID}:${USER_GID} /usr/local/bin/stern && \
+    chmod 500 /usr/local/bin/stern
+# Kubectx and Kubens
+ARG KUBECTX_VERSION=v0.9.1
+RUN wget -qO- "https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubectx_${KUBECTX_VERSION}_$(uname -s)_$(uname -m).tar.gz" | \
+    tar -xzC /usr/local/bin kubectx && \
+    wget -qO- "https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubens_${KUBECTX_VERSION}_$(uname -s)_$(uname -m).tar.gz" | \
+    tar -xzC /usr/local/bin kubens && \
+    chmod 500 /usr/local/bin/kube* && \
+    chown ${USERNAME} /usr/local/bin/kube*
+# Helm
+ARG HELM3_VERSION=v3.3.4
+RUN wget -qO- "https://get.helm.sh/helm-${HELM3_VERSION}-linux-amd64.tar.gz" | \
+    tar -xzC /usr/local/bin --strip-components=1 linux-amd64/helm && \
+    chmod 500 /usr/local/bin/helm* && \
+    chown ${USERNAME} /usr/local/bin/helm*
+
 USER ${USERNAME}
