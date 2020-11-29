@@ -27,7 +27,7 @@ It works on Linux, Windows and OSX.
 You can make changes to the [Dockerfile](Dockerfile) and then rebuild the image. For example, your Dockerfile could be:
 
 ```Dockerfile
-FROM gcr.io/dmx-cluster/godev
+FROM qmcgaw/godevcontainer
 USER root
 RUN apk add curl
 USER vscode
