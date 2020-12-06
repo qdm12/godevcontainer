@@ -2,19 +2,11 @@ name: Buildx latest
 on:
   push:
     branches: [master]
-    paths-ignore:
-      - .devcontainer
-      - .github/workflows/buildx-pr.yml
-      - .github/workflows/buildx-release.yml
-      - .github/workflows/dockerhub-description.yml
-      - .github/workflows/labels.yml
-      - .github/workflows/misspell.yml
-      - .vscode
-      - .gitignore
-      - docker-compose.yml
-      - LICENSE
-      - README.md
-      - title.png
+    paths:
+      - .github/workflows/buildx-latest.yml
+      - alpine.Dockerfile
+      - debian.Dockerfile
+      - shell/**
   schedule:
     - cron: '0 9 * * 0'
 jobs:
