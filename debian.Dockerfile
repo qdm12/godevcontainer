@@ -60,7 +60,7 @@ RUN go get -v \
     # Terminal tools
     github.com/golang/mock/gomock@${MOCK_VERSION} \
     github.com/golang/mock/mockgen@${MOCK_VERSION} \
-    github.com/vektra/mockery/...@${MOCKERY_VERSION} \
+    github.com/vektra/mockery/v2/...@${MOCKERY_VERSION} \
     2>&1 && \
     rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
     chown -R ${USER_UID}:${USER_GID} $GOPATH && \
