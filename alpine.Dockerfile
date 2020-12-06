@@ -35,22 +35,29 @@ COPY shell/.zshrc-specific shell/.welcome.sh /root/
 # Install Go packages
 ARG GOLANGCI_LINT_VERSION=v1.33.0
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d ${GOLANGCI_LINT_VERSION}
+ARG GOPLS_VERSION=v0.5.5
+ARG DELVE_VERSION=v1.5.0
+ARG GOMODIFYTAGS_VERSION=v1.13.0
+ARG GOPLAY_VERSION=v1.0.0
+ARG GOTESTS_VERSION=v1.5.3
+ARG MOCK_VERSION=v1.4.4
+ARG MOCKERY_VERSION=v2.3.0
 RUN go get -v \
     # Base Go tools needed for VS code Go extension
-    golang.org/x/tools/gopls \
+    golang.org/x/tools/gopls@${GOPLS_VERSION} \
     github.com/ramya-rao-a/go-outline \
     golang.org/x/tools/cmd/guru \
     golang.org/x/tools/cmd/gorename \
-    github.com/go-delve/delve/cmd/dlv \
+    github.com/go-delve/delve/cmd/dlv@${DELVE_VERSION} \
     # Extra tools integrating with VS code
-    github.com/fatih/gomodifytags \
-    github.com/haya14busa/goplay/cmd/goplay \
-    github.com/cweill/gotests/... \
+    github.com/fatih/gomodifytags@${GOMODIFYTAGS_VERSION} \
+    github.com/haya14busa/goplay/cmd/goplay@${GOPLAY_VERSION} \
+    github.com/cweill/gotests/...@${GOTESTS_VERSION} \
     github.com/davidrjenni/reftools/cmd/fillstruct \
     # Terminal tools
-    github.com/golang/mock/gomock \
-    github.com/golang/mock/mockgen \
-    github.com/vektra/mockery/... \
+    github.com/golang/mock/gomock@${MOCK_VERSION} \
+    github.com/golang/mock/mockgen@${MOCK_VERSION} \
+    github.com/vektra/mockery/v2/...@${MOCKERY_VERSION} \
     2>&1 && \
     rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
     chown -R ${USER_UID}:${USER_GID} $GOPATH && \
