@@ -1,1 +1,1 @@
-plugins=(vscode git colorize golang docker docker-compose)
+plugins=(vscode git colorize golang docker docker-compose kubectl helm)
