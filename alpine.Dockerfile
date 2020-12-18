@@ -35,16 +35,19 @@ COPY shell/.zshrc-specific shell/.welcome.sh /root/
 # Install Go packages
 ARG GOLANGCI_LINT_VERSION=v1.33.0
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d ${GOLANGCI_LINT_VERSION}
-ARG GOPLS_VERSION=v0.6.0
+ARG GOPLS_VERSION=v0.6.1
 ARG DELVE_VERSION=v1.5.0
 ARG GOMODIFYTAGS_VERSION=v1.13.0
 ARG GOPLAY_VERSION=v1.0.0
 ARG GOTESTS_VERSION=v1.5.3
 ARG MOCK_VERSION=v1.4.4
 ARG MOCKERY_VERSION=v2.3.0
+RUN go get -v golang.org/x/tools/gopls@${GOPLS_VERSION} 2>&1 && \
+    rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
+    chown -R ${USER_UID}:${USER_GID} $GOPATH && \
+    chmod -R 777 $GOPATH
 RUN go get -v \
     # Base Go tools needed for VS code Go extension
-    golang.org/x/tools/gopls@${GOPLS_VERSION} \
     github.com/ramya-rao-a/go-outline \
     golang.org/x/tools/cmd/guru \
     golang.org/x/tools/cmd/gorename \
