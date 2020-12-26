@@ -7,8 +7,6 @@ on:
       - alpine.Dockerfile
       - debian.Dockerfile
       - shell/**
-  schedule:
-    - cron: '0 9 * * 0'
 jobs:
   buildx:
     runs-on: ubuntu-latest
