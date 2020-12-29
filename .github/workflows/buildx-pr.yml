@@ -4,9 +4,10 @@ on:
     branches: [master]
     paths:
       - .github/workflows/buildx-pr.yml
+      - shell/**
+      - .dockerignore
       - alpine.Dockerfile
       - debian.Dockerfile
-      - shell/**
 jobs:
   build:
     runs-on: ubuntu-latest

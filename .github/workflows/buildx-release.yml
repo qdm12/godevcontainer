@@ -4,9 +4,10 @@ on:
     types: [published]
     paths:
       - .github/workflows/buildx-release.yml
+      - shell/**
+      - .dockerignore
       - alpine.Dockerfile
       - debian.Dockerfile
-      - shell/**
 jobs:
   buildx:
     runs-on: ubuntu-latest

@@ -4,9 +4,10 @@ on:
     branches: [master]
     paths:
       - .github/workflows/buildx-latest.yml
+      - shell/**
+      - .dockerignore
       - alpine.Dockerfile
       - debian.Dockerfile
-      - shell/**
 jobs:
   buildx:
     runs-on: ubuntu-latest
