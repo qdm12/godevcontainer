@@ -16,10 +16,6 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/qdm12/godevcontainer.svg)](https://github.com/qdm12/godevcontainer/issues)
 [![GitHub issues](https://img.shields.io/github/issues/qdm12/godevcontainer.svg)](https://github.com/qdm12/godevcontainer/issues)
 
-## Video
-
-[Video: what is it, how to set it up and how to customize it](https://youtu.be/t8KMhp4U40g)
-
 ## Features
 
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
@@ -62,7 +58,15 @@
 
 ## Setup for a project
 
-1. Download this repository and put the [.devcontainer](.devcontainer) directory in your project.
+1. Setup your configuration files
+    - With style 💯
+
+        ```sh
+        docker run -it --rm -v "/yourrepopath:/repository" qmcgaw/devtainr:v0.2.0 -dev go -path /repository -name projectname
+        ```
+
+        Or use the [built binary](https://github.com/qdm12/devtainr#binary)
+    - Or manually: download this repository and put the [.devcontainer](.devcontainer) directory in your project.
 1. If you have a *.vscode/settings.json*, eventually move the settings to *.devcontainer/devcontainer.json* in the `"settings"` section as *.vscode/settings.json* take precedence over the settings defined in *.devcontainer/devcontainer.json*.
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P) and select `Remote-Containers: Open Folder in Container...` and choose your project directory
 
@@ -73,7 +77,6 @@ See the [.devcontainer/README.md](.devcontainer/README.md) document in your repo
 ## TODOs
 
 - [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer) todos
-- Setup Go binary
 
 ## License
 
