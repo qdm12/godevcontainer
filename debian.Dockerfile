@@ -37,7 +37,7 @@ RUN apt-get update && \
 COPY --chown=${USER_UID}:${USER_GID} shell/.zshrc-specific shell/.welcome.sh /home/${USERNAME}/
 COPY shell/.zshrc-specific shell/.welcome.sh /root/
 # Install Go packages
-ARG GOLANGCI_LINT_VERSION=v1.34.1
+ARG GOLANGCI_LINT_VERSION=v1.35.2
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d ${GOLANGCI_LINT_VERSION}
 ARG GOPLS_VERSION=v0.6.3
 ARG DELVE_VERSION=v1.5.0
