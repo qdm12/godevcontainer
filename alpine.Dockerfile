@@ -1,7 +1,7 @@
-ARG ALPINE_VERSION=3.12
+ARG ALPINE_VERSION=3.13
 ARG GO_VERSION=1.15
 
-FROM golang:${GO_VERSION}-alpine AS go
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS go
 
 FROM qmcgaw/basedevcontainer:alpine
 ARG BUILD_DATE
