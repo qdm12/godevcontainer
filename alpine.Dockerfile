@@ -5,7 +5,7 @@ FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS go
 
 FROM qmcgaw/basedevcontainer:alpine
 ARG BUILD_DATE
-ARG VCS_REF
+ARG COMMIT
 ARG VERSION=local
 ARG USERNAME=vscode
 ARG USER_UID=1000

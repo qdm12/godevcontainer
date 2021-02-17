@@ -5,7 +5,7 @@ FROM golang:${GO_VERSION}-${DEBIAN_VERSION} AS go
 
 FROM qmcgaw/basedevcontainer:debian
 ARG BUILD_DATE
-ARG VCS_REF
+ARG COMMIT
 ARG VERSION=local
 ARG USERNAME=vscode
 ARG USER_UID=1000

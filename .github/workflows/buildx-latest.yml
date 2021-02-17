@@ -1,45 +1,62 @@
 name: Buildx latest
 on:
   push:
-    branches: [master]
+    branches:
+      - master
     paths:
       - .github/workflows/buildx-latest.yml
       - shell/**
       - .dockerignore
       - alpine.Dockerfile
       - debian.Dockerfile
+
 jobs:
-  buildx:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Buildx setup
-        uses: crazy-max/ghaction-docker-buildx@v1
-      - name: Dockerhub login
-        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u qmcgaw --password-stdin 2>&1
-      - name: Buildx Alpine
+
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
+
+      - uses: docker/login-action@v1
+        with:
+          username: qmcgaw
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Set variables
+        id: vars
         run: |
-          docker buildx build \
-            -f alpine.Dockerfile \
-            --progress plain \
-            --platform=linux/amd64 \
-            --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-            --build-arg VCS_REF=`git rev-parse --short HEAD` \
-            --build-arg VERSION=alpine \
-            -t qmcgaw/godevcontainer:latest \
-            -t qmcgaw/godevcontainer:alpine \
-            --push \
-            .
-      - name: Buildx Debian
-        run: |
-          docker buildx build \
-            -f debian.Dockerfile \
-            --progress plain \
-            --platform=linux/amd64 \
-            --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-            --build-arg VCS_REF=`git rev-parse --short HEAD` \
-            --build-arg VERSION=debian \
-            -t qmcgaw/godevcontainer:debian \
-            --push \
-            .
-      - run: curl -X POST https://hooks.microbadger.com/images/qmcgaw/godevcontainer/v4frfjbWjrt91BFJFuoQejzhzfM= || exit 0
+          echo ::set-output name=commit::$(git rev-parse --short HEAD)
+          echo ::set-output name=build_date::$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          echo ::set-output name=platforms::linux/amd64
+
+      - name: Build and push Alpine image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./alpine.Dockerfile
+          platforms: ${{ steps.vars.outputs.platforms }}
+          build-args: |
+            BUILD_DATE=${{ steps.vars.outputs.build_date }}
+            COMMIT=${{ steps.vars.outputs.commit }}
+            VERSION=${{ steps.vars.outputs.alpine_version }}
+          tags: qmcgaw/godevcontainer,qmcgaw/godevcontainer:alpine
+          push: true
+
+      - name: Build and push Debian image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./debian.Dockerfile
+          platforms: ${{ steps.vars.outputs.platforms }}
+          build-args: |
+            BUILD_DATE=${{ steps.vars.outputs.build_date }}
+            COMMIT=${{ steps.vars.outputs.commit }}
+            VERSION=${{ steps.vars.outputs.debian_version }}
+          tags: qmcgaw/godevcontainer:debian
+          push: true
+
+      - name: Microbadger hook
+        run: curl -X POST https://hooks.microbadger.com/images/qmcgaw/godevcontainer/v4frfjbWjrt91BFJFuoQejzhzfM=
+        continue-on-error: true
