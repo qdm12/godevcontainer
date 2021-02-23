@@ -33,7 +33,7 @@ RUN apk add -q --update --progress --no-cache g++
 COPY --chown=${USER_UID}:${USER_GID} shell/.zshrc-specific shell/.welcome.sh /home/${USERNAME}/
 COPY shell/.zshrc-specific shell/.welcome.sh /root/
 # Install Go packages
-ARG GOLANGCI_LINT_VERSION=v1.36.0
+ARG GOLANGCI_LINT_VERSION=v1.37.1
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d ${GOLANGCI_LINT_VERSION}
 ARG GOPLS_VERSION=v0.6.4
 ARG DELVE_VERSION=v1.5.0
