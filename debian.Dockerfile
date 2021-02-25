@@ -44,7 +44,7 @@ ARG DELVE_VERSION=v1.5.0
 ARG GOMODIFYTAGS_VERSION=v1.13.0
 ARG GOPLAY_VERSION=v1.0.0
 ARG GOTESTS_VERSION=v1.5.3
-ARG MOCK_VERSION=v1.4.4
+ARG MOCK_VERSION=v1.5.0
 ARG MOCKERY_VERSION=v2.3.0
 RUN go get -v golang.org/x/tools/gopls@${GOPLS_VERSION} 2>&1 && \
     rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
