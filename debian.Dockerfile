@@ -81,7 +81,7 @@ RUN wget -qO /usr/local/bin/stern https://github.com/wercker/stern/releases/down
     chown ${USER_UID}:${USER_GID} /usr/local/bin/stern && \
     chmod 500 /usr/local/bin/stern
 # Kubectx and Kubens
-ARG KUBECTX_VERSION=v0.9.2
+ARG KUBECTX_VERSION=v0.9.3
 RUN wget -qO- "https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubectx_${KUBECTX_VERSION}_$(uname -s)_$(uname -m).tar.gz" | \
     tar -xzC /usr/local/bin kubectx && \
     wget -qO- "https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubens_${KUBECTX_VERSION}_$(uname -s)_$(uname -m).tar.gz" | \

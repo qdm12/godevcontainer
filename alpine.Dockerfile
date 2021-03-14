@@ -73,7 +73,7 @@ RUN wget -qO /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-r
     chmod 500 /usr/local/bin/kubectl && \
     chown ${USERNAME} /usr/local/bin/kubectl
 # Kubectx and Kubens
-ARG KUBECTX_VERSION=v0.9.2
+ARG KUBECTX_VERSION=v0.9.3
 RUN wget -qO- "https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubectx_${KUBECTX_VERSION}_$(uname -s)_$(uname -m).tar.gz" | \
     tar -xzC /usr/local/bin kubectx && \
     wget -qO- "https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VERSION}/kubens_${KUBECTX_VERSION}_$(uname -s)_$(uname -m).tar.gz" | \
