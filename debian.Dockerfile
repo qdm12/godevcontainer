@@ -40,7 +40,7 @@ COPY shell/.zshrc-specific shell/.welcome.sh /root/
 ARG GOLANGCI_LINT_VERSION=v1.39.0
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d ${GOLANGCI_LINT_VERSION}
 ARG GOPLS_VERSION=v0.6.10
-ARG DELVE_VERSION=v1.5.0
+ARG DELVE_VERSION=v1.6.0
 ARG GOMODIFYTAGS_VERSION=v1.13.0
 ARG GOPLAY_VERSION=v1.0.0
 ARG GOTESTS_VERSION=v1.5.3
