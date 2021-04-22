@@ -71,7 +71,7 @@ RUN go get -v \
 
 # EXTRA TOOLS
 # Kubectl
-ARG KUBECTL_VERSION=v1.19.4
+ARG KUBECTL_VERSION=v1.21.0
 RUN wget -qO /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     chmod 500 /usr/local/bin/kubectl && \
     chown ${USERNAME} /usr/local/bin/kubectl
