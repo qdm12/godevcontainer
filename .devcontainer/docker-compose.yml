@@ -4,20 +4,15 @@ services:
   vscode:
     build: .
     image: godevcontainer
-    # image: qmcgaw/godevcontainer:alpine
-    # image: qmcgaw/godevcontainer:debian
     volumes:
       - ../:/workspace
       # Docker socket to access Docker server
       - /var/run/docker.sock:/var/run/docker.sock
       # SSH directory
-      - ~/.ssh:/home/vscode/.ssh
       - ~/.ssh:/root/.ssh
       # Git config
-      - ~/.gitconfig:/home/districter/.gitconfig
       - ~/.gitconfig:/root/.gitconfig
       # Kubernetes
-      # - ~/.kube:/home/districter/.kube
       # - ~/.kube:/root/.kube
     environment:
       - TZ=
