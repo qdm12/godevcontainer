@@ -6,6 +6,8 @@ services:
     image: godevcontainer
     volumes:
       - ../:/workspace
+      # Docker
+      - ~/.docker:/root/.docker:z
       # Docker socket to access Docker server
       - /var/run/docker.sock:/var/run/docker.sock
       # SSH directory for Linux, OSX and WSL
