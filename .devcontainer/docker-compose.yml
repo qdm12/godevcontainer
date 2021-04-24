@@ -9,14 +9,16 @@ services:
       # Docker socket to access Docker server
       - /var/run/docker.sock:/var/run/docker.sock
       # SSH directory for Linux, OSX and WSL
-      - ~/.ssh:/root/.ssh
+      - ~/.ssh:/root/.ssh:z
       # For Windows without WSL, a copy will be made
       # from /tmp/.ssh to ~/.ssh to fix permissions
       # - ~/.ssh:/tmp/.ssh:ro
+      # Shell history persistence
+      - ~/.zsh_history:/root/.zsh_history:z
       # Git config
-      - ~/.gitconfig:/root/.gitconfig
+      - ~/.gitconfig:/root/.gitconfig:z
       # Kubernetes
-      # - ~/.kube:/root/.kube
+      - ~/.kube:/root/.kube:z
     environment:
       - TZ=
     cap_add:
