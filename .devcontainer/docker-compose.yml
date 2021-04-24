@@ -8,8 +8,11 @@ services:
       - ../:/workspace
       # Docker socket to access Docker server
       - /var/run/docker.sock:/var/run/docker.sock
-      # SSH directory
+      # SSH directory for Linux, OSX and WSL
       - ~/.ssh:/root/.ssh
+      # For Windows without WSL, a copy will be made
+      # from /tmp/.ssh to ~/.ssh to fix permissions
+      # - ~/.ssh:/tmp/.ssh:ro
       # Git config
       - ~/.gitconfig:/root/.gitconfig
       # Kubernetes
