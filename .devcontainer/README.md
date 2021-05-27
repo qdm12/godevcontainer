@@ -29,12 +29,8 @@ You can make changes to the [Dockerfile](Dockerfile) and then rebuild the image.
 
 ```Dockerfile
 FROM qmcgaw/godevcontainer
-USER root
 RUN apk add curl
-USER vscode
 ```
-
-Note that you may need to use `USER root` to build as root, and then change back to `USER vscode`.
 
 To rebuild the image, either:
 
@@ -51,7 +47,7 @@ You can bind mount a shell script to `/home/vscode/.welcome.sh` to replace the [
 
 ### Publish a port
 
-To access a port from your host to your development container, publish a port in [docker-compose.yml](docker-compose.yml).
+To access a port from your host to your development container, publish a port in [docker-compose.yml](docker-compose.yml). You can also now do it directly with VSCode without restarting the container.
 
 ### Run other services
 
