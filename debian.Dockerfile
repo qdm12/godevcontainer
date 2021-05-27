@@ -79,7 +79,7 @@ RUN wget -qO- "https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VER
     tar -xzC /usr/local/bin kubens && \
     chmod 500 /usr/local/bin/kube*
 # Helm
-ARG HELM3_VERSION=v3.5.4
+ARG HELM3_VERSION=v3.6.0
 RUN wget -qO- "https://get.helm.sh/helm-${HELM3_VERSION}-linux-amd64.tar.gz" | \
     tar -xzC /usr/local/bin --strip-components=1 linux-amd64/helm && \
     chmod 500 /usr/local/bin/helm*

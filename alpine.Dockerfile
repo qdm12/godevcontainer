@@ -76,7 +76,7 @@ ARG STERN_VERSION=1.11.0
 RUN wget -qO /usr/local/bin/stern https://github.com/wercker/stern/releases/download/${STERN_VERSION}/stern_$(uname -s)_amd64 && \
     chmod 500 /usr/local/bin/stern
 # Helm
-ARG HELM3_VERSION=v3.5.4
+ARG HELM3_VERSION=v3.6.0
 RUN wget -qO- "https://get.helm.sh/helm-${HELM3_VERSION}-linux-amd64.tar.gz" | \
     tar -xzC /usr/local/bin --strip-components=1 linux-amd64/helm && \
     chmod 500 /usr/local/bin/helm*
