@@ -1,8 +1,12 @@
 {
     "name": "project-dev",
-    "dockerComposeFile": ["docker-compose.yml"],
+    "dockerComposeFile": [
+        "docker-compose.yml"
+    ],
     "service": "vscode",
-    "runServices": ["vscode"],
+    "runServices": [
+        "vscode"
+    ],
     "shutdownAction": "stopCompose",
     "postCreateCommand": "source ~/.windows.sh && go mod download && go mod tidy",
     "workspaceFolder": "/workspace",
@@ -71,7 +75,10 @@
         "go.testEnvVars": {
             "": "",
         },
-        "go.testFlags": ["-v", "-race"],
+        "go.testFlags": [
+            "-v",
+            "-race"
+        ],
         "go.testTimeout": "10s",
         "go.coverOnSingleTest": true,
         "go.coverOnSingleTestFile": true,
