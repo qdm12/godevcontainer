@@ -1,4 +1,5 @@
 ARG DEBIAN_VERSION=buster
+ARG ALPINE_VERSION=3.13
 ARG GO_VERSION=1.16
 
 FROM golang:${GO_VERSION}-${DEBIAN_VERSION} AS go
@@ -12,6 +13,109 @@ RUN apk add --no-cache git && \
 COPY --from=qmcgaw/xcputranslate:v0.4.0 /xcputranslate /usr/local/bin/xcputranslate
 WORKDIR /tmp/build
 ARG TARGETPLATFORM
+
+FROM gobuilder AS fillstruct
+RUN git clone --depth 1 https://github.com/davidrjenni/reftools.git .
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/fillstruct ./cmd/fillstruct && \
+    chmod 500 /tmp/fillstruct
+
+FROM gobuilder AS go-outline
+RUN git clone --depth 1 https://github.com/ramya-rao-a/go-outline.git .
+RUN go mod init github.com/ramya-rao-a/go-outline && \
+    go mod tidy
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/go-outline && \
+    chmod 500 /tmp/go-outline
+
+FROM gobuilder AS gomodifytags
+ARG GOMODIFYTAGS_VERSION=v1.13.0
+RUN git clone --depth 1 --branch ${GOMODIFYTAGS_VERSION} https://github.com/fatih/gomodifytags.git .
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/gomodifytags && \
+    chmod 500 /tmp/gomodifytags
+
+FROM gobuilder AS goplay
+ARG GOPLAY_VERSION=v1.0.0
+RUN git clone --depth 1 --branch ${GOPLAY_VERSION} https://github.com/haya14busa/goplay.git .
+RUN go mod init github.com/haya14busa/goplay && \
+    go mod tidy
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/goplay ./cmd/goplay && \
+    chmod 500 /tmp/goplay
+
+FROM gobuilder AS gotests
+ARG GOTESTS_VERSION=v1.5.3
+RUN git clone --depth 1 --branch ${GOTESTS_VERSION} https://github.com/cweill/gotests.git .
+RUN go mod init github.com/cweill/gotests && \
+    go mod tidy
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/gotests && \
+    chmod 500 /tmp/gotests
+
+FROM gobuilder AS dlv
+ARG DELVE_VERSION=v1.6.1
+RUN git clone --depth 1 --branch ${DELVE_VERSION} https://github.com/go-delve/delve.git .
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/dlv ./cmd/dlv && \
+    chmod 500 /tmp/dlv
+
+FROM gobuilder AS mockery
+ARG MOCKERY_VERSION=v2.3.0
+RUN git clone --depth 1 --branch ${MOCKERY_VERSION} https://github.com/vektra/mockery.git .
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/mockery && \
+    chmod 500 /tmp/mockery
+
+FROM gobuilder AS gomock
+ARG MOCK_VERSION=v1.5.0
+RUN git clone --depth 1 --branch ${MOCK_VERSION} https://github.com/golang/mock.git .
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/gomock ./gomock && \
+    chmod 500 /tmp/gomock
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/mockgen ./mockgen && \
+    chmod 500 /tmp/mockgen
+
+FROM gobuilder AS tools
+ARG GOPLS_VERSION=v0.6.11
+RUN git clone --depth 1 --branch "gopls/${GOPLS_VERSION}" https://github.com/golang/tools.git .
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/guru golang.org/x/tools/cmd/guru && \
+    chmod 500 /tmp/guru
+RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/gorename golang.org/x/tools/cmd/gorename && \
+    chmod 500 /tmp/gorename
+RUN cd gopls && \
+    GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w" -o /tmp/gopls golang.org/x/tools/gopls && \
+    chmod 500 /tmp/gopls
+
+FROM gobuilder AS golangci-lint
+ARG GOLANGCI_LINT_VERSION=v1.40.1
+RUN git clone --depth 1 --branch ${GOLANGCI_LINT_VERSION} https://github.com/golangci/golangci-lint.git .
+RUN COMMIT="$(git rev-parse --short HEAD)" && \
+    DATE="$(date +%Y-%m-%dT%T%z)" && \
+    GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w \
+    -X 'main.version==${GOLANGCI_LINT_VERSION}' \
+    -X 'main.commit=${COMMIT}' \
+    -X 'main.date=${DATE}' \
+    " -o /tmp/golangci-lint ./cmd/golangci-lint && \
+    chmod 500 /tmp/golangci-lint
 
 FROM gobuilder AS kubectl
 ARG KUBERNETES_VERSION=v1.21.1
@@ -105,40 +209,24 @@ RUN apt-get update && \
     rm -r /var/cache/* /var/lib/apt/lists/*
 # Shell setup
 COPY shell/.zshrc-specific shell/.welcome.sh /root/
-# Install Go packages
-ARG GOLANGCI_LINT_VERSION=v1.40.1
-RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /bin -d ${GOLANGCI_LINT_VERSION}
-ARG GOPLS_VERSION=v0.6.11
-ARG DELVE_VERSION=v1.6.1
-ARG GOMODIFYTAGS_VERSION=v1.13.0
-ARG GOPLAY_VERSION=v1.0.0
-ARG GOTESTS_VERSION=v1.5.3
-ARG MOCK_VERSION=v1.5.0
-ARG MOCKERY_VERSION=v2.3.0
-RUN go get -v golang.org/x/tools/gopls@${GOPLS_VERSION} 2>&1 && \
-    rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
-    chmod -R 777 $GOPATH
-RUN go get -v \
-    # Base Go tools needed for VS code Go extension
-    golang.org/x/tools/cmd/guru \
-    golang.org/x/tools/cmd/gorename \
-    github.com/go-delve/delve/cmd/dlv@${DELVE_VERSION} \
-    # Extra tools integrating with VS code
-    github.com/fatih/gomodifytags@${GOMODIFYTAGS_VERSION} \
-    github.com/haya14busa/goplay/cmd/goplay@${GOPLAY_VERSION} \
-    github.com/cweill/gotests/...@${GOTESTS_VERSION} \
-    github.com/davidrjenni/reftools/cmd/fillstruct \
-    # Terminal tools
-    github.com/golang/mock/gomock@${MOCK_VERSION} \
-    github.com/golang/mock/mockgen@${MOCK_VERSION} \
-    github.com/vektra/mockery/v2/...@${MOCKERY_VERSION} \
-    2>&1 && \
-    rm -rf $GOPATH/pkg/* $GOPATH/src/* /root/.cache/go-build && \
-    chmod -R 777 $GOPATH
+
+COPY --from=fillstruct /tmp/fillstruct /go/bin/
+COPY --from=go-outline /tmp/go-outline /go/bin/
+COPY --from=gomodifytags /tmp/gomodifytags /go/bin/
+COPY --from=goplay /tmp/goplay /go/bin/
+COPY --from=gotests /tmp/gotests /go/bin/
+COPY --from=dlv /tmp/dlv /go/bin/
+COPY --from=mockery /tmp/mockery /go/bin/
+COPY --from=gomock /tmp/gomock /go/bin/
+COPY --from=gomock /tmp/mockgen /go/bin/
+COPY --from=tools /tmp/gopls /go/bin/
+COPY --from=tools /tmp/gorename /go/bin/
+COPY --from=tools /tmp/guru /go/bin/
+COPY --from=golangci-lint /tmp/golangci-lint /go/bin/
 
 # Extra binary tools
 COPY --from=kubectl /tmp/kubectl /usr/local/bin/
 COPY --from=stern /tmp/stern /usr/local/bin/
 COPY --from=kubectx /tmp/kubectx /usr/local/bin/
-COPY --from=kubectx /tmp/kubens /usr/local/bin/kubens
-COPY --from=helm /tmp/helm /usr/local/bin/helm
+COPY --from=kubectx /tmp/kubens /usr/local/bin/
+COPY --from=helm /tmp/helm /usr/local/bin/

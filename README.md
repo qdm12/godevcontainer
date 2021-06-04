@@ -19,13 +19,14 @@
 ## Features
 
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
-    - Based on Alpine 3.12 (size of 827MB)
+    - Based on Alpine 3.13 (size of 881MB)
 - `qmcgaw/godevcontainer:debian` - **beware [it has CVE](https://github.com/qdm12/godevcontainer/runs/596825646?check_suite_focus=true) because of outdated packages**
-    - Based on Debian Bullseye Slim (size of 891MB)
+    - Based on Debian Buster Slim (size of 1.1GB)
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
-    - Based on either Alpine 3.12 or Debian buster slim
+    - Based on either Alpine 3.13 or Debian Buster slim
     - Minimal custom terminal and packages
     - Go 1.16 code obtained from the latest Golang Docker image
+    - All Go tooling binaries built statically from source
     - See more [features](https://github.com/qdm12/basedevcontainer#features)
 - Go tooling [integrating with VS code](https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on):
     - [Google's Go language server gopls](https://github.com/golang/tools/tree/master/gopls)
