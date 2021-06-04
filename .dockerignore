@@ -1,7 +1,6 @@
 .devcontainer
 .git
 .github
-.vscode
 .dockerignore
 .gitignore
 alpine.Dockerfile
