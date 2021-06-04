@@ -68,8 +68,9 @@ ARG KUBECTL_VERSION=v1.21.0
 RUN wget -qO /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     chmod 500 /usr/local/bin/kubectl
 # Stern
-ARG STERN_VERSION=1.11.0
-RUN wget -qO /usr/local/bin/stern https://github.com/wercker/stern/releases/download/${STERN_VERSION}/stern_$(uname -s)_amd64 && \
+ARG STERN_VERSION=1.18.0
+RUN wget -qO- "https://github.com/stern/stern/releases/download/v${STERN_VERSION}/stern_${STERN_VERSION}_linux_amd64.tar.gz" | \
+    tar -xzC /usr/local/bin --strip-components=1 "stern_${STERN_VERSION}_linux_amd64/stern" && \
     chmod 500 /usr/local/bin/stern
 # Kubectx and Kubens
 ARG KUBECTX_VERSION=v0.9.3

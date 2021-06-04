@@ -72,8 +72,9 @@ RUN wget -qO- "https://github.com/ahmetb/kubectx/releases/download/${KUBECTX_VER
     tar -xzC /usr/local/bin kubens && \
     chmod 500 /usr/local/bin/kube*
 # Stern
-ARG STERN_VERSION=1.11.0
-RUN wget -qO /usr/local/bin/stern https://github.com/wercker/stern/releases/download/${STERN_VERSION}/stern_$(uname -s)_amd64 && \
+ARG STERN_VERSION=1.18.0
+RUN wget -qO- "https://github.com/stern/stern/releases/download/v${STERN_VERSION}/stern_${STERN_VERSION}_linux_amd64.tar.gz" | \
+    tar -xzC /usr/local/bin --strip-components=1 "stern_${STERN_VERSION}_linux_amd64/stern" && \
     chmod 500 /usr/local/bin/stern
 # Helm
 ARG HELM3_VERSION=v3.6.0
