@@ -18,7 +18,7 @@
 
 ## Features
 
-- Compatible with many CPU architecures: `amd64`, `arm64`
+- Compatible with `amd64` and `arm64` CPU architecures ([create an issue](https://github.com/qdm12/godevcontainer/issues/new) if you need more!)
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
     - Based on Alpine 3.13 (size of 881MB)
 - `qmcgaw/godevcontainer:debian` - **beware [it has CVE](https://github.com/qdm12/godevcontainer/runs/596825646?check_suite_focus=true) because of outdated packages**
