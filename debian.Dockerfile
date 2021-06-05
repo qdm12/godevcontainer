@@ -60,10 +60,15 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
 
 FROM gobuilder AS dlv
 ARG DELVE_VERSION=v1.6.1
-RUN git clone --depth 1 --branch ${DELVE_VERSION} https://github.com/go-delve/delve.git .
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
-    go build -trimpath -ldflags="-s -w" -o /tmp/dlv ./cmd/dlv && \
+RUN if [ "$TARGETPLATFORM" == "linux/amd64" ] || [ "$TARGETPLATFORM" == "linux/arm64" ]; then touch /tmp/isSupported; fi
+RUN if [ -f /tmp/isSupported ]; then git clone --depth 1 --branch ${DELVE_VERSION} https://github.com/go-delve/delve.git .; fi
+RUN if [ -f /tmp/isSupported ]; then \
+        GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
+        GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+        go build -trimpath -ldflags="-s -w" -o /tmp/dlv ./cmd/dlv; \
+    else \
+        echo -e "#!/bin/sh\necho 'dlv is not supported on this platform'\n" > /tmp/dlv; \
+    fi && \
     chmod 500 /tmp/dlv
 
 FROM gobuilder AS mockery
