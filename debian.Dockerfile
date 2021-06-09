@@ -92,7 +92,7 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     chmod 500 /tmp/mockgen
 
 FROM gobuilder AS tools
-ARG GOPLS_VERSION=v0.6.11
+ARG GOPLS_VERSION=v0.7.0
 RUN git clone --depth 1 --branch "gopls/${GOPLS_VERSION}" https://github.com/golang/tools.git .
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
