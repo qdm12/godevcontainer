@@ -21,9 +21,7 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     chmod 500 /tmp/fillstruct
 
 FROM gobuilder AS go-outline
-RUN git clone --depth 1 https://github.com/ramya-rao-a/go-outline.git .
-RUN go mod init github.com/ramya-rao-a/go-outline && \
-    go mod tidy
+RUN git clone --depth 2 https://github.com/ramya-rao-a/go-outline.git .
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/go-outline && \
