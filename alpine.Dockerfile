@@ -77,7 +77,7 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     chmod 500 /tmp/mockery
 
 FROM gobuilder AS gomock
-ARG MOCK_VERSION=v1.5.0
+ARG MOCK_VERSION=v1.6.0
 RUN git clone --depth 1 --branch ${MOCK_VERSION} https://github.com/golang/mock.git .
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
