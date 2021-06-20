@@ -106,7 +106,7 @@ RUN cd gopls && \
     chmod 500 /tmp/gopls
 
 FROM gobuilder AS golangci-lint
-ARG GOLANGCI_LINT_VERSION=v1.40.1
+ARG GOLANGCI_LINT_VERSION=v1.41.1
 RUN git clone --depth 1 --branch ${GOLANGCI_LINT_VERSION} https://github.com/golangci/golangci-lint.git .
 RUN COMMIT="$(git rev-parse --short HEAD)" && \
     DATE="$(date +%Y-%m-%dT%T%z)" && \
