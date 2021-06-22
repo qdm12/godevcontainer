@@ -15,6 +15,7 @@ ARG TARGETPLATFORM
 
 FROM gobuilder AS fillstruct
 RUN git clone --depth 1 https://github.com/davidrjenni/reftools.git .
+RUN go mod download
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/fillstruct ./cmd/fillstruct && \
@@ -22,6 +23,7 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
 
 FROM gobuilder AS go-outline
 RUN git clone --depth 2 https://github.com/ramya-rao-a/go-outline.git .
+RUN go mod download
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/go-outline && \
@@ -30,6 +32,7 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
 FROM gobuilder AS gomodifytags
 ARG GOMODIFYTAGS_VERSION=v1.13.0
 RUN git clone --depth 1 --branch ${GOMODIFYTAGS_VERSION} https://github.com/fatih/gomodifytags.git .
+RUN go mod download
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/gomodifytags && \
@@ -39,7 +42,8 @@ FROM gobuilder AS goplay
 ARG GOPLAY_VERSION=v1.0.0
 RUN git clone --depth 1 --branch ${GOPLAY_VERSION} https://github.com/haya14busa/goplay.git .
 RUN go mod init github.com/haya14busa/goplay && \
-    go mod tidy
+    go mod tidy && \
+    go mod download
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/goplay ./cmd/goplay && \
@@ -49,7 +53,8 @@ FROM gobuilder AS gotests
 ARG GOTESTS_VERSION=v1.5.3
 RUN git clone --depth 1 --branch ${GOTESTS_VERSION} https://github.com/cweill/gotests.git .
 RUN go mod init github.com/cweill/gotests && \
-    go mod tidy
+    go mod tidy && \
+    go mod download
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/gotests && \
@@ -59,6 +64,7 @@ FROM gobuilder AS dlv
 ARG DELVE_VERSION=v1.6.1
 RUN if [ "$TARGETPLATFORM" == "linux/amd64" ] || [ "$TARGETPLATFORM" == "linux/arm64" ]; then touch /tmp/isSupported; fi
 RUN if [ -f /tmp/isSupported ]; then git clone --depth 1 --branch ${DELVE_VERSION} https://github.com/go-delve/delve.git .; fi
+RUN if [ -f /tmp/isSupported ]; then go mod download; fi
 RUN if [ -f /tmp/isSupported ]; then \
         GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
         GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
@@ -71,6 +77,7 @@ RUN if [ -f /tmp/isSupported ]; then \
 FROM gobuilder AS mockery
 ARG MOCKERY_VERSION=v2.3.0
 RUN git clone --depth 1 --branch ${MOCKERY_VERSION} https://github.com/vektra/mockery.git .
+RUN go mod download
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/mockery && \
@@ -91,6 +98,7 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
 FROM gobuilder AS tools
 ARG GOPLS_VERSION=v0.7.0
 RUN git clone --depth 1 --branch "gopls/${GOPLS_VERSION}" https://github.com/golang/tools.git .
+RUN go mod download
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/guru golang.org/x/tools/cmd/guru && \
@@ -108,6 +116,7 @@ RUN cd gopls && \
 FROM gobuilder AS golangci-lint
 ARG GOLANGCI_LINT_VERSION=v1.41.1
 RUN git clone --depth 1 --branch ${GOLANGCI_LINT_VERSION} https://github.com/golangci/golangci-lint.git .
+RUN go mod download
 RUN COMMIT="$(git rev-parse --short HEAD)" && \
     DATE="$(date +%Y-%m-%dT%T%z)" && \
     GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
@@ -122,6 +131,7 @@ RUN COMMIT="$(git rev-parse --short HEAD)" && \
 FROM gobuilder AS kubectl
 ARG KUBERNETES_VERSION=v1.21.1
 RUN git clone --depth 1 --branch ${KUBERNETES_VERSION} https://github.com/kubernetes/kubernetes.git .
+RUN go mod download
 RUN SOURCE_DATE_EPOCH="$(git show -s --format=format:%ct HEAD)" && \
     BUILD_DATE="$(date ${SOURCE_DATE_EPOCH:+"--date=@${SOURCE_DATE_EPOCH}"} -u +'%Y-%m-%dT%H:%M:%SZ')" && \
     GITCOMMIT="$(git rev-parse HEAD)" && \
@@ -147,6 +157,7 @@ RUN SOURCE_DATE_EPOCH="$(git show -s --format=format:%ct HEAD)" && \
 FROM gobuilder AS stern
 ARG STERN_VERSION=v1.18.0
 RUN git clone --depth 1 --branch ${STERN_VERSION} https://github.com/stern/stern.git .
+RUN go mod download
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w \
@@ -157,6 +168,7 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
 FROM gobuilder AS kubectx
 ARG KUBECTX_VERSION=v0.9.3
 RUN git clone --depth 1 --branch ${KUBECTX_VERSION} https://github.com/ahmetb/kubectx.git .
+RUN go mod download
 RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w \
@@ -173,6 +185,7 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
 FROM gobuilder AS helm
 ARG HELM_VERSION=v3.6.1
 RUN git clone --depth 1 --branch ${HELM_VERSION} https://github.com/helm/helm.git .
+RUN go mod download
 RUN GITCOMMIT="$(git rev-parse HEAD)" && \
     GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
