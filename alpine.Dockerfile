@@ -9,23 +9,23 @@ FROM --platform=$BUILDPLATFORM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS g
 ENV CGO_ENABLED=0
 RUN apk add --no-cache git && \
     git config --global advice.detachedHead false
-COPY --from=qmcgaw/xcputranslate:v0.4.0 /xcputranslate /usr/local/bin/xcputranslate
+COPY --from=qmcgaw/xcputranslate:v0.6.0 /xcputranslate /usr/local/bin/xcputranslate
 WORKDIR /tmp/build
 ARG TARGETPLATFORM
 
 FROM gobuilder AS fillstruct
 RUN git clone --depth 1 https://github.com/davidrjenni/reftools.git .
 RUN go mod download
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/fillstruct ./cmd/fillstruct && \
     chmod 500 /tmp/fillstruct
 
 FROM gobuilder AS go-outline
 RUN git clone --depth 2 https://github.com/ramya-rao-a/go-outline.git .
 RUN go mod download
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/go-outline && \
     chmod 500 /tmp/go-outline
 
@@ -33,8 +33,8 @@ FROM gobuilder AS gomodifytags
 ARG GOMODIFYTAGS_VERSION=v1.13.0
 RUN git clone --depth 1 --branch ${GOMODIFYTAGS_VERSION} https://github.com/fatih/gomodifytags.git .
 RUN go mod download
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/gomodifytags && \
     chmod 500 /tmp/gomodifytags
 
@@ -44,8 +44,8 @@ RUN git clone --depth 1 --branch ${GOPLAY_VERSION} https://github.com/haya14busa
 RUN go mod init github.com/haya14busa/goplay && \
     go mod tidy && \
     go mod download
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/goplay ./cmd/goplay && \
     chmod 500 /tmp/goplay
 
@@ -55,8 +55,8 @@ RUN git clone --depth 1 --branch ${GOTESTS_VERSION} https://github.com/cweill/go
 RUN go mod init github.com/cweill/gotests && \
     go mod tidy && \
     go mod download
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/gotests && \
     chmod 500 /tmp/gotests
 
@@ -66,8 +66,8 @@ RUN if [ "$TARGETPLATFORM" == "linux/amd64" ] || [ "$TARGETPLATFORM" == "linux/a
 RUN if [ -f /tmp/isSupported ]; then git clone --depth 1 --branch ${DELVE_VERSION} https://github.com/go-delve/delve.git .; fi
 RUN if [ -f /tmp/isSupported ]; then go mod download; fi
 RUN if [ -f /tmp/isSupported ]; then \
-        GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-        GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+        GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+        GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
         go build -trimpath -ldflags="-s -w" -o /tmp/dlv ./cmd/dlv; \
     else \
         echo -e "#!/bin/sh\necho 'dlv is not supported on this platform'\n" > /tmp/dlv; \
@@ -78,20 +78,20 @@ FROM gobuilder AS mockery
 ARG MOCKERY_VERSION=v2.3.0
 RUN git clone --depth 1 --branch ${MOCKERY_VERSION} https://github.com/vektra/mockery.git .
 RUN go mod download
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/mockery && \
     chmod 500 /tmp/mockery
 
 FROM gobuilder AS gomock
 ARG MOCK_VERSION=v1.6.0
 RUN git clone --depth 1 --branch ${MOCK_VERSION} https://github.com/golang/mock.git .
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/gomock ./gomock && \
     chmod 500 /tmp/gomock
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/mockgen ./mockgen && \
     chmod 500 /tmp/mockgen
 
@@ -99,17 +99,17 @@ FROM gobuilder AS tools
 ARG GOPLS_VERSION=v0.7.0
 RUN git clone --depth 1 --branch "gopls/${GOPLS_VERSION}" https://github.com/golang/tools.git .
 RUN go mod download
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/guru golang.org/x/tools/cmd/guru && \
     chmod 500 /tmp/guru
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/gorename golang.org/x/tools/cmd/gorename && \
     chmod 500 /tmp/gorename
 RUN cd gopls && \
-    GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w" -o /tmp/gopls golang.org/x/tools/gopls && \
     chmod 500 /tmp/gopls
 
@@ -119,8 +119,8 @@ RUN git clone --depth 1 --branch ${GOLANGCI_LINT_VERSION} https://github.com/gol
 RUN go mod download
 RUN COMMIT="$(git rev-parse --short HEAD)" && \
     DATE="$(date +%Y-%m-%dT%T%z)" && \
-    GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w \
     -X 'main.version==${GOLANGCI_LINT_VERSION}' \
     -X 'main.commit=${COMMIT}' \
@@ -135,8 +135,8 @@ RUN go mod download
 RUN SOURCE_DATE_EPOCH="$(git show -s --format=format:%ct HEAD)" && \
     BUILD_DATE="$(date ${SOURCE_DATE_EPOCH:+"--date=@${SOURCE_DATE_EPOCH}"} -u +'%Y-%m-%dT%H:%M:%SZ')" && \
     GITCOMMIT="$(git rev-parse HEAD)" && \
-    GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     # Ldflags: see https://github.com/kubernetes/kubernetes/blob/ea0764452222146c47ec826977f49d7001b0ea8c/hack/lib/version.sh#L151
     go build -trimpath -ldflags="-s -w \
     -X 'k8s.io/client-go/pkg/version.buildDate=${BUILD_DATE}' \
@@ -158,8 +158,8 @@ FROM gobuilder AS stern
 ARG STERN_VERSION=v1.18.0
 RUN git clone --depth 1 --branch ${STERN_VERSION} https://github.com/stern/stern.git .
 RUN go mod download
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w \
     -X 'github.com/stern/stern/cmd.version=${STERN_VERSION}' \
     " -o /tmp/stern && \
@@ -169,14 +169,14 @@ FROM gobuilder AS kubectx
 ARG KUBECTX_VERSION=v0.9.3
 RUN git clone --depth 1 --branch ${KUBECTX_VERSION} https://github.com/ahmetb/kubectx.git .
 RUN go mod download
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w \
     -X 'github.com/ahmetb/kubectx/cmd/kubectx.version=${KUBECTX_VERSION}' \
     " -o /tmp/kubectx ./cmd/kubectx && \
     chmod 500 /tmp/kubectx
-RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w \
     -X 'github.com/ahmetb/kubectx/cmd/kubens.version=${KUBECTX_VERSION}' \
     " -o /tmp/kubens ./cmd/kubens && \
@@ -187,8 +187,8 @@ ARG HELM_VERSION=v3.6.1
 RUN git clone --depth 1 --branch ${HELM_VERSION} https://github.com/helm/helm.git .
 RUN go mod download
 RUN GITCOMMIT="$(git rev-parse HEAD)" && \
-    GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate -field arm -targetplatform ${TARGETPLATFORM})" \
+    GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
     go build -trimpath -ldflags="-s -w \
     -X 'helm.sh/helm/v3/internal/version.version=${HELM_VERSION}' \
     -X 'helm.sh/helm/v3/internal/version.gitCommit=${GITCOMMIT}' \
