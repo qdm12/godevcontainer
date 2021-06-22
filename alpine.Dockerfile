@@ -171,7 +171,7 @@ RUN GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
     chmod 500 /tmp/kubens
 
 FROM gobuilder AS helm
-ARG HELM_VERSION=v3.6.0
+ARG HELM_VERSION=v3.6.1
 RUN git clone --depth 1 --branch ${HELM_VERSION} https://github.com/helm/helm.git .
 RUN GITCOMMIT="$(git rev-parse HEAD)" && \
     GOARCH="$(xcputranslate -field arch -targetplatform ${TARGETPLATFORM})" \
