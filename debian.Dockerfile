@@ -82,7 +82,7 @@ RUN if [ -f /tmp/isSupported ]; then \
     chmod 500 /tmp/dlv
 
 FROM gobuilder AS mockery
-ARG MOCKERY_VERSION=v2.3.0
+ARG MOCKERY_VERSION=v2.9.0
 RUN git clone --depth 1 --branch ${MOCKERY_VERSION} https://github.com/vektra/mockery.git .
 RUN go mod download
 ARG TARGETPLATFORM
