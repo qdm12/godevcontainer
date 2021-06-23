@@ -95,7 +95,7 @@ RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFO
     go build -trimpath -ldflags="-s -w" -o /tmp/mockgen ./mockgen && \
     chmod 500 /tmp/mockgen
 
-FROM gobuilder AS tools
+FROM gobuilder AS gopls
 ARG GOPLS_VERSION=v0.7.0
 RUN git clone --depth 1 --branch "gopls/${GOPLS_VERSION}" https://github.com/golang/tools.git .
 RUN go mod download
@@ -231,7 +231,7 @@ COPY --from=dlv /tmp/dlv /go/bin/
 COPY --from=mockery /tmp/mockery /go/bin/
 COPY --from=gomock /tmp/gomock /go/bin/
 COPY --from=gomock /tmp/mockgen /go/bin/
-COPY --from=tools /tmp/gopls /go/bin/
+COPY --from=gopls /tmp/gopls /go/bin/
 COPY --from=golangci-lint /tmp/golangci-lint /go/bin/
 
 # Extra binary tools
