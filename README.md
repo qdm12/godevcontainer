@@ -33,7 +33,6 @@
     - [Google's Go language server gopls](https://github.com/golang/tools/tree/master/gopls)
     - [golangci-lint](https://github.com/golangci/golangci-lint), includes golint and other linters
     - [guru](https://golang.org/x/tools/cmd/guru)
-    - [gorename](https://golang.org/x/tools/cmd/gorename)
     - [dlv](https://github.com/go-delve/delve/cmd/dlv)
     - [gomodifytags](https://github.com/fatih/gomodifytags)
     - [goplay](https://github.com/haya14busa/goplay)
