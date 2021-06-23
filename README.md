@@ -32,7 +32,6 @@
 - Go tooling [integrating with VS code](https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on):
     - [Google's Go language server gopls](https://github.com/golang/tools/tree/master/gopls)
     - [golangci-lint](https://github.com/golangci/golangci-lint), includes golint and other linters
-    - [guru](https://golang.org/x/tools/cmd/guru)
     - [dlv](https://github.com/go-delve/delve/cmd/dlv)
     - [gomodifytags](https://github.com/fatih/gomodifytags)
     - [goplay](https://github.com/haya14busa/goplay)

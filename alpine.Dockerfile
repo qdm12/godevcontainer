@@ -99,10 +99,6 @@ ARG GOPLS_VERSION=v0.7.0
 RUN git clone --depth 1 --branch "gopls/${GOPLS_VERSION}" https://github.com/golang/tools.git .
 RUN go mod download
 ARG TARGETPLATFORM
-RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
-    go build -trimpath -ldflags="-s -w" -o /tmp/guru golang.org/x/tools/cmd/guru && \
-    chmod 500 /tmp/guru
 RUN cd gopls && \
     GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
     GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
@@ -231,7 +227,6 @@ COPY --from=mockery /tmp/mockery /go/bin/
 COPY --from=gomock /tmp/gomock /go/bin/
 COPY --from=gomock /tmp/mockgen /go/bin/
 COPY --from=tools /tmp/gopls /go/bin/
-COPY --from=tools /tmp/guru /go/bin/
 COPY --from=golangci-lint /tmp/golangci-lint /go/bin/
 
 # Extra binary tools
