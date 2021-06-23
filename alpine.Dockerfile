@@ -13,15 +13,6 @@ RUN apk add --no-cache git && \
 COPY --from=xcputranslate /xcputranslate /usr/local/bin/xcputranslate
 WORKDIR /tmp/build
 
-FROM gobuilder AS fillstruct
-RUN git clone --depth 1 https://github.com/davidrjenni/reftools.git .
-RUN go mod download
-ARG TARGETPLATFORM
-RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
-    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
-    go build -trimpath -ldflags="-s -w" -o /tmp/fillstruct ./cmd/fillstruct && \
-    chmod 500 /tmp/fillstruct
-
 FROM gobuilder AS go-outline
 RUN git clone --depth 2 https://github.com/ramya-rao-a/go-outline.git .
 RUN go mod download
@@ -235,7 +226,6 @@ RUN apk add -q --update --progress --no-cache g++
 # Shell setup
 COPY shell/.zshrc-specific shell/.welcome.sh /root/
 
-COPY --from=fillstruct /tmp/fillstruct /go/bin/
 COPY --from=go-outline /tmp/go-outline /go/bin/
 COPY --from=gomodifytags /tmp/gomodifytags /go/bin/
 COPY --from=goplay /tmp/goplay /go/bin/
