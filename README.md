@@ -38,6 +38,7 @@
     - [impl](https://github.com/josharian/impl)
     - [gotype-live](https://github.com/tylerb/gotype-live)
     - [gotests](https://github.com/cweill/gotests)
+    - [gopkgs v2](https://github.com/uudashr/gopkgs/tree/master/v2)
 - Terminal Go tools
     - [mockgen](https://github.com/golang/mock/mockgen) to generate mocks
     - [mockery](https://github.com/vektra/mockery) to generate mocks for testify/mock
