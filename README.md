@@ -18,7 +18,7 @@
 
 ## Features
 
-- Compatible with `amd64` and `arm64` CPU architecures ([create an issue](https://github.com/qdm12/godevcontainer/issues/new) if you need more!)
+- Compatible with `amd64`, `386`, `arm64`, `armv6`, `armv7`, `s390x` and `ppc64le` CPUs
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
     - Based on Alpine 3.13 (size of 881MB)
 - `qmcgaw/godevcontainer:debian` - **beware [it has CVE](https://github.com/qdm12/godevcontainer/runs/596825646?check_suite_focus=true) because of outdated packages**
@@ -32,7 +32,7 @@
 - Go tooling [integrating with VS code](https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on):
     - [Google's Go language server gopls](https://github.com/golang/tools/tree/master/gopls)
     - [golangci-lint](https://github.com/golangci/golangci-lint), includes golint and other linters
-    - [dlv](https://github.com/go-delve/delve/cmd/dlv)
+    - [dlv](https://github.com/go-delve/delve/cmd/dlv) ⚠️ only works on `amd64` and `arm64`
     - [gomodifytags](https://github.com/fatih/gomodifytags)
     - [goplay](https://github.com/haya14busa/goplay)
     - [impl](https://github.com/josharian/impl)
