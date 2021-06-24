@@ -10,6 +10,7 @@ ARG GOMOCK_VERSION=v1.6.0
 ARG MOCKGEN_VERSION=v1.6.0
 ARG GOPLS_VERSION=v0.7.0
 ARG GOLANGCILINT_VERSION=v1.41.1
+ARG IMPL_VERSION=b761d8a
 ARG KUBECTL_VERSION=v1.21.1
 ARG STERN_VERSION=v1.18.0
 ARG KUBECTX_VERSION=v0.9.3
@@ -29,6 +30,7 @@ FROM qmcgaw/binpot:gomock-${GOMOCK_VERSION} AS gomock
 FROM qmcgaw/binpot:mockgen-${MOCKGEN_VERSION} AS mockgen
 FROM qmcgaw/binpot:gopls-${GOPLS_VERSION} AS gopls
 FROM qmcgaw/binpot:golangci-lint-${GOLANGCILINT_VERSION} AS golangci-lint
+FROM qmcgaw/binpot:impl-${IMPL_VERSION} AS impl
 FROM qmcgaw/binpot:kubectl-${KUBECTL_VERSION} AS kubectl
 FROM qmcgaw/binpot:stern-${STERN_VERSION} AS stern
 FROM qmcgaw/binpot:kubectx-${KUBECTX_VERSION} AS kubectx
@@ -74,6 +76,7 @@ COPY --from=gomock /bin /go/bin/gomock
 COPY --from=mockgen /bin /go/bin/mockgen
 COPY --from=gopls /bin /go/bin/gopls
 COPY --from=golangci-lint /bin /go/bin/golangci-lint
+COPY --from=impl /bin /go/bin/impl
 
 # Extra binary tools
 COPY --from=kubectl /bin /usr/local/bin/kubectl
