@@ -43,8 +43,6 @@ jobs:
 
       - name: Set variables
         id: vars
-        env:
-          EVENT_NAME: ${{ github.event_name }}
         run: |
           BRANCH=${GITHUB_REF#refs/heads/}
           TAG=${GITHUB_REF#refs/tags/}
