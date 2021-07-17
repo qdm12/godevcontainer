@@ -72,8 +72,3 @@ jobs:
             qmcgaw/godevcontainer:latest
             qmcgaw/godevcontainer:alpine
           push: true
-
-      - if: github.event_name == 'push' && github.event.ref == 'refs/heads/master'
-        name: Microbadger hook
-        run: curl -X POST https://hooks.microbadger.com/images/qmcgaw/godevcontainer/v4frfjbWjrt91BFJFuoQejzhzfM=
-        continue-on-error: true
