@@ -5,14 +5,12 @@ on:
       - .github/workflows/alpine.yml
       - shell/**
       - .dockerignore
-      - .windows.sh
       - alpine.Dockerfile
   pull_request:
     paths:
       - .github/workflows/alpine.yml
       - shell/**
       - .dockerignore
-      - .windows.sh
       - alpine.Dockerfile
 
 jobs:
