@@ -5,14 +5,12 @@ on:
       - .github/workflows/debian.yml
       - shell/**
       - .dockerignore
-      - .windows.sh
       - debian.Dockerfile
   pull_request:
     paths:
       - .github/workflows/debian.yml
       - shell/**
       - .dockerignore
-      - .windows.sh
       - debian.Dockerfile
 
 jobs:
@@ -50,12 +48,15 @@ jobs:
           echo ::set-output name=created::$(date -u +%Y-%m-%dT%H:%M:%SZ)
           if [ "$TAG" != "$GITHUB_REF" ]; then
             echo ::set-output name=version::$TAG
+            echo ::set-output name=debian_version::$TAG-debian
             echo ::set-output name=platforms::linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/s390x,linux/ppc64le
           elif [ "$BRANCH" = "master" ]; then
             echo ::set-output name=version::latest
+            echo ::set-output name=debian_version::debian
             echo ::set-output name=platforms::linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6,linux/s390x,linux/ppc64le
           else
             echo ::set-output name=version::$BRANCH
+            echo ::set-output name=debian_version::$BRANCH-debian
             echo ::set-output name=platforms::linux/amd64
           fi
 
@@ -69,5 +70,5 @@ jobs:
             COMMIT=${{ steps.vars.outputs.commit }}
             VERSION=${{ steps.vars.outputs.version }}
           tags: |
-            qmcgaw/godevcontainer:debian
+            qmcgaw/godevcontainer:${{ steps.vars.outputs.debian_version }}
           push: true
