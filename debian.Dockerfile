@@ -47,7 +47,7 @@ LABEL \
     org.opencontainers.image.authors="quentin.mcgaw@gmail.com" \
     org.opencontainers.image.created=$BUILD_DATE \
     org.opencontainers.image.version=$VERSION \
-    org.opencontainers.image.revision=$VCS_REF \
+    org.opencontainers.image.revision=$COMMIT \
     org.opencontainers.image.url="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.documentation="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.source="https://github.com/qdm12/godevcontainer" \
