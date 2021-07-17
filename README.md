@@ -9,13 +9,13 @@
 
 [![dockeri.co](https://dockeri.co/image/qmcgaw/godevcontainer)](https://hub.docker.com/r/qmcgaw/godevcontainer)
 
-![Last release](https://img.shields.io/github/release/qdm12/godevcontainer?label=Last%20release)
 ![Last Docker tag](https://img.shields.io/docker/v/qmcgaw/godevcontainer?sort=semver&label=Last%20Docker%20tag)
+[![Latest size](https://img.shields.io/docker/image-size/qmcgaw/godevcontainer/latest?label=Latest%20image)](https://hub.docker.com/r/qmcgaw/godevcontainer/tags)
+
+![Last release](https://img.shields.io/github/release/qdm12/godevcontainer?label=Last%20release)
 [![Last release size](https://img.shields.io/docker/image-size/qmcgaw/godevcontainer?sort=semver&label=Last%20released%20image)](https://hub.docker.com/r/qmcgaw/godevcontainer/tags?page=1&ordering=last_updated)
 ![GitHub last release date](https://img.shields.io/github/release-date/qdm12/godevcontainer?label=Last%20release%20date)
 ![Commits since release](https://img.shields.io/github/commits-since/qdm12/godevcontainer/latest?sort=semver)
-
-[![Latest size](https://img.shields.io/docker/image-size/qmcgaw/godevcontainer/latest?label=Latest%20image)](https://hub.docker.com/r/qmcgaw/godevcontainer/tags)
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/qdm12/godevcontainer.svg)](https://github.com/qdm12/godevcontainer/commits/main)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/qdm12/godevcontainer.svg)](https://github.com/qdm12/godevcontainer/graphs/contributors)
