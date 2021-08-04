@@ -1,3 +1,4 @@
+ARG BASEDEV_VERSION=v0.2.0
 ARG DEBIAN_VERSION=buster
 ARG GO_VERSION=1.16
 ARG GOOUTLINE_VERSION=9736a4b
@@ -39,7 +40,7 @@ FROM qmcgaw/binpot:kubectx-${KUBECTX_VERSION} AS kubectx
 FROM qmcgaw/binpot:kubens-${KUBENS_VERSION} AS kubens
 FROM qmcgaw/binpot:helm-${HELM_VERSION} AS helm
 
-FROM qmcgaw/basedevcontainer:debian
+FROM qmcgaw/basedevcontainer:${BASEDEV_VERSION}-debian
 ARG CREATED
 ARG COMMIT
 ARG VERSION=local
