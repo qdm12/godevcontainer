@@ -33,39 +33,39 @@
 
 - Compatible with `amd64`, `386`, `arm64`, `armv6`, `armv7`, `s390x` and `ppc64le` CPUs
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
-    - Based on Alpine 3.14 (size of 881MB)
-    - Not compatible with `s390x` CPUs
+  - Based on Alpine 3.14 (size of 881MB)
+  - Not compatible with `s390x` CPUs
 - `qmcgaw/godevcontainer:debian` - **beware [it has CVE](https://github.com/qdm12/godevcontainer/runs/596825646?check_suite_focus=true) because of outdated packages**
-    - Based on Debian Buster Slim (size of 1.1GB)
+  - Based on Debian Buster Slim (size of 1.1GB)
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
-    - Based on either Alpine 3.14 or Debian Buster slim
-    - Minimal custom terminal and packages
-    - Go 1.16 code obtained from the latest Golang Docker image
-    - All Go tooling binaries built statically from source
-    - See more [features](https://github.com/qdm12/basedevcontainer#features)
+  - Based on either Alpine 3.14 or Debian Buster slim
+  - Minimal custom terminal and packages
+  - Go 1.16 code obtained from the latest Golang Docker image
+  - All Go tooling binaries built statically from source
+  - See more [features](https://github.com/qdm12/basedevcontainer#features)
 - Go tooling [integrating with VS code](https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on):
-    - [Google's Go language server gopls](https://github.com/golang/tools/tree/master/gopls)
-    - [golangci-lint](https://github.com/golangci/golangci-lint), includes golint and other linters
-    - [dlv](https://github.com/go-delve/delve/cmd/dlv) ⚠️ only works on `amd64` and `arm64`
-    - [gomodifytags](https://github.com/fatih/gomodifytags)
-    - [goplay](https://github.com/haya14busa/goplay)
-    - [impl](https://github.com/josharian/impl)
-    - [gotype-live](https://github.com/tylerb/gotype-live)
-    - [gotests](https://github.com/cweill/gotests)
-    - [gopkgs v2](https://github.com/uudashr/gopkgs/tree/master/v2)
+  - [Google's Go language server gopls](https://github.com/golang/tools/tree/master/gopls)
+  - [golangci-lint](https://github.com/golangci/golangci-lint), includes golint and other linters
+  - [dlv](https://github.com/go-delve/delve/cmd/dlv) ⚠️ only works on `amd64` and `arm64`
+  - [gomodifytags](https://github.com/fatih/gomodifytags)
+  - [goplay](https://github.com/haya14busa/goplay)
+  - [impl](https://github.com/josharian/impl)
+  - [gotype-live](https://github.com/tylerb/gotype-live)
+  - [gotests](https://github.com/cweill/gotests)
+  - [gopkgs v2](https://github.com/uudashr/gopkgs/tree/master/v2)
 - Terminal Go tools
-    - [mockgen](https://github.com/golang/mock/mockgen) to generate mocks
-    - [mockery](https://github.com/vektra/mockery) to generate mocks for testify/mock
+  - [mockgen](https://github.com/golang/mock/mockgen) to generate mocks
+  - [mockery](https://github.com/vektra/mockery) to generate mocks for testify/mock
 - Cross platform
-    - Easily bind mount your SSH keys to use with **git**
-    - Manage your host Docker from within the dev container, more details at [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer#features)
+  - Easily bind mount your SSH keys to use with **git**
+  - Manage your host Docker from within the dev container, more details at [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer#features)
 - Extensible with docker-compose.yml
 - Comes with extra Go binary tools for a few extra MBs: `kubectl`, `kubectx`, `kubens`, `stern` and `helm`
 
 ## Requirements
 
 - [Docker](https://www.docker.com/products/docker-desktop) installed and running
-    - If you don't use Linux, share the directories `~/.ssh` and the directory of your project with Docker Desktop
+  - If you don't use Linux, share the directories `~/.ssh` and the directory of your project with Docker Desktop
 - [Docker Compose](https://docs.docker.com/compose/install/) installed
 - [VS code](https://code.visualstudio.com/download) installed
 - [VS code remote containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
