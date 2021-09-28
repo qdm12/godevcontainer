@@ -1,5 +1,5 @@
 ARG BASEDEV_VERSION=v0.3.0
-ARG DEBIAN_VERSION=buster
+ARG DEBIAN_VERSION=bullseye
 ARG GO_VERSION=1.17
 ARG GOOUTLINE_VERSION=9736a4b
 ARG GOMODIFYTAGS_VERSION=v1.14.0
@@ -21,7 +21,7 @@ ARG HELM_VERSION=v3.6.3
 
 
 
-FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS go
+FROM golang:${GO_VERSION}-${DEBIAN_VERSION} AS go
 FROM qmcgaw/binpot:go-outline-${GOOUTLINE_VERSION} AS go-outline
 FROM qmcgaw/binpot:gomodifytags-${GOMODIFYTAGS_VERSION} AS gomodifytags
 FROM qmcgaw/binpot:goplay-${GOPLAY_VERSION} AS goplay
