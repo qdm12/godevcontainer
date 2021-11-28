@@ -86,5 +86,5 @@ COPY --from=gopkgs /bin /go/bin/gopkgs
 COPY --from=kubectl /bin /usr/local/bin/kubectl
 COPY --from=stern /bin /usr/local/bin/stern
 COPY --from=kubectx /bin /usr/local/bin/kubectx
-COPY --from=kubectx /bin /usr/local/bin/kubens
+COPY --from=kubens /bin /usr/local/bin/kubens
 COPY --from=helm /bin /usr/local/bin/helm
