@@ -33,11 +33,11 @@
 
 - Compatible with `amd64`, `386`, `arm64`, `armv6`, `armv7` and `ppc64le` CPUs
 - `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
-  - Based on Alpine 3.14 (size of 881MB)
+  - Based on Alpine 3.15 (size of 881MB)
 - `qmcgaw/godevcontainer:debian` - **beware [it has CVE](https://github.com/qdm12/godevcontainer/runs/596825646?check_suite_focus=true) because of outdated packages**
   - Based on Debian Buster Slim (size of 1.1GB)
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
-  - Based on either Alpine 3.14 or Debian Buster slim
+  - Based on either Alpine 3.15 or Debian Buster slim
   - Minimal custom terminal and packages
   - Go 1.17 code obtained from the latest Golang Docker image
   - All Go tooling binaries built statically from source
