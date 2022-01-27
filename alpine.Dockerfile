@@ -19,6 +19,7 @@ ARG KUBECTX_VERSION=v0.9.4
 ARG KUBENS_VERSION=v0.9.4
 ARG HELM_VERSION=v3.7.2
 
+
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS go
 FROM qmcgaw/binpot:go-outline-${GOOUTLINE_VERSION} AS go-outline
 FROM qmcgaw/binpot:gomodifytags-${GOMODIFYTAGS_VERSION} AS gomodifytags
