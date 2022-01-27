@@ -17,7 +17,7 @@ ARG KUBECTL_VERSION=v1.23.3
 ARG STERN_VERSION=v1.21.0
 ARG KUBECTX_VERSION=v0.9.4
 ARG KUBENS_VERSION=v0.9.4
-ARG HELM_VERSION=v3.7.2
+ARG HELM_VERSION=v3.8.0
 
 
 FROM golang:${GO_VERSION}-${DEBIAN_VERSION} AS go
@@ -39,7 +39,7 @@ FROM qmcgaw/binpot:kubectx-${KUBECTX_VERSION} AS kubectx
 FROM qmcgaw/binpot:kubens-${KUBENS_VERSION} AS kubens
 FROM qmcgaw/binpot:helm-${HELM_VERSION} AS helm
 
-FROM qmcgaw/basedevcontainer:${BASEDEV_VERSION}-debian
+FROM qmcgaw/basedevcontainer:debian
 ARG CREATED
 ARG COMMIT
 ARG VERSION=local
