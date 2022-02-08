@@ -39,7 +39,7 @@
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
   - Based on either Alpine 3.15 or Debian Buster slim
   - Minimal custom terminal and packages
-  - Go 1.18beta1 code obtained from the latest Golang Docker image
+  - Go 1.17 code obtained from the latest Golang Docker image
   - All Go tooling binaries built statically from source
   - See more [features](https://github.com/qdm12/basedevcontainer#features)
 - Go tooling [integrating with VS code](https://github.com/Microsoft/vscode-go/wiki/Go-tools-that-the-Go-extension-depends-on):
