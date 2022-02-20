@@ -37,40 +37,30 @@
         "remote.extensionKind": {
             "ms-azuretools.vscode-docker": "workspace"
         },
-        "editor.codeActionsOnSaveTimeout": 3000,
         "go.useLanguageServer": true,
         "[go]": {
-            "editor.formatOnSave": true,
             "editor.codeActionsOnSave": {
-                "source.organizeImports": true,
+                "source.organizeImports": true
             },
-            // Optional: Disable snippets, as they conflict with completion ranking.
-            "editor.snippetSuggestions": "none"
         },
         "[go.mod]": {
-            "editor.formatOnSave": true,
             "editor.codeActionsOnSave": {
-                "source.organizeImports": true,
-            },
+                "source.organizeImports": true
+            }
         },
         "gopls": {
+            "build.buildFlags": [
+                "-tags",
+                ""
+            ],
             "usePlaceholders": false,
-            "staticcheck": true
+            "staticcheck": true,
         },
-        "go.autocompleteUnimportedPackages": true,
-        "go.gotoSymbol.includeImports": true,
-        "go.gotoSymbol.includeGoroot": true,
         "go.lintTool": "golangci-lint",
-        "go.buildOnSave": "workspace",
-        "go.lintOnSave": "workspace",
-        "go.vetOnSave": "workspace",
+        "go.lintOnSave": "package",
         "editor.formatOnSave": true,
         "go.toolsEnvVars": {
-            "GOFLAGS": "-tags=",
-            "CGO_ENABLED": 1 // for the race detector
-        },
-        "gopls.env": {
-            "GOFLAGS": "-tags="
+            "CGO_ENABLED": 0
         },
         "go.testEnvVars": {
             "": "",
