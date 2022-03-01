@@ -19,7 +19,7 @@ jobs:
     env:
       DOCKER_BUILDKIT: "1"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Build image
         run: docker build -f alpine.Dockerfile -t qmcgaw/godevcontainer .
@@ -29,7 +29,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: docker/setup-qemu-action@v1
       - uses: docker/setup-buildx-action@v1
