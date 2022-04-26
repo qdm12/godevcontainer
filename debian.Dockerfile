@@ -1,7 +1,6 @@
 ARG BASEDEV_VERSION=v0.12.0
 ARG DEBIAN_VERSION=bullseye
 ARG GO_VERSION=1.18
-ARG GOOUTLINE_VERSION=9736a4b
 ARG GOMODIFYTAGS_VERSION=v1.16.0
 ARG GOPLAY_VERSION=v1.0.0
 ARG GOTESTS_VERSION=v1.6.0
@@ -21,7 +20,6 @@ ARG HELM_VERSION=v3.8.2
 
 
 FROM golang:${GO_VERSION}-${DEBIAN_VERSION} AS go
-FROM qmcgaw/binpot:go-outline-${GOOUTLINE_VERSION} AS go-outline
 FROM qmcgaw/binpot:gomodifytags-${GOMODIFYTAGS_VERSION} AS gomodifytags
 FROM qmcgaw/binpot:goplay-${GOPLAY_VERSION} AS goplay
 FROM qmcgaw/binpot:gotests-${GOTESTS_VERSION} AS gotests
@@ -68,7 +66,6 @@ RUN apt-get update && \
 # Shell setup
 COPY shell/.zshrc-specific shell/.welcome.sh /root/
 
-COPY --from=go-outline /bin /go/bin/go-outline
 COPY --from=gomodifytags /bin /go/bin/gomodifytags
 COPY --from=goplay  /bin /go/bin/goplay
 COPY --from=gotests /bin /go/bin/gotests
