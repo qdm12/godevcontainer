@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Build and push final image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           file: alpine.Dockerfile
           platforms: ${{ steps.vars.outputs.platforms }}
