@@ -63,7 +63,7 @@
 ## Requirements
 
 - [Docker](https://www.docker.com/products/docker-desktop) installed and running
-  - If you don't use Linux, share the directories `~/.ssh` and the directory of your project with Docker Desktop
+  - If you don't use Linux or Windows with WSL, share the directory `~/.ssh` and the directory of your project with Docker Desktop
 - [Docker Compose](https://docs.docker.com/compose/install/) installed
 - [VS code](https://code.visualstudio.com/download) installed
 - [VS code remote containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
