@@ -25,8 +25,14 @@ jobs:
         run: docker build -f alpine.Dockerfile -t qmcgaw/godevcontainer .
 
   publish:
+    if: |
+      github.repository == 'qdm12/godevcontainer' &&
+      (
+        github.event_name == 'push' ||
+        github.event_name == 'release' ||
+        (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]')
+      )
     needs: [verify]
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.2.0
