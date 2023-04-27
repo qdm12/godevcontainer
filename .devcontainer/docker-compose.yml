@@ -16,8 +16,6 @@ services:
       - ~/.ssh:/mnt/ssh
       # Shell history persistence
       - ~/.zsh_history:/root/.zsh_history:z
-      # Git config
-      - ~/.gitconfig:/root/.gitconfig:z
       # Kubernetes
       - ~/.kube:/root/.kube:z
     environment:
