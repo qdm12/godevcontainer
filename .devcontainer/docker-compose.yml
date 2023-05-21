@@ -6,7 +6,7 @@ services:
     volumes:
       - ../:/workspace
       # Docker
-      - ~/.docker:/root/.docker:z
+      - ~/.docker:/root/.docker
       # Docker socket to access Docker server
       - /var/run/docker.sock:/var/run/docker.sock
       # SSH directory for Linux, OSX and WSL
@@ -15,9 +15,9 @@ services:
       # from /mnt/ssh to ~/.ssh to fix permissions.
       - ~/.ssh:/mnt/ssh
       # Shell history persistence
-      - ~/.zsh_history:/root/.zsh_history:z
+      - ~/.zsh_history:/root/.zsh_history
       # Kubernetes
-      - ~/.kube:/root/.kube:z
+      - ~/.kube:/root/.kube
     environment:
       - TZ=
     cap_add:
