@@ -44,7 +44,7 @@
                 "[go]": {
                     "editor.codeActionsOnSave": {
                         "source.organizeImports": true
-                    },
+                    }
                 },
                 "[go.mod]": {
                     "editor.codeActionsOnSave": {
@@ -57,7 +57,7 @@
                         ""
                     ],
                     "usePlaceholders": false,
-                    "staticcheck": true,
+                    "staticcheck": true
                 },
                 "go.lintTool": "golangci-lint",
                 "go.lintOnSave": "package",
@@ -66,7 +66,7 @@
                     "CGO_ENABLED": "0"
                 },
                 "go.testEnvVars": {
-                    "": "",
+                    "": ""
                 },
                 "go.testFlags": [
                     "-v",
