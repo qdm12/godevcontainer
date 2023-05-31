@@ -37,34 +37,12 @@
             ],
             "settings": {
                 "files.eol": "\n",
-                "remote.extensionKind": {
-                    "ms-azuretools.vscode-docker": "workspace"
-                },
-                "go.useLanguageServer": true,
-                "[go]": {
-                    "editor.codeActionsOnSave": {
-                        "source.organizeImports": true
-                    }
-                },
-                "[go.mod]": {
-                    "editor.codeActionsOnSave": {
-                        "source.organizeImports": true
-                    }
-                },
-                "gopls": {
-                    "build.buildFlags": [
-                        "-tags",
-                        ""
-                    ],
-                    "usePlaceholders": false,
-                    "staticcheck": true
-                },
-                "go.lintTool": "golangci-lint",
-                "go.lintOnSave": "package",
                 "editor.formatOnSave": true,
+                "go.buildTags": "",
                 "go.toolsEnvVars": {
                     "CGO_ENABLED": "0"
                 },
+                "go.useLanguageServer": true,
                 "go.testEnvVars": {
                     "CGO_ENABLED": "1"
                 },
@@ -75,7 +53,21 @@
                 "go.testTimeout": "10s",
                 "go.coverOnSingleTest": true,
                 "go.coverOnSingleTestFile": true,
-                "go.coverOnTestPackage": true
+                "go.coverOnTestPackage": true,
+                "go.lintTool": "golangci-lint",
+                "go.lintOnSave": "package",
+                "[go]": {
+                    "editor.codeActionsOnSave": {
+                        "source.organizeImports": true
+                    }
+                },
+                "gopls": {
+                    "usePlaceholders": false,
+                    "staticcheck": true
+                },
+                "remote.extensionKind": {
+                    "ms-azuretools.vscode-docker": "workspace"
+                }
             }
         }
     }
