@@ -13,13 +13,12 @@ It works on Linux, Windows and OSX.
 
 ## Setup
 
-1. Create the following files on your host if you don't have them:
+1. Create the following files and directory on your host if you don't have them:
 
     ```sh
     touch ~/.gitconfig ~/.zsh_history
+    mkdir -p ~/.ssh
     ```
-
-    Note that the development container will create the empty directory `~/.ssh` on your host if you don't have it.
 
 1. **For Docker on OSX or Windows without WSL**: ensure your home directory `~` is accessible by Docker.
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P).
