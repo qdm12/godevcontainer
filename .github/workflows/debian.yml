@@ -1,6 +1,11 @@
 name: Debian
 on:
+  release:
+    types:
+      - published
   push:
+    branches:
+      - master
     paths:
       - .github/workflows/debian.yml
       - shell/**
@@ -37,6 +42,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # extract metadata (tags, labels) for Docker
+      # https://github.com/docker/metadata-action
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          flavor: |
+            latest=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+          images: |
+            qmcgaw/godevcontainer
+          tags: |
+            type=ref,event=pr
+            type=semver,pattern=v{{major}}.{{minor}}.{{patch}}-debian
+            type=semver,pattern=v{{major}}.{{minor}}-debian
+            type=raw,value=debian,enable=${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+
       - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
 
@@ -45,36 +66,19 @@ jobs:
           username: qmcgaw
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Set variables
-        id: vars
-        run: |
-          BRANCH=${GITHUB_REF#refs/heads/}
-          TAG=${GITHUB_REF#refs/tags/}
-          echo ::set-output name=commit::$(git rev-parse --short HEAD)
-          echo ::set-output name=created::$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          if [ "$TAG" != "$GITHUB_REF" ]; then
-            echo ::set-output name=version::$TAG
-            echo ::set-output name=debian_version::$TAG-debian
-            echo ::set-output name=platforms::linux/amd64,linux/386,linux/arm64,linux/arm/v7
-          elif [ "$BRANCH" = "master" ]; then
-            echo ::set-output name=version::latest
-            echo ::set-output name=debian_version::debian
-            echo ::set-output name=platforms::linux/amd64,linux/386,linux/arm64,linux/arm/v7
-          else
-            echo ::set-output name=version::$BRANCH
-            echo ::set-output name=debian_version::$BRANCH-debian
-            echo ::set-output name=platforms::linux/amd64
-          fi
+      - name: Short commit
+        id: shortcommit
+        run: echo "::set-output name=value::$(git rev-parse --short HEAD)"
 
       - name: Build and push final image
         uses: docker/build-push-action@v5
         with:
           file: debian.Dockerfile
-          platforms: ${{ steps.vars.outputs.platforms }}
+          platforms: linux/amd64,linux/386,linux/arm64,linux/arm/v7
+          labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            CREATED=${{ steps.vars.outputs.created }}
-            COMMIT=${{ steps.vars.outputs.commit }}
-            VERSION=${{ steps.vars.outputs.version }}
-          tags: |
-            qmcgaw/godevcontainer:${{ steps.vars.outputs.debian_version }}
+            CREATED=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
+            COMMIT=${{ steps.shortcommit.outputs.value }}
+            VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+          tags: ${{ steps.meta.outputs.tags }}
           push: true
