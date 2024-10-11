@@ -65,5 +65,4 @@ To access a port from your host to your development container, publish a port in
           POSTGRES_PASSWORD: password
     ```
 
-1. In [devcontainer.json](devcontainer.json), change the line `"runServices": ["vscode"],` to `"runServices": ["vscode", "database"],`.
 1. In the VS code command palette, rebuild the container.

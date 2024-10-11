@@ -4,10 +4,6 @@
         "docker-compose.yml"
     ],
     "service": "vscode",
-    "runServices": [
-        "vscode"
-    ],
-    "shutdownAction": "stopCompose",
     "postCreateCommand": "~/.windows.sh && go mod download && go mod tidy",
     "workspaceFolder": "/workspace",
     // "overrideCommand": "",
