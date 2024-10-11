@@ -19,7 +19,7 @@ It works on Linux, Windows and OSX.
     touch ~/.gitconfig ~/.zsh_history
     ```
 
-    Note that the development container will create the empty directories `~/.docker`, `~/.ssh` and `~/.kube` if you don't have them.
+    Note that the development container will create the empty directory `~/.ssh` on your host if you don't have it.
 
 1. **For Docker on OSX or Windows without WSL**: ensure your home directory `~` is accessible by Docker.
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P).
