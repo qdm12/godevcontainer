@@ -9,6 +9,7 @@ ARG MOCKERY_VERSION=v2.46.2
 ARG GOMOCK_VERSION=v1.6.0
 ARG MOCKGEN_VERSION=v1.6.0
 ARG GOPLS_VERSION=v0.16.2
+ARG GOFUMPT_VERSION=v0.7.0
 ARG GOLANGCILINT_VERSION=v1.61.0
 ARG IMPL_VERSION=v1.2.0
 ARG GOPKGS_VERSION=v2.1.2
@@ -28,6 +29,7 @@ FROM qmcgaw/binpot:mockery-${MOCKERY_VERSION} AS mockery
 FROM qmcgaw/binpot:gomock-${GOMOCK_VERSION} AS gomock
 FROM qmcgaw/binpot:mockgen-${MOCKGEN_VERSION} AS mockgen
 FROM qmcgaw/binpot:gopls-${GOPLS_VERSION} AS gopls
+FROM qmcgaw/binpot:gofumpt-${GOFUMPT_VERSION} AS gofumpt
 FROM qmcgaw/binpot:golangci-lint-${GOLANGCILINT_VERSION} AS golangci-lint
 FROM qmcgaw/binpot:impl-${IMPL_VERSION} AS impl
 FROM qmcgaw/binpot:gopkgs-${GOPKGS_VERSION} AS gopkgs
@@ -74,6 +76,7 @@ COPY --from=mockery /bin /go/bin/mockery
 COPY --from=gomock /bin /go/bin/gomock
 COPY --from=mockgen /bin /go/bin/mockgen
 COPY --from=gopls /bin /go/bin/gopls
+COPY --from=gofumpt /bin /go/bin/gofumpt
 COPY --from=golangci-lint /bin /go/bin/golangci-lint
 COPY --from=impl /bin /go/bin/impl
 COPY --from=gopkgs /bin /go/bin/gopkgs
