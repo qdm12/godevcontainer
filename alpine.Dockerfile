@@ -50,7 +50,7 @@ LABEL \
     org.opencontainers.image.documentation="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.source="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.title="Go Dev container Alpine" \
-    org.opencontainers.image.description="Go development container for Visual Studio Code Remote Containers development"
+    org.opencontainers.image.description="Go development container for Visual Studio Code Dev Containers development"
 COPY --from=go /usr/local/go /usr/local/go
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH \
