@@ -1,4 +1,4 @@
-ARG BASEDEV_VERSION=v0.27.0
+ARG BASEDEV_VERSION=v0.28.0
 ARG DEBIAN_VERSION=bookworm
 ARG GO_VERSION=1.25
 ARG GOMODIFYTAGS_VERSION=v1.17.0
@@ -21,25 +21,25 @@ ARG HELM_VERSION=v3.18.5
 
 
 FROM golang:${GO_VERSION}-${DEBIAN_VERSION} AS go
-FROM qmcgaw/binpot:gomodifytags-${GOMODIFYTAGS_VERSION} AS gomodifytags
-FROM qmcgaw/binpot:goplay-${GOPLAY_VERSION} AS goplay
-FROM qmcgaw/binpot:gotests-${GOTESTS_VERSION} AS gotests
-FROM qmcgaw/binpot:dlv-${DLV_VERSION} AS dlv
-FROM qmcgaw/binpot:mockery-${MOCKERY_VERSION} AS mockery
-FROM qmcgaw/binpot:gomock-${GOMOCK_VERSION} AS gomock
-FROM qmcgaw/binpot:mockgen-${MOCKGEN_VERSION} AS mockgen
-FROM qmcgaw/binpot:gopls-${GOPLS_VERSION} AS gopls
-FROM qmcgaw/binpot:gofumpt-${GOFUMPT_VERSION} AS gofumpt
-FROM qmcgaw/binpot:golangci-lint-${GOLANGCILINT_VERSION} AS golangci-lint
-FROM qmcgaw/binpot:impl-${IMPL_VERSION} AS impl
-FROM qmcgaw/binpot:gopkgs-${GOPKGS_VERSION} AS gopkgs
-FROM qmcgaw/binpot:kubectl-${KUBECTL_VERSION} AS kubectl
-FROM qmcgaw/binpot:stern-${STERN_VERSION} AS stern
-FROM qmcgaw/binpot:kubectx-${KUBECTX_VERSION} AS kubectx
-FROM qmcgaw/binpot:kubens-${KUBENS_VERSION} AS kubens
-FROM qmcgaw/binpot:helm-${HELM_VERSION} AS helm
+FROM ghcr.io/qdm12/binpot:gomodifytags-${GOMODIFYTAGS_VERSION} AS gomodifytags
+FROM ghcr.io/qdm12/binpot:goplay-${GOPLAY_VERSION} AS goplay
+FROM ghcr.io/qdm12/binpot:gotests-${GOTESTS_VERSION} AS gotests
+FROM ghcr.io/qdm12/binpot:dlv-${DLV_VERSION} AS dlv
+FROM ghcr.io/qdm12/binpot:mockery-${MOCKERY_VERSION} AS mockery
+FROM ghcr.io/qdm12/binpot:gomock-${GOMOCK_VERSION} AS gomock
+FROM ghcr.io/qdm12/binpot:mockgen-${MOCKGEN_VERSION} AS mockgen
+FROM ghcr.io/qdm12/binpot:gopls-${GOPLS_VERSION} AS gopls
+FROM ghcr.io/qdm12/binpot:gofumpt-${GOFUMPT_VERSION} AS gofumpt
+FROM ghcr.io/qdm12/binpot:golangci-lint-${GOLANGCILINT_VERSION} AS golangci-lint
+FROM ghcr.io/qdm12/binpot:impl-${IMPL_VERSION} AS impl
+FROM ghcr.io/qdm12/binpot:gopkgs-${GOPKGS_VERSION} AS gopkgs
+FROM ghcr.io/qdm12/binpot:kubectl-${KUBECTL_VERSION} AS kubectl
+FROM ghcr.io/qdm12/binpot:stern-${STERN_VERSION} AS stern
+FROM ghcr.io/qdm12/binpot:kubectx-${KUBECTX_VERSION} AS kubectx
+FROM ghcr.io/qdm12/binpot:kubens-${KUBENS_VERSION} AS kubens
+FROM ghcr.io/qdm12/binpot:helm-${HELM_VERSION} AS helm
 
-FROM qmcgaw/basedevcontainer:${BASEDEV_VERSION}-debian
+FROM ghcr.io/qdm12/basedevcontainer:${BASEDEV_VERSION}-debian
 ARG CREATED
 ARG COMMIT
 ARG VERSION=local
