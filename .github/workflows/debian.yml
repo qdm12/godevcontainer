@@ -24,7 +24,7 @@ jobs:
     env:
       DOCKER_BUILDKIT: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Build image
         run: docker build -f debian.Dockerfile -t qmcgaw/godevcontainer .
@@ -44,7 +44,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
