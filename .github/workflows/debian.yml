@@ -55,6 +55,8 @@ jobs:
           images: |
             qmcgaw/godevcontainer
             ghcr.io/qdm12/godevcontainer
+          flavor: |
+            latest=false
           tags: |
             type=ref,event=pr
             type=semver,pattern=v{{major}}.{{minor}}.{{patch}}-debian
