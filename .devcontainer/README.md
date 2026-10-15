@@ -56,3 +56,5 @@ Customizations available are notably:
 
 This container does not run an engine of its own: it mounts the **host's** container engine API socket, so `docker` and `docker compose` drive the host engine (run, build, cross-architecture build) and share its images etc.
 Nothing needs to be installed beyond the client CLIs already in the image, and there are no privileges involved.
+
+To ease using the host engine, because volume paths resolve on the host, the checkout is mounted at the same absolute path inside and outside the container (`workspaceFolder`), so `docker run -v $PWD/data:/data` refers to the same files on both sides. Note this is still limited to the bind mounted volumes, mounting a container path that the host does not have will fail.

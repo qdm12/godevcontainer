@@ -8,12 +8,15 @@
         "dockerfile": "./Dockerfile"
     },
     "postCreateCommand": "~/.windows.sh && go mod download && go mod tidy",
-    "workspaceFolder": "/workspace",
+    // Mount the checkout at the SAME absolute path it has on the host. A path handed
+    // to the host engine (`docker run -v $PWD/data:/data`, build contexts) then refers
+    // to the same files inside and outside the container.
+    "workspaceFolder": "${localWorkspaceFolder}",
     "mounts": [
-        // Source code
+        // Application code
         {
-            "source": "../",
-            "target": "/workspace",
+            "source": "${localWorkspaceFolder}",
+            "target": "${localWorkspaceFolder}",
             "type": "bind"
         },
         // Zsh commands history persistence
