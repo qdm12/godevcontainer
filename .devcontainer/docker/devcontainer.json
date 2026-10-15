@@ -1,13 +1,30 @@
 {
     // See https://containers.dev/implementors/json_reference/
     "name": "project-dev",
+    // The image builds an unprivileged account (uid/gid 1000 by default, name `user`)
+    // and runs as it. Keep this value in sync with the USERNAME build argument, and
+    // with the /home/user paths below, if you rebuild the image with other values.
+    "remoteUser": "user",
     "containerEnv": {
         "TZ": "", // User defined timezone
         "GH_TOKEN": "${localEnv:GH_TOKEN}", // GitHub token for GitHub CLI, used for `gh auth login` in the container
         "SSH_AUTH_SOCK": "/tmp/ssh-agent.sock" // Comment out if not using the SSH agent
     },
     "build": {
-        "dockerfile": "../Dockerfile"
+        "dockerfile": "../Dockerfile",
+        // The unprivileged account the image creates and runs as (see the README,
+        // "Non-root user"). They must match "remoteUser" above and the /home/user
+        // mount targets below. DOCKER_GID is read from the host environment, empty
+        // meaning the docker group is not created in the image: use
+        // DOCKER_GID=$(stat -c %g /var/run/docker.sock) to bake in the group allowed
+        // to open a rootful engine's socket. Docker Desktop needs nothing.
+        "args": {
+            "USERNAME": "user",
+            "GROUP_NAME": "user",
+            "USER_UID": "1000",
+            "USER_GID": "1000",
+            "DOCKER_GID": "${localEnv:DOCKER_GID}"
+        }
     },
     "runArgs": [
         // Set `host.docker.internal` to match Docker Desktop setups, in case this is running
@@ -15,6 +32,12 @@
         "--add-host=host.docker.internal:host-gateway",
         // Set `host.containers.internal` to match Podman setups to simplify cross engine configuration
         "--add-host=host.containers.internal:host-gateway"
+        // A rootful dockerd socket belongs to root:docker, so the unprivileged user needs
+        // its group to reach it. Grant it without rebuilding the image by uncommenting
+        // and adapting this line to the group ID of the socket
+        // (`stat -c %g /var/run/docker.sock`), or bake it in with the DOCKER_GID build
+        // argument. Docker Desktop sockets are world-writable and need nothing.
+        // "--group-add=1001",
     ],
     "postCreateCommand": "~/.ssh.sh && go mod download && go mod tidy",
     // Mount the checkout at the SAME absolute path it has on the host. A path handed
@@ -31,13 +54,13 @@
         // Zsh commands history persistence
         {
             "source": "${localEnv:HOME}/.zsh_history",
-            "target": "/root/.zsh_history",
+            "target": "/home/user/.zsh_history",
             "type": "bind"
         },
         // Git configuration file
         {
             "source": "${localEnv:HOME}/.gitconfig",
-            "target": "/root/.gitconfig",
+            "target": "/home/user/.gitconfig",
             "type": "bind"
         },
         // SSH agent socket forwarded from the host, so the private key
@@ -73,7 +96,7 @@
         // id_ed25519.pub. Comment out if ~/.ssh/id_ed25519.pub does not exist.
         {
             "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
-            "target": "/root/.ssh/id_ed25519.pub",
+            "target": "/home/user/.ssh/id_ed25519.pub",
             "type": "bind,readonly"
         },
         // Commit signatures display: allowed_signers is consulted by `git log`
@@ -82,13 +105,13 @@
         // Comment out if ~/.ssh/allowed_signers does not exist.
         {
             "source": "${localEnv:HOME}/.ssh/allowed_signers",
-            "target": "/root/.ssh/allowed_signers",
+            "target": "/home/user/.ssh/allowed_signers",
             "type": "bind,readonly"
         },
         // Machine-specific agent context
         {
             "source": "${localEnv:HOME}/AGENTS.md",
-            "target": "/AGENTS.md",
+            "target": "/home/user/AGENTS.md",
             "type": "bind"
         },
         // Engine: the host's Docker daemon, reached through its own Unix socket and
@@ -105,7 +128,7 @@
         // Comment out if the file does not exist.
         {
             "source": "${localEnv:HOME}/.config/containers/auth.json",
-            "target": "/root/.config/containers/auth.json",
+            "target": "/home/user/.config/containers/auth.json",
             "type": "bind"
         }
     ],

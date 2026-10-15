@@ -1,6 +1,10 @@
 {
     // See https://containers.dev/implementors/json_reference/
     "name": "project-dev",
+    // The image builds an unprivileged account (uid/gid 1000 by default, name `user`)
+    // and runs as it. Keep this value in sync with the USERNAME build argument, and
+    // with the /home/user paths below, if you rebuild the image with other values.
+    "remoteUser": "user",
     "containerEnv": {
         "TZ": "", // User defined timezone
         "GH_TOKEN": "${localEnv:GH_TOKEN}", // GitHub token for GitHub CLI, used for `gh auth login` in the container
@@ -18,13 +22,29 @@
         "DOCKER_BUILDKIT": "0"
     },
     "build": {
-        "dockerfile": "../Dockerfile"
+        "dockerfile": "../Dockerfile",
+        // The unprivileged account the image creates and runs as (see the README,
+        // "Non-root user"). They must match "remoteUser" above and the /home/user
+        // mount targets below. Rootless podman needs no DOCKER_GID: its socket already
+        // belongs to you, and --userns=keep-id below maps your host UID into the container.
+        "args": {
+            "USERNAME": "user",
+            "GROUP_NAME": "user",
+            "USER_UID": "1000",
+            "USER_GID": "1000"
+        }
     },
     "runArgs": [
         // Note:
         // - host.containers.internal is automatically set in Podman since Podman v3.1.0
         // - host.docker.internal is automatically set in Podman from Podman v4.7.0
         // - using `host-gateway` in `--add-host ` is supported since Podman v4.7.0
+        // ---
+        // Run the container's uid 1000 as the host's uid 1000: the podman API socket
+        // belongs to the host user, and files bind-mounted from the host keep working
+        // permissions instead of landing in the subuid range. No effect on the files
+        // the image owns, and podman-only: the Docker engine rejects this flag.
+        "--userns=keep-id"
     ],
     "postCreateCommand": "~/.ssh.sh && go mod download && go mod tidy",
     // Mount the checkout at the SAME absolute path it has on the host. A path handed
@@ -41,13 +61,13 @@
         // Zsh commands history persistence
         {
             "source": "${localEnv:HOME}/.zsh_history",
-            "target": "/root/.zsh_history",
+            "target": "/home/user/.zsh_history",
             "type": "bind"
         },
         // Git configuration file
         {
             "source": "${localEnv:HOME}/.gitconfig",
-            "target": "/root/.gitconfig",
+            "target": "/home/user/.gitconfig",
             "type": "bind"
         },
         // SSH agent socket forwarded from the host, so the private key
@@ -83,7 +103,7 @@
         // id_ed25519.pub. Comment out if ~/.ssh/id_ed25519.pub does not exist.
         {
             "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
-            "target": "/root/.ssh/id_ed25519.pub",
+            "target": "/home/user/.ssh/id_ed25519.pub",
             "type": "bind,readonly"
         },
         // Commit signatures display: allowed_signers is consulted by `git log`
@@ -92,13 +112,13 @@
         // Comment out if ~/.ssh/allowed_signers does not exist.
         {
             "source": "${localEnv:HOME}/.ssh/allowed_signers",
-            "target": "/root/.ssh/allowed_signers",
+            "target": "/home/user/.ssh/allowed_signers",
             "type": "bind,readonly"
         },
         // Machine-specific agent context
         {
             "source": "${localEnv:HOME}/AGENTS.md",
-            "target": "/AGENTS.md",
+            "target": "/home/user/AGENTS.md",
             "type": "bind"
         },
         // Engine: the host's rootless podman, reached through its API socket and mounted at
@@ -118,7 +138,7 @@
         // Comment out if the file does not exist.
         {
             "source": "${localEnv:HOME}/.config/containers/auth.json",
-            "target": "/root/.config/containers/auth.json",
+            "target": "/home/user/.config/containers/auth.json",
             "type": "bind"
         }
     ],

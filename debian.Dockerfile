@@ -1,4 +1,4 @@
-ARG BASEDEV_VERSION=v0.29.0
+ARG BASEDEV_VERSION=v0.30.0
 ARG DEBIAN_VERSION=trixie
 ARG GO_VERSION=1.26
 ARG GOMODIFYTAGS_VERSION=v1.17.0
@@ -53,11 +53,40 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/godevcontainer" \
     org.opencontainers.image.title="Go Dev container Debian" \
     org.opencontainers.image.description="Go development container for Visual Studio Code Dev Containers development"
-COPY --from=go /usr/local/go /usr/local/go
+# The base image creates and runs an unprivileged account (uid/gid 1000 by default,
+# named `user`). These build arguments mirror it so the paths below follow the account
+# you build with: keep them in sync with the "remoteUser" key and the mount targets in
+# devcontainer.json.
+ARG USERNAME=user
+ARG GROUP_NAME=user
+ARG USER_UID=1000
+ARG USER_GID=1000
+ARG USER_HOME=/home/${USERNAME}
+
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH \
     CGO_ENABLED=0 \
     GO111MODULE=on
+
+# Only this block needs root, the rest of the build runs as the unprivileged account,
+# like the container does.
+USER root
+# Group ID of the `docker` group on the host, needed to open a rootful engine's
+# /var/run/docker.sock. The published base image has no such group, so create it here.
+# Left empty, the group is not created. Alternatively pass
+# --group-add=$(stat -c %g /var/run/docker.sock) to the container, no rebuild needed.
+ARG DOCKER_GID=
+RUN set -eux && \
+    if [ -n "${DOCKER_GID}" ] && ! grep -q "^docker:" /etc/group; then \
+    groupadd -g "${DOCKER_GID}" docker && \
+    usermod -aG docker "${USERNAME}"; \
+    fi && \
+    # Go workspace: the unprivileged account builds into it (go mod download, go install)
+    mkdir -p "${GOPATH}/bin" "${GOPATH}/pkg" && \
+    chown "${USER_UID}:${USER_GID}" "${GOPATH}" "${GOPATH}/bin" "${GOPATH}/pkg"
+USER ${USERNAME}
+
+COPY --from=go /usr/local/go /usr/local/go
 WORKDIR $GOPATH
 # Install Debian packages
 RUN apt-get update && \
@@ -66,24 +95,23 @@ RUN apt-get update && \
     apt-get clean -y && \
     rm -r /var/cache/* /var/lib/apt/lists/*
 # Shell setup
-COPY shell/.zshrc-specific shell/.welcome.sh /root/
-
-COPY --from=gomodifytags /bin /go/bin/gomodifytags
-COPY --from=goplay  /bin /go/bin/goplay
-COPY --from=gotests /bin /go/bin/gotests
-COPY --from=dlv /bin /go/bin/dlv
-COPY --from=mockery /bin /go/bin/mockery
-COPY --from=gomock /bin /go/bin/gomock
-COPY --from=mockgen /bin /go/bin/mockgen
-COPY --from=gopls /bin /go/bin/gopls
-COPY --from=gofumpt /bin /go/bin/gofumpt
-COPY --from=golangci-lint /bin /go/bin/golangci-lint
-COPY --from=impl /bin /go/bin/impl
-COPY --from=gopkgs /bin /go/bin/gopkgs
+COPY --chown="${USER_UID}:${USER_GID}" --chmod=644 shell/.zshrc-specific shell/.welcome.sh ${USER_HOME}/
+COPY --chown="${USER_UID}:${USER_GID}" --from=gomodifytags /bin /go/bin/gomodifytags
+COPY --chown="${USER_UID}:${USER_GID}" --from=goplay  /bin /go/bin/goplay
+COPY --chown="${USER_UID}:${USER_GID}" --from=gotests /bin /go/bin/gotests
+COPY --chown="${USER_UID}:${USER_GID}" --from=dlv /bin /go/bin/dlv
+COPY --chown="${USER_UID}:${USER_GID}" --from=mockery /bin /go/bin/mockery
+COPY --chown="${USER_UID}:${USER_GID}" --from=gomock /bin /go/bin/gomock
+COPY --chown="${USER_UID}:${USER_GID}" --from=mockgen /bin /go/bin/mockgen
+COPY --chown="${USER_UID}:${USER_GID}" --from=gopls /bin /go/bin/gopls
+COPY --chown="${USER_UID}:${USER_GID}" --from=gofumpt /bin /go/bin/gofumpt
+COPY --chown="${USER_UID}:${USER_GID}" --from=golangci-lint /bin /go/bin/golangci-lint
+COPY --chown="${USER_UID}:${USER_GID}" --from=impl /bin /go/bin/impl
+COPY --chown="${USER_UID}:${USER_GID}" --from=gopkgs /bin /go/bin/gopkgs
 
 # Extra binary tools
-COPY --from=kubectl /bin /usr/local/bin/kubectl
-COPY --from=stern /bin /usr/local/bin/stern
-COPY --from=kubectx /bin /usr/local/bin/kubectx
-COPY --from=kubens /bin /usr/local/bin/kubens
-COPY --from=helm /bin /usr/local/bin/helm
+COPY --chown="${USER_UID}:${USER_GID}" --from=kubectl /bin /usr/local/bin/kubectl
+COPY --chown="${USER_UID}:${USER_GID}" --from=stern /bin /usr/local/bin/stern
+COPY --chown="${USER_UID}:${USER_GID}" --from=kubectx /bin /usr/local/bin/kubectx
+COPY --chown="${USER_UID}:${USER_GID}" --from=kubens /bin /usr/local/bin/kubens
+COPY --chown="${USER_UID}:${USER_GID}" --from=helm /bin /usr/local/bin/helm

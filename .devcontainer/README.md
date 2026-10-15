@@ -27,6 +27,20 @@ It works on Linux, Windows (WSL2) and OSX.
     - The Docker daemon socket `/var/run/docker.sock` (for [./docker](./docker)) or the Podman socket `${XDG_RUNTIME_DIR}/podman/podman.sock` (for [./podman](./podman))
 
     You can alternatively modify the mounts in `devcontainer.json` to suit your needs.
+1. The container runs as an unprivileged user with uid `1000` and gid `1000` by default. Any bind mounts from the host should therefore be writable and/or readable by that group id and/or user id, including your workspace. A quick way to do so is with the following shell commands on the host, from the workspace:
+
+    ```sh
+    # Workspace - group read/write
+    chown -R :1000 .
+    chmod g+rw -R .
+    # Config files - group read/write
+    chown :1000 ~/.gitconfig ~/.zsh_history ~/AGENTS.md ~/.config/containers/auth.json ~/.ssh/known_hosts
+    chmod g+rw ~/.gitconfig ~/.zsh_history ~/AGENTS.md ~/.config/containers/auth.json ~/.ssh/known_hosts
+    # SSH public files - group read
+    chown :1000 ~/.ssh/*.pub ~/.ssh/allowed_signers
+    chmod g+r ~/.ssh/*.pub ~/.ssh/allowed_signers
+    ```
+
 1. **For OSX hosts**: ensure the project directory and your home directory `~` are accessible by the container engine.
 1. Whether you want to use SSH or not, see the [SSH keys section below](#ssh-keys)
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P).
@@ -71,20 +85,20 @@ WantedBy=default.target
 
 By default, the devcontainer mounts files to be able to use GPG SSH git commit signing with an `id_ed25519`-named key:
 
-- `~/.ssh/allowed_signers` <-> `/root/.ssh/allowed_signers`
-- `~/.ssh/id_ed25519.pub` <-> `/root/.ssh/id_ed25519.pub` - `id_ed25519.pub` may need to be adapted to match your key filename
+- `~/.ssh/allowed_signers` <-> `/home/user/.ssh/allowed_signers`
+- `~/.ssh/id_ed25519.pub` <-> `/home/user/.ssh/id_ed25519.pub` - `id_ed25519.pub` may need to be adapted to match your key filename
 
 If you do not want to use GPG SSH git commit signing, comment out the mounts in `devcontainer.json`:
 
 ```jsonc
 {
     "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
-    "target": "/root/.ssh/id_ed25519.pub",
+    "target": "/home/user/.ssh/id_ed25519.pub",
     "type": "bind,readonly"
 },
 {
     "source": "${localEnv:HOME}/.ssh/allowed_signers",
-    "target": "/root/.ssh/allowed_signers",
+    "target": "/home/user/.ssh/allowed_signers",
     "type": "bind,readonly"
 },
 ```
@@ -109,12 +123,12 @@ This is **not the default** so `devcontainer.json` needs the following changes:
     },
     {
         "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
-        "target": "/root/.ssh/id_ed25519.pub",
+        "target": "/home/user/.ssh/id_ed25519.pub",
         "type": "bind,readonly"
     },
     {
         "source": "${localEnv:HOME}/.ssh/allowed_signers",
-        "target": "/root/.ssh/allowed_signers",
+        "target": "/home/user/.ssh/allowed_signers",
         "type": "bind,readonly"
     },
     ```
@@ -152,12 +166,12 @@ and all the ssh mounts in `devcontainer.json`:
 },
 {
     "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
-    "target": "/root/.ssh/id_ed25519.pub",
+    "target": "/home/user/.ssh/id_ed25519.pub",
     "type": "bind,readonly"
 },
 {
     "source": "${localEnv:HOME}/.ssh/allowed_signers",
-    "target": "/root/.ssh/allowed_signers",
+    "target": "/home/user/.ssh/allowed_signers",
     "type": "bind,readonly"
 },
 ```
@@ -186,15 +200,15 @@ Customizations available are notably:
 
 - Changes to the container image in [Dockerfile](Dockerfile)
 - Changes to VSCode **settings** and **extensions** in `devcontainer.json` (in the `podman/` or `docker/` directory, whichever you use).
-- Change the entrypoint script by adding a bind mount in `devcontainer.json` of a shell script to `/root/.welcome.sh` to replace the [current welcome script](https://github.com/qdm12/godevcontainer/blob/master/shell/.welcome.sh). For example:
+- Change the entrypoint script by adding a bind mount in `devcontainer.json` of a shell script to `/home/user/.welcome.sh` to replace the [current welcome script](https://github.com/qdm12/godevcontainer/blob/master/shell/.welcome.sh). For example:
 
-    ```json
+    ```jsonc
     // Welcome script
     {
         "source": "/yourpath/.welcome.sh",
-        "target": "/root/.welcome.sh",
+        "target": "/home/user/.welcome.sh",
         "type": "bind"
-    },
+    }
     ```
 
 - Change the container configuration in `devcontainer.json`
@@ -203,7 +217,8 @@ Customizations available are notably:
 
 ## Container engine
 
-This container does not run an engine of its own: it mounts the **host's** container engine API socket, so `docker`, `docker compose` and `podman-remote` (symlinked as `podman`) drive the host engine (run, build, cross-architecture build) and share its images etc.
+This container does not run an engine of its own, it mounts the **host's** container engine API socket at the canonical path `/var/run/docker.sock`.
+That way `docker`, `docker compose` and `podman-remote` (symlinked as `podman`) drive the host engine (run, build, cross-architecture build) and share its images etc.
 Nothing needs to be installed beyond the client CLIs already in the image, and there are no privileges involved.
 
 Because the host socket path differs per engine, there are two configurations, one per engine: `podman` and `docker`.
@@ -215,6 +230,13 @@ To ease using the host engine, because volume paths resolve on the host, the che
 See [docker/devcontainer.json](docker/devcontainer.json) for the Docker Desktop or dockerd engine. It mounts the host's `/var/run/docker.sock` at the canonical path inside the container.
 
 It builds and cross-builds using the docker plugin buildx.
+
+A rootful dockerd socket belongs to `root:docker`, so the unprivileged user needs that group to open it. You have two options:
+
+- Uncomment `// --group-add=$(stat -c %g /var/run/docker.sock)` in the `runArgs` key in [.devcontainer/docker/devcontainer.json](docker/devcontainer.json)
+- Set your host environment variable `export DOCKER_GID=$(stat -c %g /var/run/docker.sock)` and rebuild the container image. The [.devcontainer/docker/devcontainer.json](docker/devcontainer.json) already uses the host `DOCKER_GID` variable as its `DOCKER_GID` build argument.
+
+**Docker Desktop / OrbStack / Colima**: their socket is world-writable, nothing to do.
 
 ### Podman engine
 
