@@ -4,13 +4,27 @@
     "containerEnv": {
         "TZ": "", // User defined timezone
         "GH_TOKEN": "${localEnv:GH_TOKEN}", // GitHub token for GitHub CLI, used for `gh auth login` in the container
-        "SSH_AUTH_SOCK": "/tmp/ssh-agent.sock" // Comment out if not using the SSH agent
+        "SSH_AUTH_SOCK": "/tmp/ssh-agent.sock", // Comment out if not using the SSH agent
+        // podman is the podman-remote symlink of the image, and since Podman 5 it ignores
+        // DOCKER_HOST: it resolves its destination from its own connection configuration,
+        // defaulting to ${XDG_RUNTIME_DIR}/podman/podman.sock, which does not exist here -
+        // the host socket is bind mounted at Docker's canonical path, which docker and
+        // docker compose read as their own default. The unix:// scheme is required.
+        "CONTAINER_HOST": "unix:///var/run/docker.sock",
+        // DOCKER_BUILDKIT=0 because this image ships the buildx plugin: without it, `docker build`
+        // is routed to a docker-container BuildKit builder, which podman's API cannot serve (the
+        // builder container dies creating its cgroup, and leaves a buildx_buildkit_default corpse).
+        // On the legacy builder `docker build --platform linux/arm64` builds and runs fine.
+        "DOCKER_BUILDKIT": "0"
     },
     "build": {
-        "dockerfile": "./Dockerfile"
+        "dockerfile": "../Dockerfile"
     },
     "runArgs": [
-        "--add-host=host.docker.internal:host-gateway"
+        // Note:
+        // - host.containers.internal is automatically set in Podman since Podman v3.1.0
+        // - host.docker.internal is automatically set in Podman from Podman v4.7.0
+        // - using `host-gateway` in `--add-host ` is supported since Podman v4.7.0
     ],
     "postCreateCommand": "~/.ssh.sh && go mod download && go mod tidy",
     // Mount the checkout at the SAME absolute path it has on the host. A path handed
@@ -87,9 +101,16 @@
             "target": "/AGENTS.md",
             "type": "bind"
         },
-        // Docker socket to access the host Docker server
+        // Engine: the host's rootless podman, reached through its API socket and mounted at
+        // Docker's canonical path, so docker and docker compose need no variable at all.
+        // podman is the exception: since Podman 5 it ignores DOCKER_HOST and needs the
+        // CONTAINER_HOST of containerEnv, as its default is the host-only runtime path.
+        // (buildx is the one thing podman's API cannot serve - see DOCKER_BUILDKIT above.)
+        // This devcontainer holds clients only: no engine, no capabilities, no storage.
+        // XDG_RUNTIME_DIR is /run/user/$UID; if your editor server does not export it,
+        // set it to the value from running `echo "/run/user/$(id -u)"`.
         {
-            "source": "/var/run/docker.sock",
+            "source": "${localEnv:XDG_RUNTIME_DIR}/podman/podman.sock",
             "target": "/var/run/docker.sock",
             "type": "bind"
         },

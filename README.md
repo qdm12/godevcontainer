@@ -57,12 +57,13 @@
 - Cross platform
   - Easily bind mount your SSH keys to use with **git**
   - Manage your host Docker from within the dev container, more details at [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer#features)
+- Compatible with both the Docker and Podman engines
 - Extensible with docker-compose.yml
 - Comes with extra Go binary tools for a few extra MBs: `kubectl`, `kubectx`, `kubens`, `stern` and `helm`
 
 ## Requirements
 
-- [Docker](https://www.docker.com/products/docker-desktop) installed and running
+- [Docker](https://www.docker.com/products/docker-desktop) or [Podman](https://podman.io/getting-started/installation) installed and running
   - If you use OSX, share the `~/.ssh` directory and the directory of your project with Docker Desktop
 - [VS code](https://code.visualstudio.com/download) installed
 - [VS code dev containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
@@ -77,8 +78,8 @@
         ```
 
         Or use the [built binary](https://github.com/qdm12/devtainr#binary)
-    - Or manually: download this repository and put the [.devcontainer](.devcontainer) directory in your project.
-1. If you have a *.vscode/settings.json*, eventually move the settings to *.devcontainer/devcontainer.json* in the `"settings"` section as *.vscode/settings.json* take precedence over the settings defined in *.devcontainer/devcontainer.json*.
+    - Or manually: download this repository and put the [.devcontainer](.devcontainer) directory in your project. It holds a `docker/` and a `podman/` configuration, pick the one matching your container engine.
+1. If you have a *.vscode/settings.json*, eventually move the settings to *`.devcontainer/*/devcontainer.json`* in the `"settings"` section as *.vscode/settings.json* take precedence over the settings defined in *.devcontainer/*/devcontainer.json*.
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P) and select `Dev Containers: Open Folder in Container...` and choose your project directory
 
 ## Customization
@@ -100,10 +101,10 @@ services:
       POSTGRES_PASSWORD: password
 ```
 
-And change the following in `.devcontainer/devcontainer.json`:
+And change the following in your relevant `devcontainer.json`:
 
-- remove `"build": { "dockerfile": "./Dockerfile" },`
-- add `"dockerComposeFile": "docker-compose.yml",`
+- remove `"build": { "dockerfile": "../Dockerfile" },`
+- add `"dockerComposeFile": "../docker-compose.yml",`
 - add `"overrideCommand": true,`
 - add `"service": "vscode",`
 - add `"runServices": ["vscode", "postgres"],`

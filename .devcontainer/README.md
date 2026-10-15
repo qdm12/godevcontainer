@@ -8,7 +8,7 @@ It works on Linux, Windows (WSL2) and OSX.
 
 - [VS code](https://code.visualstudio.com/download) installed
 - [VS code dev containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
-- [Docker](https://www.docker.com/products/docker-desktop) installed and running
+- [Docker](https://www.docker.com) **or** [Podman](https://podman.io) installed and running
 
 ## Setup
 
@@ -24,10 +24,10 @@ It works on Linux, Windows (WSL2) and OSX.
     On top of these files, note by default this container bind mounts:
 
     - Some public files from `~/.ssh` (no private key), see the [SSH agent section below](#ssh-agent)
-    - The Docker daemon socket `/var/run/docker.sock`
+    - The Docker daemon socket `/var/run/docker.sock` (for [./docker](./docker)) or the Podman socket `${XDG_RUNTIME_DIR}/podman/podman.sock` (for [./podman](./podman))
 
-    You can alternatively modify the mounts in [devcontainer.json](devcontainer.json) to suit your needs.
-1. **For OSX hosts**: ensure the project directory and your home directory `~` are accessible by Docker.
+    You can alternatively modify the mounts in `devcontainer.json` to suit your needs.
+1. **For OSX hosts**: ensure the project directory and your home directory `~` are accessible by the container engine.
 1. Whether you want to use SSH or not, see the [SSH keys section below](#ssh-keys)
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P).
 1. Select `Dev-Containers: Open Folder in Container...` and choose the project directory.
@@ -173,7 +173,7 @@ and all the ssh mounts in `devcontainer.json`:
 
 3. The devcontainer will pick it up and inject it as `GH_TOKEN`, which is then used by `gh` within the devcontainer.
 
-If needed, you can modify this in the [devcontainer.json](devcontainer.json) file `containerEnv` key, for example if you prefer to read another variable name.
+If needed, you can modify this in the `devcontainer.json` file the `containerEnv` key, for example if you prefer to read another variable name.
 
 ## Customization
 
@@ -184,9 +184,9 @@ For customizations to take effect, you should "rebuild and reopen":
 
 Customizations available are notably:
 
-- Changes to the Docker image in [Dockerfile](Dockerfile)
-- Changes to VSCode **settings** and **extensions** in [devcontainer.json](devcontainer.json).
-- Change the entrypoint script by adding a bind mount in [devcontainer.json](devcontainer.json) of a shell script to `/root/.welcome.sh` to replace the [current welcome script](https://github.com/qdm12/godevcontainer/blob/master/shell/.welcome.sh). For example:
+- Changes to the container image in [Dockerfile](Dockerfile)
+- Changes to VSCode **settings** and **extensions** in `devcontainer.json` (in the `podman/` or `docker/` directory, whichever you use).
+- Change the entrypoint script by adding a bind mount in `devcontainer.json` of a shell script to `/root/.welcome.sh` to replace the [current welcome script](https://github.com/qdm12/godevcontainer/blob/master/shell/.welcome.sh). For example:
 
     ```json
     // Welcome script
@@ -197,13 +197,52 @@ Customizations available are notably:
     },
     ```
 
-- Change the container configuration in [devcontainer.json](devcontainer.json)
+- Change the container configuration in `devcontainer.json`
 - Add other services in a `docker-compose.yml`, see [this README section](https://github.com/qdm12/godevcontainer/blob/master/README.md#docker-composeyml)
 - More customizations available are documented in the [devcontainer.json reference](https://containers.dev/implementors/json_reference/).
 
 ## Container engine
 
-This container does not run an engine of its own: it mounts the **host's** container engine API socket, so `docker` and `docker compose` drive the host engine (run, build, cross-architecture build) and share its images etc.
+This container does not run an engine of its own: it mounts the **host's** container engine API socket, so `docker`, `docker compose` and `podman-remote` (symlinked as `podman`) drive the host engine (run, build, cross-architecture build) and share its images etc.
 Nothing needs to be installed beyond the client CLIs already in the image, and there are no privileges involved.
 
+Because the host socket path differs per engine, there are two configurations, one per engine: `podman` and `docker`.
+
 To ease using the host engine, because volume paths resolve on the host, the checkout is mounted at the same absolute path inside and outside the container (`workspaceFolder`), so `docker run -v $PWD/data:/data` refers to the same files on both sides. Note this is still limited to the bind mounted volumes, mounting a container path that the host does not have will fail.
+
+### Docker engine
+
+See [docker/devcontainer.json](docker/devcontainer.json) for the Docker Desktop or dockerd engine. It mounts the host's `/var/run/docker.sock` at the canonical path inside the container.
+
+It builds and cross-builds using the docker plugin buildx.
+
+### Podman engine
+
+See [podman/devcontainer.json](podman/devcontainer.json) for the Podman engine.
+
+#### Setup the devcontainer
+
+To create the devcontainer, the extension shells out to the CLI named by VSCode's setting `dev.containers.dockerPath`. Point it at the **`podman` CLI**, as an **absolute path**.
+
+```jsonc
+"dev.containers.dockerPath": "/usr/bin/podman",
+```
+
+Nothing else needs to point at the engine: `podman` carries its own connection configuration (the rootless socket at `${XDG_RUNTIME_DIR}/podman/podman.sock` by default, or a `podman system connection`), so no socket path or Docker host setting is involved.
+
+⚠️ Podman must log events to a **file**, set once on the host in `~/.config/containers/containers.conf`:
+
+```toml
+[engine]
+events_logger = "file"
+```
+
+Right after `podman run`, the Dev Containers CLI waits for the container `start` event on a `podman events --filter event=start` stream it started a millisecond earlier. The `podman` CLI has to initialize its database before it subscribes, so the event lands first - and the journald logger, rootless Podman's default, keeps no replayable log to recover it from, so the window hangs forever at `Container started`. A file-backed log is replayable, so the event is never lost. References: [devcontainers/cli#1236](https://github.com/devcontainers/cli/issues/1236), [microsoft/vscode-remote-release#7980](https://github.com/microsoft/vscode-remote-release/issues/7980).
+
+💁 Why the `podman` CLI and not a Docker CLI against Podman's API: `--userns=keep-id` in [devcontainer.json](podman/devcontainer.json) `runArgs` is a Podman user namespace mode. A Docker CLI has `--userns` too, but validates its value client-side and rejects everything but `host` (`docker: --userns: invalid USER mode`), so `keep-id` never reaches Podman - and Podman's Docker-compatible API ignores `UsernsMode` altogether, so even `--userns=host` through that API is a no-op. Without the user namespace mapping, the container's uid 1000 is the host's `subuid+999`: files written in the bind-mounted workspace land outside your uid, and the bind-mounted Podman socket (mode `0660`, your user only) is unreachable from inside.
+
+#### Host engine access
+
+It mounts the host's `${XDG_RUNTIME_DIR}/podman/podman.sock` at the canonical `/var/run/docker.sock` inside the container. If your editor server does not export the environment variable `XDG_RUNTIME_DIR`, hardcode it in the [devcontainer.json](podman/devcontainer.json) mounts to the value given by running `echo "/run/user/$(id -u)"`. That way all `docker`, `docker compose` (default docker socket path) and `podman` (using `CONTAINER_HOST`) all work using the same socket path.
+
+The Docker buildx plugin is not supported by a Podman host, so `DOCKER_BUILDKIT=0` is set. Cross building is still possible.
