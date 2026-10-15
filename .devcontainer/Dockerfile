@@ -1,1 +1,1 @@
-FROM qmcgaw/godevcontainer
+FROM ghcr.io/qdm12/godevcontainer

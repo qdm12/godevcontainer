@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Build image
-        run: docker build -f alpine.Dockerfile -t qmcgaw/godevcontainer .
+        run: docker build -f alpine.Dockerfile -t ghcr.io/qdm12/godevcontainer .
 
   publish:
     if: |

@@ -32,9 +32,9 @@
 ## Features
 
 - Compatible with `amd64`, `386`, `arm64`, `armv6` and `armv7` CPUs
-- `qmcgaw/godevcontainer:alpine` and `qmcgaw/godevcontainer`
+- `ghcr.io/qdm12/godevcontainer:alpine` and `ghcr.io/qdm12/godevcontainer`
   - Based on Alpine 3.23 (size of 996MB)
-- `qmcgaw/godevcontainer:debian`
+- `ghcr.io/qdm12/godevcontainer:debian`
   - Based on Debian Buster Slim (size of 1.21GB)
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
   - Based on either Alpine or Debian
