@@ -18,6 +18,7 @@ It works on Linux, Windows (WSL2) and OSX.
     touch ~/.gitconfig # git configuration
     touch ~/.zsh_history # ZSH shell commands history
     touch ~/AGENTS.md # AI agent context file
+    touch ~/.config/containers/auth.json # Container registry credentials for container engine
     ```
 
     On top of these files, note by default this container bind mounts:

@@ -92,6 +92,13 @@
             "source": "/var/run/docker.sock",
             "target": "/var/run/docker.sock",
             "type": "bind"
+        },
+        // Container registry credentials for Docker.
+        // Comment out if the file does not exist.
+        {
+            "source": "${localEnv:HOME}/.config/containers/auth.json",
+            "target": "/root/.config/containers/auth.json",
+            "type": "bind"
         }
     ],
     "customizations": {
