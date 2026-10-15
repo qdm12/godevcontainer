@@ -2,7 +2,8 @@
     // See https://containers.dev/implementors/json_reference/
     "name": "project-dev",
     "containerEnv": {
-        "TZ": "" // User defined timezone
+        "TZ": "", // User defined timezone
+        "SSH_AUTH_SOCK": "/tmp/ssh-agent.sock" // Comment out if not using the SSH agent
     },
     "build": {
         "dockerfile": "./Dockerfile"
@@ -10,7 +11,7 @@
     "runArgs": [
         "--add-host=host.docker.internal:host-gateway"
     ],
-    "postCreateCommand": "~/.windows.sh && go mod download && go mod tidy",
+    "postCreateCommand": "~/.ssh.sh && go mod download && go mod tidy",
     // Mount the checkout at the SAME absolute path it has on the host. A path handed
     // to the host engine (`docker run -v $PWD/data:/data`, build contexts) then refers
     // to the same files inside and outside the container.
@@ -34,14 +35,50 @@
             "target": "/root/.gitconfig",
             "type": "bind"
         },
+        // SSH agent socket forwarded from the host, so the private key
+        // never enters the container. Host side should have the SSH_AUTH_SOCK
+        // environment variable set as the path to the socket.
+        {
+            "source": "${localEnv:SSH_AUTH_SOCK}",
+            "target": "/tmp/ssh-agent.sock",
+            "type": "bind"
+        },
+        // Commented out in favor of using an SSH agent
         // SSH directory for Linux, OSX and WSL
         // On Linux and OSX, a symlink /mnt/ssh <-> ~/.ssh is
         // created in the container. On Windows, files are copied
         // from /mnt/ssh to ~/.ssh to fix permissions.
+        // {
+        //     "source": "${localEnv:HOME}/.ssh",
+        //     "target": "/mnt/ssh",
+        //     "type": "bind"
+        // },
+        // Known hosts, read from /etc/ssh/ssh_known_hosts by the OpenSSH client by default.
+        // If the user binds mount ~/.ssh <-> /mnt/ssh, this duplicates known_hosts in both
+        // ~/.ssh/known_hosts and /etc/ssh/ssh_known_hosts, which is fine.
         {
-            "source": "${localEnv:HOME}/.ssh",
-            "target": "/mnt/ssh",
+            "source": "${localEnv:HOME}/.ssh/known_hosts",
+            "target": "/etc/ssh/ssh_known_hosts",
             "type": "bind"
+        },
+        // Commit signing using SSH.
+        // With gpg.format=ssh git resolves user.signingkey to the public key file
+        // to learn which identity to use, then asks the SSH agent for the signature.
+        // Adapt the public key filename to your public key filename in case it's not
+        // id_ed25519.pub. Comment out if ~/.ssh/id_ed25519.pub does not exist.
+        {
+            "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
+            "target": "/root/.ssh/id_ed25519.pub",
+            "type": "bind,readonly"
+        },
+        // Commit signatures display: allowed_signers is consulted by `git log`
+        // if log.showSignature is set to true. It contains a list of public keys
+        // and the email addresses.
+        // Comment out if ~/.ssh/allowed_signers does not exist.
+        {
+            "source": "${localEnv:HOME}/.ssh/allowed_signers",
+            "target": "/root/.ssh/allowed_signers",
+            "type": "bind,readonly"
         },
         // Machine-specific agent context
         {

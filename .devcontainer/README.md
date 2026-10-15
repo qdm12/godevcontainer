@@ -20,12 +20,146 @@ It works on Linux, Windows (WSL2) and OSX.
     touch ~/AGENTS.md # AI agent context file
     ```
 
-    On top of these files, note by default this container bind mounts the host `~/.ssh` directory and `/var/run/docker.sock`.
+    On top of these files, note by default this container bind mounts:
+
+    - Some public files from `~/.ssh` (no private key), see the [SSH agent section below](#ssh-agent)
+    - The Docker daemon socket `/var/run/docker.sock`
 
     You can alternatively modify the mounts in [devcontainer.json](devcontainer.json) to suit your needs.
 1. **For OSX hosts**: ensure the project directory and your home directory `~` are accessible by Docker.
+1. Whether you want to use SSH or not, see the [SSH keys section below](#ssh-keys)
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P).
 1. Select `Dev-Containers: Open Folder in Container...` and choose the project directory.
+
+### SSH keys
+
+Three options as subsections below: ssh agent, ssh bind mount, or no ssh.
+
+#### SSH agent
+
+This is the default, preferred and more secure method.
+You need to have the agent running on your host and have the environment variable `SSH_AUTH_SOCK` set to the path to the agent socket.
+
+Just make sure you have the `~/.ssh/known_hosts` file on your host.
+
+For example, if your SSH private key is `~/.ssh/id_ed25519` you can have a systemd unit `~/.config/systemd/user/ssh-agent.service` like this:
+
+```ini
+[Unit]
+Description=OpenSSH key agent
+Documentation=man:ssh-agent(1)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+Environment=SSH_AUTH_SOCK=%t/ssh-agent.sock
+ExecStart=/usr/bin/ssh-agent -D -a %t/ssh-agent.sock
+# Leading - so a missing/unreadable key never fails the unit.
+# Loops because the socket is created shortly after ssh-agent starts.
+ExecStartPost=-/bin/sh -c 'for i in $(seq 1 50); do ssh-add %h/.ssh/id_ed25519 2>/dev/null && exit 0; sleep 0.1; done; exit 1'
+Restart=on-failure
+RestartSec=1s
+UMask=0077
+
+[Install]
+WantedBy=default.target
+```
+
+💁 this also works on WSL2 with Ubuntu
+
+By default, the devcontainer mounts files to be able to use GPG SSH git commit signing with an `id_ed25519`-named key:
+
+- `~/.ssh/allowed_signers` <-> `/root/.ssh/allowed_signers`
+- `~/.ssh/id_ed25519.pub` <-> `/root/.ssh/id_ed25519.pub` - `id_ed25519.pub` may need to be adapted to match your key filename
+
+If you do not want to use GPG SSH git commit signing, comment out the mounts in `devcontainer.json`:
+
+```jsonc
+{
+    "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
+    "target": "/root/.ssh/id_ed25519.pub",
+    "type": "bind,readonly"
+},
+{
+    "source": "${localEnv:HOME}/.ssh/allowed_signers",
+    "target": "/root/.ssh/allowed_signers",
+    "type": "bind,readonly"
+},
+```
+
+#### SSH bind mount
+
+You bind mount `~/.ssh` to `/mnt/ssh` in the container, and the [ssh script](https://github.com/qdm12/basedevcontainer/blob/master/.ssh.sh) takes care of mapping those to `~/.ssh` in the container depending on the host platform.
+
+This is **not the default** so `devcontainer.json` needs the following changes:
+
+1. Comment out with `//`
+
+    ```jsonc
+    "SSH_AUTH_SOCK": "/tmp/ssh-agent.sock"
+    ```
+
+    ```jsonc
+    {
+        "source": "${localEnv:SSH_AUTH_SOCK}",
+        "target": "/tmp/ssh-agent.sock",
+        "type": "bind"
+    },
+    {
+        "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
+        "target": "/root/.ssh/id_ed25519.pub",
+        "type": "bind,readonly"
+    },
+    {
+        "source": "${localEnv:HOME}/.ssh/allowed_signers",
+        "target": "/root/.ssh/allowed_signers",
+        "type": "bind,readonly"
+    },
+    ```
+
+1. Uncomment by removing `//`:
+
+    ```jsonc
+    // {
+    //     "source": "${localEnv:HOME}/.ssh",
+    //     "target": "/mnt/ssh",
+    //     "type": "bind"
+    // },
+    ```
+
+#### No SSH
+
+If you do not want to use SSH at all, comment out
+
+```jsonc
+"SSH_AUTH_SOCK": "/tmp/ssh-agent.sock"
+```
+
+and all the ssh mounts in `devcontainer.json`:
+
+```jsonc
+{
+    "source": "${localEnv:SSH_AUTH_SOCK}",
+    "target": "/tmp/ssh-agent.sock",
+    "type": "bind"
+},
+{
+    "source": "${localEnv:HOME}/.ssh/known_hosts",
+    "target": "/etc/ssh/ssh_known_hosts",
+    "type": "bind"
+},
+{
+    "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
+    "target": "/root/.ssh/id_ed25519.pub",
+    "type": "bind,readonly"
+},
+{
+    "source": "${localEnv:HOME}/.ssh/allowed_signers",
+    "target": "/root/.ssh/allowed_signers",
+    "type": "bind,readonly"
+},
+```
 
 ## Customization
 
