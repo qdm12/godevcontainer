@@ -17,6 +17,7 @@ It works on Linux, Windows (WSL2) and OSX.
     ```sh
     touch ~/.gitconfig # git configuration
     touch ~/.zsh_history # ZSH shell commands history
+    touch ~/AGENTS.md # AI agent context file
     ```
 
     On top of these files, note by default this container bind mounts the host `~/.ssh` directory and `/var/run/docker.sock`.

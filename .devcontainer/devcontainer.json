@@ -43,6 +43,12 @@
             "target": "/mnt/ssh",
             "type": "bind"
         },
+        // Machine-specific agent context
+        {
+            "source": "${localEnv:HOME}/AGENTS.md",
+            "target": "/AGENTS.md",
+            "type": "bind"
+        },
         // Docker socket to access the host Docker server
         {
             "source": "/var/run/docker.sock",
