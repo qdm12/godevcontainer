@@ -64,7 +64,6 @@
 
 - [Docker](https://www.docker.com/products/docker-desktop) installed and running
   - If you use OSX, share the `~/.ssh` directory and the directory of your project with Docker Desktop
-- [Docker Compose](https://docs.docker.com/compose/install/) installed
 - [VS code](https://code.visualstudio.com/download) installed
 - [VS code dev containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
 
@@ -85,6 +84,31 @@
 ## Customization
 
 See the [.devcontainer/README.md](.devcontainer/README.md) document in your repository.
+
+### docker-compose.yml
+
+You can create a `.devcontainer/docker-compose.yml` to create the devcontainer and other containers at the same time:
+
+```yml
+services:
+  vscode: # configured in devcontainer.json
+    build: .
+  postgres: # example of a database container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+```
+
+And change the following in `.devcontainer/devcontainer.json`:
+
+- remove `"build": { "dockerfile": "./Dockerfile" },`
+- add `"dockerComposeFile": "docker-compose.yml",`
+- add `"overrideCommand": true,`
+- add `"service": "vscode",`
+- add `"runServices": ["vscode", "postgres"],`
+
+Finally, open the command palette in Visual Studio Code (CTRL+SHIFT+P) and select `Dev-Containers: Rebuild Container`
 
 ## TODOs
 

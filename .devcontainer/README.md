@@ -9,29 +9,31 @@ It works on Linux, Windows (WSL2) and OSX.
 - [VS code](https://code.visualstudio.com/download) installed
 - [VS code dev containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) installed
 - [Docker](https://www.docker.com/products/docker-desktop) installed and running
-- [Docker Compose](https://docs.docker.com/compose/install/) installed
 
 ## Setup
 
-1. Create the following files and directory on your host if you don't have them:
+1. This dev container expects to bind mount several files directly, so they must exist on the host, even if empty:
 
     ```sh
-    touch ~/.gitconfig ~/.zsh_history
-    mkdir -p ~/.ssh
+    touch ~/.gitconfig # git configuration
+    touch ~/.zsh_history # ZSH shell commands history
     ```
 
+    On top of these files, note by default this container bind mounts the host `~/.ssh` directory and `/var/run/docker.sock`.
+
+    You can alternatively modify the mounts in [devcontainer.json](devcontainer.json) to suit your needs.
 1. **For OSX hosts**: ensure the project directory and your home directory `~` are accessible by Docker.
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P).
 1. Select `Dev-Containers: Open Folder in Container...` and choose the project directory.
 
 ## Customization
 
-For any customization to take effect, you should "rebuild and reopen":
+For customizations to take effect, you should "rebuild and reopen":
 
 1. Open the command palette in Visual Studio Code (CTRL+SHIFT+P)
 2. Select `Dev-Containers: Rebuild Container`
 
-Changes you can make are notably:
+Customizations available are notably:
 
 - Changes to the Docker image in [Dockerfile](Dockerfile)
 - Changes to VSCode **settings** and **extensions** in [devcontainer.json](devcontainer.json).
@@ -46,15 +48,6 @@ Changes you can make are notably:
     },
     ```
 
-- Change the `vscode` service container configuration either in [docker-compose.yml](docker-compose.yml) or in [devcontainer.json](devcontainer.json).
-- Add other services in [docker-compose.yml](docker-compose.yml) to run together with the development VSCode service container. For example to add a test database:
-
-    ```yml
-      database:
-        image: postgres
-        restart: always
-        environment:
-          POSTGRES_PASSWORD: password
-    ```
-
-- More options are documented in the [devcontainer.json reference](https://containers.dev/implementors/json_reference/).
+- Change the container configuration in [devcontainer.json](devcontainer.json)
+- Add other services in a `docker-compose.yml`, see [this README section](https://github.com/qdm12/godevcontainer/blob/master/README.md#docker-composeyml)
+- More customizations available are documented in the [devcontainer.json reference](https://containers.dev/implementors/json_reference/).

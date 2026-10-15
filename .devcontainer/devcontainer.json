@@ -4,9 +4,9 @@
     "containerEnv": {
         "TZ": "" // User defined timezone
     },
-    "dockerComposeFile": "docker-compose.yml",
-    "overrideCommand": true,
-    "service": "vscode",
+    "build": {
+        "dockerfile": "./Dockerfile"
+    },
     "postCreateCommand": "~/.windows.sh && go mod download && go mod tidy",
     "workspaceFolder": "/workspace",
     "mounts": [
