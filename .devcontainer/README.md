@@ -161,6 +161,19 @@ and all the ssh mounts in `devcontainer.json`:
 },
 ```
 
+## Github cli `gh`
+
+1. [Create fine grained personal access token](https://github.com/settings/personal-access-tokens)
+2. Set it on your host environment variable as `GH_TOKEN`:
+
+    ```sh
+    export GH_TOKEN=ghp_XXXXXXXXXXXXXXXX
+    ```
+
+3. The devcontainer will pick it up and inject it as `GH_TOKEN`, which is then used by `gh` within the devcontainer.
+
+If needed, you can modify this in the [devcontainer.json](devcontainer.json) file `containerEnv` key, for example if you prefer to read another variable name.
+
 ## Customization
 
 For customizations to take effect, you should "rebuild and reopen":

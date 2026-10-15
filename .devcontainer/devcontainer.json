@@ -3,6 +3,7 @@
     "name": "project-dev",
     "containerEnv": {
         "TZ": "", // User defined timezone
+        "GH_TOKEN": "${localEnv:GH_TOKEN}", // GitHub token for GitHub CLI, used for `gh auth login` in the container
         "SSH_AUTH_SOCK": "/tmp/ssh-agent.sock" // Comment out if not using the SSH agent
     },
     "build": {
