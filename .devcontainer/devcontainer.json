@@ -1,15 +1,13 @@
 {
     // See https://containers.dev/implementors/json_reference/
-    // User defined settings
-    "containerEnv": {
-        "TZ": ""
-    },
-    // Fixed settings
     "name": "project-dev",
-    "postCreateCommand": "~/.windows.sh && go mod download && go mod tidy",
+    "containerEnv": {
+        "TZ": "" // User defined timezone
+    },
     "dockerComposeFile": "docker-compose.yml",
     "overrideCommand": true,
     "service": "vscode",
+    "postCreateCommand": "~/.windows.sh && go mod download && go mod tidy",
     "workspaceFolder": "/workspace",
     "mounts": [
         // Source code
@@ -71,6 +69,7 @@
                 // "spikespaz.vscode-smoothtype", // smooth cursor animation
             ],
             "settings": {
+                // General settings
                 "files.eol": "\n",
                 "editor.formatOnSave": true,
                 "go.buildTags": "",
@@ -104,6 +103,7 @@
                     },
                     "formatting.gofumpt": true
                 },
+                // Docker settings
                 "remote.extensionKind": {
                     "ms-azuretools.vscode-docker": "workspace"
                 }
