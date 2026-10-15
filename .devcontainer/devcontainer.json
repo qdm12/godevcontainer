@@ -7,6 +7,9 @@
     "build": {
         "dockerfile": "./Dockerfile"
     },
+    "runArgs": [
+        "--add-host=host.docker.internal:host-gateway"
+    ],
     "postCreateCommand": "~/.windows.sh && go mod download && go mod tidy",
     // Mount the checkout at the SAME absolute path it has on the host. A path handed
     // to the host engine (`docker run -v $PWD/data:/data`, build contexts) then refers
