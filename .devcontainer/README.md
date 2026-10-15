@@ -51,3 +51,8 @@ Customizations available are notably:
 - Change the container configuration in [devcontainer.json](devcontainer.json)
 - Add other services in a `docker-compose.yml`, see [this README section](https://github.com/qdm12/godevcontainer/blob/master/README.md#docker-composeyml)
 - More customizations available are documented in the [devcontainer.json reference](https://containers.dev/implementors/json_reference/).
+
+## Container engine
+
+This container does not run an engine of its own: it mounts the **host's** container engine API socket, so `docker` and `docker compose` drive the host engine (run, build, cross-architecture build) and share its images etc.
+Nothing needs to be installed beyond the client CLIs already in the image, and there are no privileges involved.
