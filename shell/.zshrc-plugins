@@ -1,0 +1,4 @@
+# Sourced by the base image shell before oh-my-zsh reads the plugins variable, so this is
+# the only place where the plugin list has an effect. The base lists vscode, git, colorize,
+# docker and docker-compose. This file should NOT interact with stdout nor stdin.
+plugins=($plugins golang kubectl helm)

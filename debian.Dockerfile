@@ -95,7 +95,7 @@ RUN apt-get update && \
     apt-get clean -y && \
     rm -r /var/cache/* /var/lib/apt/lists/*
 # Shell setup
-COPY --chown="${USER_UID}:${USER_GID}" --chmod=644 shell/.zshrc-specific shell/.welcome.sh ${USER_HOME}/
+COPY --chown="${USER_UID}:${USER_GID}" --chmod=644 shell/.zshrc-plugins shell/.welcome.sh ${USER_HOME}/
 COPY --chown="${USER_UID}:${USER_GID}" --from=gomodifytags /bin /go/bin/gomodifytags
 COPY --chown="${USER_UID}:${USER_GID}" --from=goplay  /bin /go/bin/goplay
 COPY --chown="${USER_UID}:${USER_GID}" --from=gotests /bin /go/bin/gotests

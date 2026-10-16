@@ -1,3 +1,0 @@
-# This file should NOT interact with stdout nor stdin!
-
-plugins=(vscode git colorize golang docker docker-compose kubectl helm)
