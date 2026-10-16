@@ -1,0 +1,101 @@
+# Shared checks for the dev container, called as a job by Alpine and Debian
+# (see their verify job). It is not triggerable on its own: the callers keep
+# their own triggers, so a change to alpine.Dockerfile only runs the Alpine
+# copy of these jobs, and .devcontainer/** changes run both.
+#
+# The checks themselves live in the base repository, as composite actions: a
+# composite action carries its own scripts, resolved with github.action_path,
+# so they run here unchanged. They are pinned to a release tag rather than to
+# master, and have to be released before this workflow can resolve them.
+name: Devcontainer
+
+on:
+  workflow_call:
+    inputs:
+      dockerfile:
+        description: Dockerfile to build the dev container image from
+        required: true
+        type: string
+
+env:
+  # Tagged :latest because .devcontainer/Dockerfile is FROM
+  # ghcr.io/qdm12/godevcontainer: the dev container must be built from the
+  # Dockerfile under test, not from the published image, which lags behind
+  # master. Nothing is pushed, the tag only ever exists on that runner.
+  IMAGE: ghcr.io/qdm12/godevcontainer:latest
+
+jobs:
+  jsonc:
+    name: JSONC syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      # The devcontainer CLI parses with jsonc-parser in recovery mode: it
+      # repairs malformed JSON silently and ignores unknown properties, so it
+      # cannot be the syntax check itself.
+      - name: Check devcontainer.json files
+        uses: qdm12/basedevcontainer/.github/actions/devcontainer-jsonc@v0.30.0
+
+  build-image:
+    name: Build image
+    needs: [jsonc]
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: "1"
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Build image
+        run: docker build -f "${{ inputs.dockerfile }}" -t "$IMAGE" .
+
+      # Both engines of the matrix below load this artifact instead of building:
+      # they keep separate image stores and cannot share a build cache.
+      - name: Export image
+        run: docker save "$IMAGE" | gzip -1 > "$RUNNER_TEMP/image.tar.gz"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: devcontainer-image
+          path: ${{ runner.temp }}/image.tar.gz
+          compression-level: 0
+          retention-days: 1
+
+  # Starts a container from .devcontainer/docker/devcontainer.json and from
+  # .devcontainer/podman/devcontainer.json, and checks the CLI reported success.
+  # The action loads the exported image, prepares the mock host files the bind
+  # mounts point at (~/.gitconfig, ~/AGENTS.md, ~/.ssh/*, ...) and, for Podman,
+  # a rootless API socket. --skip-post-create is its default: postCreateCommand
+  # runs ~/.ssh.sh and `go mod download`, which need a real SSH setup, while
+  # this job only checks that a container starts.
+  # DOCKER_GID is left empty, so no docker group is added to the image and
+  # the mounted engine socket is out of reach for the container's user.
+  devcontainer-up:
+    name: devcontainer up (${{ matrix.engine }})
+    needs: [jsonc, build-image]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [docker, podman]
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: devcontainer-image
+          path: ${{ runner.temp }}
+
+      - name: Start the dev container
+        uses: qdm12/basedevcontainer/.github/actions/devcontainer-up@v0.30.0
+        with:
+          engine: ${{ matrix.engine }}

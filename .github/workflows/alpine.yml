@@ -8,26 +8,25 @@ on:
       - master
     paths:
       - .github/workflows/alpine.yml
+      - .github/workflows/devcontainer.yml
+      - .devcontainer/**
       - shell/**
       - .dockerignore
       - alpine.Dockerfile
   pull_request:
     paths:
       - .github/workflows/alpine.yml
+      - .github/workflows/devcontainer.yml
+      - .devcontainer/**
       - shell/**
       - .dockerignore
       - alpine.Dockerfile
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
-    env:
-      DOCKER_BUILDKIT: "1"
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Build image
-        run: docker build -f alpine.Dockerfile -t ghcr.io/qdm12/godevcontainer .
+    uses: ./.github/workflows/devcontainer.yml
+    with:
+      dockerfile: alpine.Dockerfile
 
   publish:
     if: |

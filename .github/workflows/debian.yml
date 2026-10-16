@@ -8,26 +8,25 @@ on:
       - master
     paths:
       - .github/workflows/debian.yml
+      - .github/workflows/devcontainer.yml
+      - .devcontainer/**
       - shell/**
       - .dockerignore
       - debian.Dockerfile
   pull_request:
     paths:
       - .github/workflows/debian.yml
+      - .github/workflows/devcontainer.yml
+      - .devcontainer/**
       - shell/**
       - .dockerignore
       - debian.Dockerfile
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
-    env:
-      DOCKER_BUILDKIT: "1"
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Build image
-        run: docker build -f debian.Dockerfile -t ghcr.io/qdm12/godevcontainer .
+    uses: ./.github/workflows/devcontainer.yml
+    with:
+      dockerfile: debian.Dockerfile
 
   publish:
     if: |
