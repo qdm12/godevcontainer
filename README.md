@@ -33,9 +33,9 @@
 
 - Compatible with `amd64`, `386`, `arm64`, `armv6` and `armv7` CPUs
 - `ghcr.io/qdm12/godevcontainer:alpine` and `ghcr.io/qdm12/godevcontainer`
-  - Based on Alpine 3.24 (size of 1.19GB)
+  - Based on Alpine 3.24 (size of 1.21GB)
 - `ghcr.io/qdm12/godevcontainer:debian`
-  - Based on Debian Trixie Slim (size of 1.35GB)
+  - Based on Debian Trixie Slim (size of 1.37GB)
 - Based on [qmcgaw/basedevcontainer](https://github.com/qdm12/basedevcontainer)
   - Based on either Alpine or Debian
   - Minimal custom terminal and packages
@@ -52,7 +52,7 @@
   - [gotests](https://github.com/cweill/gotests)
   - [gopkgs v2](https://github.com/uudashr/gopkgs/tree/master/v2)
 - Terminal Go tools
-  - [mockgen](https://github.com/golang/mock) to generate mocks
+  - [mockgen](https://github.com/uber-go/mock) to generate mocks
   - [mockery](https://github.com/vektra/mockery) to generate mocks for testify/mock
 - Runs as an unprivileged user (`user`, uid/gid `1000` by default, configurable), see [Non-root user](#non-root-user)
   - `apk` (Alpine) and `apt-get` (Debian) install packages from that user, no sudo involved
