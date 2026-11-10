@@ -93,10 +93,10 @@
         // With gpg.format=ssh git resolves user.signingkey to the public key file
         // to learn which identity to use, then asks the SSH agent for the signature.
         // Adapt the public key filename to your public key filename in case it's not
-        // id_ed25519.pub. Comment out if ~/.ssh/id_ed25519.pub does not exist.
+        // signingkey.pub. Comment out if ~/.ssh/signingkey.pub does not exist.
         {
-            "source": "${localEnv:HOME}/.ssh/id_ed25519.pub",
-            "target": "/home/user/.ssh/id_ed25519.pub",
+            "source": "${localEnv:HOME}/.ssh/signingkey.pub",
+            "target": "/home/user/.ssh/signingkey.pub",
             "type": "bind,readonly"
         },
         // Commit signatures display: allowed_signers is consulted by `git log`
