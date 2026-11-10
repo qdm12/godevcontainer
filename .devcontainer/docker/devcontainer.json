@@ -156,9 +156,11 @@
                 // "spikespaz.vscode-smoothtype", // smooth cursor animation
             ],
             "settings": {
-                // General settings
                 "files.eol": "\n",
                 "editor.formatOnSave": true,
+                "terminal.integrated.env.linux": {
+                    "SSH_AUTH_SOCK": "/tmp/ssh-agent.sock"
+                },
                 "go.buildTags": "",
                 "go.toolsEnvVars": {
                     "CGO_ENABLED": "0"
