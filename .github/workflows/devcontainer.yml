@@ -39,7 +39,7 @@ jobs:
       # repairs malformed JSON silently and ignores unknown properties, so it
       # cannot be the syntax check itself.
       - name: Check devcontainer.json files
-        uses: qdm12/basedevcontainer/.github/actions/devcontainer-jsonc@v0.30.0
+        uses: qdm12/basedevcontainer/.github/actions/devcontainer-jsonc@v0.31.0
 
   build-image:
     name: Build image
@@ -96,6 +96,6 @@ jobs:
           path: ${{ runner.temp }}
 
       - name: Start the dev container
-        uses: qdm12/basedevcontainer/.github/actions/devcontainer-up@v0.30.0
+        uses: qdm12/basedevcontainer/.github/actions/devcontainer-up@v0.31.0
         with:
           engine: ${{ matrix.engine }}
