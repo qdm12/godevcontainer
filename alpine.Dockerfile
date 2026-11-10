@@ -89,7 +89,7 @@ USER ${USERNAME}
 COPY --from=go /usr/local/go /usr/local/go
 WORKDIR $GOPATH
 # Install Alpine packages (g++ for race testing)
-RUN apk add -q --update --progress --no-cache g++
+RUN apk add -q --no-cache g++
 # Shell setup
 COPY --chown="${USER_UID}:${USER_GID}" --chmod=644 shell/.zshrc-plugins shell/.welcome.sh ${USER_HOME}/
 COPY --chown="${USER_UID}:${USER_GID}" --from=gomodifytags /bin /go/bin/gomodifytags
