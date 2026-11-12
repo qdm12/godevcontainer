@@ -86,7 +86,7 @@ WantedBy=default.target
 By default, the devcontainer mounts files to be able to use GPG SSH git commit signing with an `signingkey`-named key:
 
 - `~/.ssh/allowed_signers` <-> `/home/user/.ssh/allowed_signers`
-`~/.ssh/signingkey.pub` <-> `/home/user/.ssh/signingkey.pub` - `signingkey.pub` may need to be adapted to match your key filename
+- `~/.ssh/signingkey.pub` <-> `/home/user/.ssh/signingkey.pub` - `signingkey.pub` may need to be adapted to match your key filename
 
 If you do not want to use GPG SSH git commit signing, comment out the mounts in `devcontainer.json`:
 
